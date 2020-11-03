@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Komodo.Models;
+using Komodo.Services;
 
 namespace Komodo
 {
@@ -39,6 +40,8 @@ namespace Komodo
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IBTRolesService, BTRolesService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
