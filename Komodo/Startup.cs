@@ -42,6 +42,7 @@ namespace Komodo
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IBTRolesService, BTRolesService>();
+            services.AddScoped<IBTProjectService, BTProjectService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

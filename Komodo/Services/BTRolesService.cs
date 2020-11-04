@@ -1,5 +1,6 @@
 ﻿using Komodo.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,8 +48,7 @@ namespace Komodo.Services
 
         public async Task<ICollection<BTUser>> UsersNotInRole(IdentityRole role)
         {
-            var roleId = await _roleManager.GetRoleIdAsync(role);
-            return _userManager.Users.Where(u => IsUserInRole(u, role.Name).Result == false).ToList();
+            return await _userManager.Users.Where(u => IsUserInRole(u, role.Name).Result == false).ToListAsync();
         }
     }
 }
