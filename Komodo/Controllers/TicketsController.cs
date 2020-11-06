@@ -41,6 +41,7 @@ namespace Komodo.Controllers
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
