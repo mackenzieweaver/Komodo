@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Komodo.Data.Migrations
+namespace Komodo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201103163313_001_Initial")]
-    partial class _001_Initial
+    [Migration("20201106025620_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -49,7 +49,7 @@ namespace Komodo.Services
         //public async Task<bool> IsUserOnProject(string userId, int projectId)
         //{
         //    var user = await _context.ProjectUsers.FirstOrDefaultAsync(pu => pu.UserId == userId && pu.ProjectId == projectId);
-        //    if(user == null)
+        //    if (user == null)
         //    {
         //        return false;
         //    }
@@ -62,7 +62,8 @@ namespace Komodo.Services
         public async Task<bool> IsUserOnProject(string userId, int projectId)
         {
             Project project = await _context.Projects
-                .Include(u => u.ProjectUsers.Where(u => u.UserId == userId)).ThenInclude(u => u.User)
+                //.Include(u => u.ProjectUsers.Where(u => u.UserId == userId)).ThenInclude(u => u.User)
+                .Include(u => u.ProjectUsers).ThenInclude(u => u.User)
                 .FirstOrDefaultAsync(u => u.Id == projectId);
             bool result = project.ProjectUsers.Any(u => u.UserId == userId);
             return result;
@@ -102,11 +103,12 @@ namespace Komodo.Services
             {
                 try
                 {
-                    ProjectUser user = new ProjectUser
-                    {
-                        ProjectId = projectId,
-                        UserId = userId
-                    };
+                    //ProjectUser user = new ProjectUser
+                    //{
+                    //    ProjectId = projectId,
+                    //    UserId = userId
+                    //};
+                    var user = await _context.ProjectUsers.FirstOrDefaultAsync(pu => pu.UserId == userId);
                     _context.ProjectUsers.Remove(user);
                     await _context.SaveChangesAsync();
                 }
@@ -127,7 +129,20 @@ namespace Komodo.Services
 
         public async Task<ICollection<BTUser>> UsersNotOnProject(int projectId)
         {
-            return await _context.Users.Where(u => IsUserOnProject(u.Id, projectId).Result == false).ToListAsync();
+            var Users = await _context.Users.Where(u => IsUserOnProject(u.Id, projectId).Result == false).ToListAsync();
+
+            //var users = await _context.Users.ToListAsync();
+            //ICollection<BTUser> Users = new List<BTUser>();
+            //foreach (var user in users)
+            //{
+            //    var result = IsUserOnProject(user.Id, projectId).Result;
+            //    if (result == false) 
+            //    {
+            //        Users.Add(user);
+            //    }
+            //}
+
+            return Users;
         }
 
         //public ICollection<BTUser> UsersNotOnProject(int projectId)
@@ -149,10 +164,16 @@ namespace Komodo.Services
             Project project = await _context.Projects
                 .Include(u => u.ProjectUsers).ThenInclude(u => u.User)
                 .FirstOrDefaultAsync(u => u.Id == projectId);
-
-            List<BTUser> projectusers = project.ProjectUsers.SelectMany(p => (IEnumerable<BTUser>)p.User).ToList();
+            //List<BTUser> projectusers = new List<BTUser>();
+            //List<BTUser> projectusers = project.ProjectUsers.SelectMany(p => (IEnumerable<BTUser>)p.User).ToList();
+            List<BTUser> projectusers = project.ProjectUsers.Select(p => p.User).ToList();
             return projectusers;
         }
+
+        //public async Task<ICollection<BTUser>> UsersOnProject(int projectId)
+        //{
+        //    return await _context.Users.Where(u => IsUserOnProject(u.Id, projectId)).ToListAsync();
+        //}
 
         //public async Task<ICollection<BTUser>> UsersOnProject(int projectId)
         //{

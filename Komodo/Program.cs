@@ -30,6 +30,7 @@ namespace Komodo
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await ContextSeed.SeedRolesAsync(roleManager);
                     await ContextSeed.SeedDefaultUsersAsync(userManager);
+                    await ContextSeed.SeedTicketListsAsync(context);
                 }
                 catch (Exception ex)
                 {
