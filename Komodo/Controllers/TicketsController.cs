@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Komodo.Data;
 using Komodo.Models;
+using Microsoft.AspNetCore.Http;
+using Komodo.Utilities;
 
 namespace Komodo.Controllers
 {
@@ -42,6 +44,7 @@ namespace Komodo.Controllers
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
                 .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
@@ -68,10 +71,15 @@ namespace Komodo.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
         {
             if (ModelState.IsValid)
             {
+                if(attachment != null)
+                {
+                    AttachmentHandler attachmentHandler = new AttachmentHandler();
+                    ticket.Attachments.Add(attachmentHandler.Attach(attachment));
+                }
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -112,7 +120,7 @@ namespace Komodo.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
         {
             if (id != ticket.Id)
             {
@@ -123,6 +131,11 @@ namespace Komodo.Controllers
             {
                 try
                 {
+                    if (attachment != null)
+                    {
+                        AttachmentHandler attachmentHandler = new AttachmentHandler();
+                        ticket.Attachments.Add(attachmentHandler.Attach(attachment));
+                    }
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
                 }
