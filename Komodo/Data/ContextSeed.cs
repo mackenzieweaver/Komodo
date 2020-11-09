@@ -890,12 +890,6 @@ namespace Komodo.Data
                 var statuses = context.TicketStatuses.Any();
                 if (statuses == false)
                 {
-                    //Opened,
-                    //Testing,
-                    //Development,
-                    //QA,
-                    //FinalPass,
-                    //Closed
                     var status = new TicketStatus { Name = TicketStatuses.Opened.ToString() };
                     context.TicketStatuses.Add(status);
                     status = new TicketStatus { Name = TicketStatuses.Testing.ToString() };
