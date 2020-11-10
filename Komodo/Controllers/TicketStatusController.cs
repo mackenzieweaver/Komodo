@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Komodo.Data;
 using Komodo.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Komodo.Controllers
 {
+    [Authorize]
     public class TicketStatusController : Controller
     {
         private readonly ApplicationDbContext _context;

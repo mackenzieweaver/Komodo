@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Komodo.Data;
 using Komodo.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Komodo.Controllers
 {
+    [Authorize]
     public class TicketHistoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,7 +24,9 @@ namespace Komodo.Controllers
         // GET: TicketHistories
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.TicketHistories.Include(t => t.Ticket).Include(t => t.User);
+            var applicationDbContext = _context.TicketHistories
+                .Include(t => t.Ticket)
+                .Include(t => t.User);
             return View(await applicationDbContext.ToListAsync());
         }
 

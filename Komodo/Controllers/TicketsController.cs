@@ -9,16 +9,24 @@ using Komodo.Data;
 using Komodo.Models;
 using Microsoft.AspNetCore.Http;
 using Komodo.Utilities;
+using Komodo.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Komodo.Controllers
 {
+    [Authorize]
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBTHistoryService _historyService;
+        private readonly UserManager<BTUser> _userManager;
 
-        public TicketsController(ApplicationDbContext context)
+        public TicketsController(ApplicationDbContext context, IBTHistoryService historyService, UserManager<BTUser> userManager)
         {
             _context = context;
+            _historyService = historyService;
+            _userManager = userManager;
         }
 
         // GET: Tickets
@@ -58,7 +66,7 @@ namespace Komodo.Controllers
         public IActionResult Create()
         {
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["OwnerUserId"] = new SelectList(_context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
             ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
@@ -71,9 +79,9 @@ namespace Komodo.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, 
-            IFormFile attachment)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
         {
+            ticket.OwnerUserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
                 if(attachment != null)
@@ -94,6 +102,7 @@ namespace Komodo.Controllers
             return View(ticket);
         }
 
+        [Authorize(Roles="Admin,ProjectManager,Developer")]
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -127,7 +136,8 @@ namespace Komodo.Controllers
             {
                 return NotFound();
             }
-
+            // snapshot of record. AsNoTracking gives the data in the DB right now.
+            Ticket oldTic = await _context.Tickets.AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
             if (ModelState.IsValid)
             {
                 try
@@ -151,6 +161,9 @@ namespace Komodo.Controllers
                         throw;
                     }
                 }
+                // Add History
+                var userId = _userManager.GetUserId(User);
+                await _historyService.AddHistory(oldTic, ticket, userId);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
@@ -161,7 +174,7 @@ namespace Komodo.Controllers
             ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
             return View(ticket);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager,Developer")]
         // GET: Tickets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

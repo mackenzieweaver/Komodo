@@ -9,9 +9,11 @@ using Komodo.Data;
 using Komodo.Models;
 using Komodo.Models.ViewModels;
 using Komodo.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Komodo.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -168,6 +170,7 @@ namespace Komodo.Controllers
             return View(model);
         }
 
+        //[Authorize(Roles="Admin,ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ProjectUsersViewModel model)

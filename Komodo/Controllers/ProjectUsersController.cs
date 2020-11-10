@@ -6,9 +6,11 @@ using Komodo.Data;
 using Komodo.Models.ViewModels;
 using Komodo.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Komodo.Controllers
 {
+    [Authorize]
     public class ProjectUsersController : Controller
     {
         private readonly ApplicationDbContext _context;

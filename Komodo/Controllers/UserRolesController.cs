@@ -6,12 +6,14 @@ using Komodo.Data;
 using Komodo.Models;
 using Komodo.Models.ViewModels;
 using Komodo.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Komodo.Controllers
 {
+    [Authorize]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,7 +26,7 @@ namespace Komodo.Controllers
             _rolesService = rolesService;
             _userManager = userManager;
         }    
-
+        [Authorize(Roles="Admin,ProjectManager")]
         public async Task<IActionResult> ManageUserRoles()
         {
             List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();
