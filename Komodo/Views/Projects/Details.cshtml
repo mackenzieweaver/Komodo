@@ -108,7 +108,14 @@
                         @ticket.OwnerUser.FullName
                     </td>
                     <td>
-                        @ticket.DeveloperUser.FullName
+                        @if(ticket.DeveloperUserId == null)
+                        {
+                            <p>Unassigned</p>
+                        }
+                        else
+                        {
+                            @ticket.DeveloperUser.FullName
+                        }
                     </td>
                 </tr>
             }

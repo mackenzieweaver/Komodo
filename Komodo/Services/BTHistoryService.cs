@@ -93,11 +93,22 @@ namespace Komodo.Services
             // Developer User
             if (oldTicket.DeveloperUserId != newTicket.DeveloperUserId)
             {
+                var oldval = oldTicket.DeveloperUserId == null ? "Unassigned" : _context.Users.Find(oldTicket.DeveloperUserId).FullName;
+
+                //if(oldTicket.DeveloperUserId == null)
+                //{
+                //    "Unassigned";
+                //}
+                //else
+                //{
+                //    _context.Users.Find(oldTicket.DeveloperUserId).FullName;
+                //}
+
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
                     Property = "DeveloperUserId",
-                    OldValue = _context.Users.Find(oldTicket.DeveloperUserId).FullName,
+                    OldValue = oldval,
                     NewValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
                     Created = DateTime.Now,
                     UserId = userId

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Komodo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201106025620_initial")]
+    [Migration("20201110223357_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
