@@ -63,7 +63,7 @@ namespace Komodo.Controllers
             return RedirectToAction("ManageUserRoles");
         }
 
-        public async Task<IActionResult> MyRoles()
+        public async Task<IActionResult> MyRole()
         {
             var userId = _userManager.GetUserId(User);
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);

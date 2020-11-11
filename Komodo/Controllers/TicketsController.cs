@@ -153,6 +153,32 @@ namespace Komodo.Controllers
             return View(ticket);
         }
 
+        public async Task<IActionResult> ProjectTicketDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var ticket = await _context.Tickets
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            return View(ticket);
+        }
+
         // GET: Tickets/Create
         public IActionResult Create()
         {

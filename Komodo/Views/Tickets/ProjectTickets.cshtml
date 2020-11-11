@@ -82,7 +82,7 @@
                         }
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@ticket.Id">Details</a>
+                        <a asp-action="ProjectTicketDetails" asp-route-id="@ticket.Id">Details</a>
                         @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
                         {
                             <a asp-action="Edit" asp-route-id="@ticket.Id">Edit</a>
