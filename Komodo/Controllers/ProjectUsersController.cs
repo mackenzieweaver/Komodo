@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Komodo.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="Admin")]
     public class ProjectUsersController : Controller
     {
         private readonly ApplicationDbContext _context;

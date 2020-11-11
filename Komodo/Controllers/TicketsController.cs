@@ -44,6 +44,22 @@ namespace Komodo.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [Authorize(Roles="ProjectManager")]
+        public async Task<IActionResult> MyProjects()
+        {
+            var userId = _userManager.GetUserId(User);
+            var projectUserRecords = await _context.ProjectUsers
+                                    .Where(p => p.UserId == userId)
+                                    .Include(pu => pu.Project)
+                                    .ToListAsync();
+            var projects = new List<Project>();
+            foreach(var projectUserRecord in projectUserRecords)
+            {
+                projects.Add(projectUserRecord.Project);
+            }
+            return View(projects);
+        }
+
         [Authorize(Roles = "ProjectManager,Developer")]
         public async Task<IActionResult> ProjectTickets()
         {

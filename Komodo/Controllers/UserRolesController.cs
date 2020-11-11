@@ -10,10 +10,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Komodo.Controllers
 {
-    [Authorize(Roles="Admin")]
+    [Authorize]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,6 +28,7 @@ namespace Komodo.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ManageUserRoles()
         {
             List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();
@@ -59,6 +61,14 @@ namespace Komodo.Controllers
                 return RedirectToAction("ManageUserRoles");
             }
             return RedirectToAction("ManageUserRoles");
+        }
+
+        public async Task<IActionResult> MyRoles()
+        {
+            var userId = _userManager.GetUserId(User);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var roles = await _rolesService.ListUserRoles(user);
+            return View(roles);
         }
     }
 }

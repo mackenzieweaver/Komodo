@@ -32,12 +32,18 @@
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">All Tickets</a>
                             </li>
                             @if (User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="ProjectTickets">Project Tickets</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("ProjectManager"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="MyProjects">My Projects</a>
                                 </li>
                             }
                             @if (User.IsInRole("Developer"))
@@ -53,11 +59,14 @@
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TicketComments" asp-action="Index">Comments</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="MyRoles">My Role</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TicketAttachments" asp-action="Index">Attachments</a>
-                            </li>
+                            @*<li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="TicketComments" asp-action="Index">Comments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="TicketAttachments" asp-action="Index">Attachments</a>
+            </li>*@
                         }
                     </ul>
                 </div>
