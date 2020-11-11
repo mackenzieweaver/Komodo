@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Komodo.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="Admin")]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,12 +25,13 @@ namespace Komodo.Controllers
             _context = context;
             _rolesService = rolesService;
             _userManager = userManager;
-        }    
-        [Authorize(Roles="Admin,ProjectManager")]
+        }
+
         public async Task<IActionResult> ManageUserRoles()
         {
             List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();
-            List<BTUser> users = _context.Users.ToList();
+            var userId = _userManager.GetUserId(User);
+            List<BTUser> users = _context.Users.Where(u => u.Id != userId).ToList();
             foreach(var user in users)
             {
                 ManageUserRolesViewModel vm = new ManageUserRolesViewModel();

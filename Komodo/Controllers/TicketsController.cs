@@ -32,8 +32,83 @@ namespace Komodo.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
+            //var id = _userManager.GetUserId(User);
+            //if(User.IsInRole("Admin"){ Where(u => u.Id == id) }
+            var applicationDbContext = _context.Tickets
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType);
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        [Authorize(Roles = "ProjectManager,Developer")]
+        public async Task<IActionResult> ProjectTickets()
+        {
+            var userId = _userManager.GetUserId(User);
+            var projectUsers = await _context.ProjectUsers.Where(p => p.UserId == userId).ToListAsync();
+            var projectIds = new List<int>();
+            foreach (var projectUser in projectUsers)
+            {
+                projectIds.Add(projectUser.ProjectId);
+            }
+            var projects = new List<Project>();
+            foreach (var id in projectIds)
+            {
+                projects.Add(_context.Projects
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketType)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketPriority)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketStatus)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketType)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.DeveloperUser)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.OwnerUser)
+                    .FirstOrDefault(p => p.Id == id));
+            }
+            return View(projects);
+        }
+
+        [Authorize(Roles = "Developer")]
+        public async Task<IActionResult> MyTickets()
+        {
+            var userId = _userManager.GetUserId(User);
+            var tickets = await _context.Tickets
+                .Where(t => t.DeveloperUserId == userId)
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
+                .ToListAsync();
+            return View(tickets);
+        }
+
+        [Authorize(Roles="Submitter")]
+        public async Task<IActionResult> CreatedTickets()
+        {
+            var userId = _userManager.GetUserId(User);
+            var tickets = await _context.Tickets
+                .Where(t => t.OwnerUserId == userId)
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
+                .ToListAsync();
+            return View(tickets);
         }
 
         // GET: Tickets/Details/5
@@ -84,7 +159,7 @@ namespace Komodo.Controllers
             ticket.OwnerUserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
-                if(attachment != null)
+                if (attachment != null)
                 {
                     AttachmentHandler attachmentHandler = new AttachmentHandler();
                     ticket.Attachments.Add(attachmentHandler.Attach(attachment));
@@ -102,7 +177,7 @@ namespace Komodo.Controllers
             return View(ticket);
         }
 
-        [Authorize(Roles="Admin,ProjectManager,Developer")]
+        [Authorize(Roles = "Admin,ProjectManager,Developer")]
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

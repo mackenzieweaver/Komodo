@@ -1,46 +1,10 @@
-﻿@model Komodo.Models.Project
-
+﻿@model IEnumerable<Komodo.Models.Project>
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Project Tickets";
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>Project</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageData)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImageData)
-        </dd>
-        <dt class="col-sm-2">
-            Team Members
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var user in Model.ProjectUsers)
-            {
-                @user.User.FullName <br />                
-            }
-        </dd>
-    </dl>
-</div>
-<div>
-    <table class="table">
+@foreach (var project in Model)
+{
+    <table id="ticketsIndex" class="table">
         <thead>
             <tr>
                 <th>
@@ -59,26 +23,26 @@
                     Project
                 </th>
                 <th>
-                    TicketType
+                    Type
                 </th>
                 <th>
-                    TicketPriority
+                    Priority
                 </th>
                 <th>
-                    TicketStatus
+                    Status
                 </th>
                 <th>
-                    OwnerUser
+                    Owner
                 </th>
                 <th>
-                    DeveloperUser
+                    Developer
                 </th>
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var ticket in Model.Tickets)
-            {
+        @foreach (var ticket in project.Tickets)
+        {
+            <tbody>
                 <tr>
                     <td>
                         @ticket.Title
@@ -93,7 +57,7 @@
                         @ticket.Updated
                     </td>
                     <td>
-                        @Model.Name
+                        @ticket.Project.Name
                     </td>
                     <td>
                         @ticket.TicketType.Name
@@ -108,7 +72,7 @@
                         @ticket.OwnerUser.FullName
                     </td>
                     <td>
-                        @if(ticket.DeveloperUserId == null)
+                        @if (ticket.DeveloperUserId == null)
                         {
                             <p>Unassigned</p>
                         }
@@ -117,13 +81,16 @@
                             @ticket.DeveloperUser.FullName
                         }
                     </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@ticket.Id">Details</a>
+                        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@ticket.Id">Edit</a>
+                            @*<a asp-action="Delete" asp-route-id="@ticket.Id">Delete</a>*@
+                        }
+                    </td>
                 </tr>
-            }
-        </tbody>
+            </tbody>
+        }
     </table>
-</div>
-<div>
-    <a asp-action="AssignUsers" asp-route-id="@Model.Id">Assign</a> |
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+}
