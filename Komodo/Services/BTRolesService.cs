@@ -46,9 +46,13 @@ namespace Komodo.Services
             return await _userManager.GetUsersInRoleAsync(roleName);
         }
 
-        public async Task<ICollection<BTUser>> UsersNotInRole(IdentityRole role)
+        //public async Task<ICollection<BTUser>> UsersNotInRole(IdentityRole role)
+        public async Task<IEnumerable<BTUser>> UsersNotInRole(string roleName)
         {
-            return await _userManager.Users.Where(u => IsUserInRole(u, role.Name).Result == false).ToListAsync();
+            //return await _userManager.Users.Where(u => IsUserInRole(u, role.Name).Result == false).ToListAsync();
+            var inRole = await _userManager.GetUsersInRoleAsync(roleName);
+            var users = await _userManager.Users.ToListAsync();
+            return users.Except(inRole);
         }
     }
 }
