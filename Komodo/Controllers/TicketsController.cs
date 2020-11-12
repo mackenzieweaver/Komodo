@@ -19,14 +19,18 @@ namespace Komodo.Controllers
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IBTHistoryService _historyService;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTHistoryService _historyService;
+        private readonly IBTRolesService _rolesService;
+        private readonly IBTProjectService _projectService;
 
-        public TicketsController(ApplicationDbContext context, IBTHistoryService historyService, UserManager<BTUser> userManager)
+        public TicketsController(ApplicationDbContext context, IBTHistoryService historyService, UserManager<BTUser> userManager, IBTRolesService rolesService, IBTProjectService projectService)
         {
             _context = context;
-            _historyService = historyService;
             _userManager = userManager;
+            _historyService = historyService;
+            _rolesService = rolesService;
+            _projectService = projectService;
         }
 
         // GET: Tickets
@@ -227,8 +231,25 @@ namespace Komodo.Controllers
             {
                 return NotFound();
             }
-
             var ticket = await _context.Tickets.FindAsync(id);
+
+            // is user in role project manager?
+            var user = await _userManager.GetUserAsync(User);
+            if (await _rolesService.IsUserInRole(user, "ProjectManager") || await _rolesService.IsUserInRole(user, "Developer"))
+            {
+                // is user on project?
+                var projectUser = (await _context.ProjectUsers.FirstOrDefaultAsync(pu => pu.UserId == user.Id && pu.ProjectId == ticket.ProjectId));
+                if(projectUser == null)
+                {
+                    return RedirectToAction("Index");
+                }
+                // is developer assigned to the ticket?
+                if (ticket.DeveloperUserId != user.Id)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
             if (ticket == null)
             {
                 return NotFound();

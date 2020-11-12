@@ -1,9 +1,9 @@
 ﻿@model Komodo.Models.Ticket
-@inject Komodo.Data.ApplicationDbContext _context
+@inject Microsoft.AspNetCore.Identity.UserManager<BTUser> _userManager
 @inject Komodo.Services.IBTProjectService _projectService
 @{
     ViewData["Title"] = "Details";
-    var userId = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name).Id;
+    var userId = _userManager.GetUserId(User);
 }
 
 <h1>Details</h1>

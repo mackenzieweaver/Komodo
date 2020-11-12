@@ -1,45 +1,47 @@
 ﻿@model IEnumerable<Komodo.Models.Project>
+@inject Microsoft.AspNetCore.Identity.UserManager<BTUser> _userManager
 @{
     ViewData["Title"] = "Project Tickets";
+    var userId = _userManager.GetUserId(User);
 }
-@foreach (var project in Model)
-{
-    <table id="ticketsIndex" class="table">
-        <thead>
-            <tr>
-                <th>
-                    Title
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Created
-                </th>
-                <th>
-                    Updated
-                </th>
-                <th>
-                    Project
-                </th>
-                <th>
-                    Type
-                </th>
-                <th>
-                    Priority
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    Owner
-                </th>
-                <th>
-                    Developer
-                </th>
-                <th></th>
-            </tr>
-        </thead>
+<table id="ticketsIndex" class="table">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Created
+            </th>
+            <th>
+                Updated
+            </th>
+            <th>
+                Project
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Priority
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Owner
+            </th>
+            <th>
+                Developer
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var project in Model)
+    {
         @foreach (var ticket in project.Tickets)
         {
             <tbody>
@@ -83,14 +85,22 @@
                     </td>
                     <td>
                         <a asp-action="ProjectTicketDetails" asp-route-id="@ticket.Id">Details</a>
-                        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                        @if (User.IsInRole("Admin"))
                         {
                             <a asp-action="Edit" asp-route-id="@ticket.Id">Edit</a>
-                            @*<a asp-action="Delete" asp-route-id="@ticket.Id">Delete</a>*@
+                            <a asp-action="Delete" asp-route-id="@ticket.Id">Delete</a>
+                        }
+                        @if (User.IsInRole("ProjectManager"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@ticket.Id">Edit</a>
+                        }
+                        @if (User.IsInRole("Developer") && ticket.DeveloperUserId == userId)
+                        {
+                            <a asp-action="Edit" asp-route-id="@ticket.Id">Edit</a>
                         }
                     </td>
                 </tr>
             </tbody>
         }
-    </table>
-}
+    }
+</table>
