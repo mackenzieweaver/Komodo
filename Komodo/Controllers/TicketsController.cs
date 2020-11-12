@@ -200,16 +200,11 @@ namespace Komodo.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
         {
             ticket.OwnerUserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
-                if (attachment != null)
-                {
-                    AttachmentHandler attachmentHandler = new AttachmentHandler();
-                    ticket.Attachments.Add(attachmentHandler.Attach(attachment));
-                }
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -268,7 +263,7 @@ namespace Komodo.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
         {
             if (id != ticket.Id)
             {
@@ -279,12 +274,7 @@ namespace Komodo.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
-                    if (attachment != null)
-                    {
-                        AttachmentHandler attachmentHandler = new AttachmentHandler();
-                        ticket.Attachments.Add(attachmentHandler.Attach(attachment));
-                    }
+                {                    
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
                 }

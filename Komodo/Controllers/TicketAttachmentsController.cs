@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Komodo.Data;
 using Komodo.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Komodo.Controllers
 {
@@ -61,10 +63,23 @@ namespace Komodo.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment)
+        public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment, IFormFile attachment)
         {
             if (ModelState.IsValid)
             {
+                var memoryStream = new MemoryStream();
+                attachment.CopyTo(memoryStream);
+                byte[] bytes = memoryStream.ToArray();
+                memoryStream.Close();
+                memoryStream.Dispose();
+                var binary = Convert.ToBase64String(bytes);
+                var ext = Path.GetExtension(attachment.FileName);
+
+                ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
+                ticketAttachment.FileData = bytes;
+                ticketAttachment.Description = attachment.FileName;
+                ticketAttachment.Created = DateTime.Now;
+            
                 _context.Add(ticketAttachment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
