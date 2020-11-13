@@ -8,17 +8,16 @@
 
 <h1>Details</h1>
 
-<div>
-    <h4>Project</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
+<h4>Project</h4>
+<hr />
+<dl>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Name)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Name)
+    </dd>
+    @*<dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ImagePath)
         </dt>
         <dd class="col-sm-10">
@@ -29,113 +28,110 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ImageData)
-        </dd>
-        <dt class="col-sm-2">
-            Team Members
-        </dt>
-        <dd class="col-sm-10">
-            <div class="row">
-                @foreach (var user in Model.ProjectUsers)
-                {
-                    <div class="col-md-3">
-                        <b>@user.User.FullName</b>
-                    </div>
-                    <div class="col-md-3">
-                        @foreach (var role in await _rolesService.ListUserRoles(user.User))
-                        {
-                            <em>@role</em>
-                        }
-                    </div>
-                    <div class="col-md-6"></div>
-                    <br />
-                }
-            </div>
-        </dd>
-    </dl>
-</div>
-<div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Title
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Created
-                </th>
-                <th>
-                    Updated
-                </th>
-                <th>
-                    Project
-                </th>
-                <th>
-                    TicketType
-                </th>
-                <th>
-                    TicketPriority
-                </th>
-                <th>
-                    TicketStatus
-                </th>
-                <th>
-                    OwnerUser
-                </th>
-                <th>
-                    DeveloperUser
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ticket in Model.Tickets)
+        </dd>*@
+    <dt class="col-sm-2">
+        Team Members
+    </dt>
+    <dd class="col-sm-10">
+        <div class="row">
+            @foreach (var user in Model.ProjectUsers)
             {
-                <tr>
-                    <td>
-                        @ticket.Title
-                    </td>
-                    <td>
-                        @ticket.Description
-                    </td>
-                    <td>
-                        @ticket.Created
-                    </td>
-                    <td>
-                        @ticket.Updated
-                    </td>
-                    <td>
-                        @Model.Name
-                    </td>
-                    <td>
-                        @ticket.TicketType.Name
-                    </td>
-                    <td>
-                        @ticket.TicketPriority.Name
-                    </td>
-                    <td>
-                        @ticket.TicketStatus.Name
-                    </td>
-                    <td>
-                        @ticket.OwnerUser.FullName
-                    </td>
-                    <td>
-                        @if (ticket.DeveloperUserId == null)
-                        {
-                            <p>Unassigned</p>
-                        }
-                        else
-                        {
-                            @ticket.DeveloperUser.FullName
-                        }
-                    </td>
-                </tr>
+                <div class="col-md-3">
+                    <b>@user.User.FullName</b>
+                </div>
+                <div class="col-md-3">
+                    @foreach (var role in await _rolesService.ListUserRoles(user.User))
+                    {
+                        <em>@role</em>
+                    }
+                </div>
+                <div class="col-md-6"></div>
+                <br />
             }
-        </tbody>
-    </table>
-</div>
+        </div>
+    </dd>
+</dl>
+<table class="table" id="ticketsIndex">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Created
+            </th>
+            <th>
+                Updated
+            </th>
+            <th>
+                Project
+            </th>
+            <th>
+                TicketType
+            </th>
+            <th>
+                TicketPriority
+            </th>
+            <th>
+                TicketStatus
+            </th>
+            <th>
+                OwnerUser
+            </th>
+            <th>
+                DeveloperUser
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model.Tickets)
+        {
+            <tr>
+                <td>
+                    @ticket.Title
+                </td>
+                <td>
+                    @ticket.Description
+                </td>
+                <td>
+                    @ticket.Created
+                </td>
+                <td>
+                    @ticket.Updated
+                </td>
+                <td>
+                    @Model.Name
+                </td>
+                <td>
+                    @ticket.TicketType.Name
+                </td>
+                <td>
+                    @ticket.TicketPriority.Name
+                </td>
+                <td>
+                    @ticket.TicketStatus.Name
+                </td>
+                <td>
+                    @ticket.OwnerUser.FullName
+                </td>
+                <td>
+                    @if (ticket.DeveloperUserId == null)
+                    {
+                        <p>Unassigned</p>
+                    }
+                    else
+                    {
+                        @ticket.DeveloperUser.FullName
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 <div>
     <a asp-action="AssignUsers" asp-route-id="@Model.Id">Assign</a> |
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

@@ -10,7 +10,8 @@ namespace Komodo.Models.ViewModels
     {
         public Project Project { get; set; }
         // populates list box
-        public MultiSelectList Users { get; set; }
+        public MultiSelectList UsersOnProject { get; set; }
+        public MultiSelectList UsersOffProject { get; set; }
         // receives selected users
         public string[] SelectedUsers { get; set; } 
     }

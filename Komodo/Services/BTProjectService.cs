@@ -130,19 +130,17 @@ namespace Komodo.Services
 
         public async Task<ICollection<BTUser>> UsersNotOnProject(int projectId)
         {
-            var Users = await _context.Users.Where(u => IsUserOnProject(u.Id, projectId).Result == false).ToListAsync();
-
-            //var users = await _context.Users.ToListAsync();
-            //ICollection<BTUser> Users = new List<BTUser>();
-            //foreach (var user in users)
-            //{
-            //    var result = IsUserOnProject(user.Id, projectId).Result;
-            //    if (result == false) 
-            //    {
-            //        Users.Add(user);
-            //    }
-            //}
-
+            //var Users = await _context.Users.Where(u => IsUserOnProject(u.Id, projectId).Result == false).ToListAsync();
+            var users = await _context.Users.ToListAsync();
+            ICollection<BTUser> Users = new List<BTUser>();
+            foreach (var user in users)
+            {
+                var result = IsUserOnProject(user.Id, projectId).Result;
+                if (result == false)
+                {
+                    Users.Add(user);
+                }
+            }
             return Users;
         }
 

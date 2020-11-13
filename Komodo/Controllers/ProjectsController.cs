@@ -183,9 +183,13 @@ namespace Komodo.Controllers
             var project = _context.Projects.Find(id);
 
             model.Project = project;
-            List<BTUser> users = await _context.Users.ToListAsync();
             List<BTUser> members = (List<BTUser>)await _bTProjectService.UsersOnProject(id);
-            model.Users = new MultiSelectList(users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName", members);
+
+            var usersOnProj = await _bTProjectService.UsersOnProject(project.Id);
+            model.UsersOnProject = new MultiSelectList(usersOnProj, "Id", "FullName", members);
+            var usersOffProj = await _bTProjectService.UsersNotOnProject(project.Id);
+            model.UsersOffProject = new MultiSelectList(usersOffProj, "Id", "FullName", members);
+
             return View(model);
         }
 
@@ -199,15 +203,31 @@ namespace Komodo.Controllers
                 {
                     var currentMembers = await _context.Projects.Include(p => p.ProjectUsers).FirstOrDefaultAsync(p => p.Id == model.Project.Id);
                     List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
-                    foreach(string id in memberIds)
-                    {
-                        await _bTProjectService.RemoveUserFromProject(id, model.Project.Id);
-                    }
                     foreach(string id in model.SelectedUsers)
                     {
                         await _bTProjectService.AddUserToProject(id, model.Project.Id);
                     }
-                    return RedirectToAction("Index", "Projects");
+                    return RedirectToAction("AssignUsers", "Projects", new { id = model.Project.Id});
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveUsers(ProjectUsersViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.SelectedUsers != null)
+                {
+                    var currentMembers = await _context.Projects.Include(p => p.ProjectUsers).FirstOrDefaultAsync(p => p.Id == model.Project.Id);
+                    List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
+                    foreach (string id in model.SelectedUsers)
+                    {
+                        await _bTProjectService.RemoveUserFromProject(id, model.Project.Id);
+                    }
+                    return RedirectToAction("AssignUsers", "Projects", new { id = model.Project.Id });
                 }
             }
             return View(model);
