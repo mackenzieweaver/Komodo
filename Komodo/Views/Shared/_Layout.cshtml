@@ -18,10 +18,16 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity.IsAuthenticated)
-                        {
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <partial name="_LoginPartial" />
+                        <ul class="navbar-nav flex-grow-1">
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">All Tickets</a>
+                            </li>
+
+                            @*admin*@
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
@@ -31,44 +37,41 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
                                 </li>
                             }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">All Tickets</a>
-                            </li>
-                            @if (User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
+
+                            @*PM*@
+                            @if (User.IsInRole("ProjectManager"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">All Projects</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="MyProjects">My Projects</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="ProjectTickets">My Tickets</a>
+                                </li>
+                            }
+
+                            @*dev*@
+                            @if (User.IsInRole("Developer"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="ProjectTickets">Project Tickets</a>
                                 </li>
-                            }
-                            @if (User.IsInRole("ProjectManager"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="MyProjects">My Projects</a>
-                                </li>
-                            }
-                            @if (User.IsInRole("Developer"))
-                            {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="MyTickets">My Tickets</a>
                                 </li>
                             }
+
+                            @*sub*@
                             @if (User.IsInRole("Submitter"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="CreatedTickets">Created Tickets</a>
                                 </li>
                             }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="MyRole">My Role</a>
-                            </li>
-                            @*<li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="TicketComments" asp-action="Index">Comments</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="TicketAttachments" asp-action="Index">Attachments</a>
-            </li>*@
-                        }
-                    </ul>
+                        </ul>
+                     }
                 </div>
             </div>
         </nav>

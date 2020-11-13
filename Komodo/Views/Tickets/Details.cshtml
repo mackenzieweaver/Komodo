@@ -10,7 +10,7 @@
 <h4>Current Ticket</h4>
 <hr />
 <div class="row">
-    <div class="col">
+    <div class="col-md-8">
         <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Title)
@@ -105,7 +105,7 @@
         </dl>
 
         @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
-         User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+        User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
         {
             <h5 class="mt-3">Add an attachment</h5>
             <form asp-controller="TicketAttachments" asp-action="Create" class="ml-0 pl-0" enctype="multipart/form-data">
@@ -125,9 +125,14 @@
                     <input type="submit" value="Post" class="btn btn-outline-dark" />
                 </div>
             </form>
+
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | 
+                <a asp-action="Index">Back to List</a>
+            </div>
         }
     </div>
-    <div class="col-4">
+    <div class="col-md-4">
         <dl>
             <dt class="col-sm-12">
                 <p>History</p>
@@ -136,18 +141,13 @@
             <dd class="col-sm-12">
                 @foreach (var history in Model.Histories.OrderByDescending(h => h.Created))
                 {
-                    <p>Created: @history.Created</p>
-                    <p>Property: @history.Property</p>
-                    <p>OldValue: @history.OldValue</p>
-                    <p>NewValue: @history.NewValue</p>
+                    <p>When: @history.Created</p>
+                    <p>What: @history.Property</p>
+                    <p>Was: @history.OldValue</p>
+                    <p>Now: @history.NewValue</p>
                     <hr />
                 }
             </dd>
         </dl>
     </div>
-</div>
-
-<div>
-    @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
-    <a asp-action="Index">Back to List</a>
 </div>

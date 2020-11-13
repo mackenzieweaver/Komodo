@@ -1,16 +1,18 @@
 ﻿@model IEnumerable<Komodo.Models.Ticket>
 @inject Microsoft.AspNetCore.Identity.UserManager<BTUser> _userManager
+@inject Komodo.Services.IBTProjectService _projectService
 
 @{
     ViewData["Title"] = "Index";
     var userId = _userManager.GetUserId(User);
 }
 
-<h1>Index</h1>
+<h1>All tickets in system</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-outline-dark" asp-action="Create">New Ticket</a>
 </p>
+
 <table id="ticketsIndex" class="table">
     <thead>
         <tr>
@@ -89,15 +91,11 @@
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                @if (User.IsInRole("Admin"))
-                {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                }
-                @if (User.IsInRole("Developer") && item.DeveloperUserId == userId)
-                {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                }
+                @if (User.IsInRole("Admin") ||
+                    User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, item.ProjectId) ||
+                    User.IsInRole("Developer") && item.DeveloperUserId == userId ||
+                    User.IsInRole("Submitter") && item.OwnerUserId == userId){
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>}
             </td>
         </tr>
 }

@@ -54,7 +54,7 @@ namespace Komodo.Services
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
-                    Property = "TicketTypeId",
+                    Property = "Type",
                     OldValue = _context.TicketTypes.Find(oldTicket.TicketTypeId).Name,
                     NewValue = _context.TicketTypes.Find(newTicket.TicketTypeId).Name,
                     Created = DateTime.Now,
@@ -68,7 +68,7 @@ namespace Komodo.Services
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
-                    Property = "TicketPriorityId",
+                    Property = "Priority",
                     OldValue = _context.TicketPriorities.Find(oldTicket.TicketPriorityId).Name,
                     NewValue = _context.TicketPriorities.Find(newTicket.TicketPriorityId).Name,
                     Created = DateTime.Now,
@@ -82,7 +82,7 @@ namespace Komodo.Services
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
-                    Property = "TicketStatusId",
+                    Property = "Status",
                     OldValue = _context.TicketStatuses.Find(oldTicket.TicketStatusId).Name,
                     NewValue = _context.TicketStatuses.Find(newTicket.TicketStatusId).Name,
                     Created = DateTime.Now,
@@ -97,7 +97,7 @@ namespace Komodo.Services
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
-                    Property = "DeveloperUserId",
+                    Property = "Developer",
                     OldValue = oldval,
                     NewValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
                     Created = DateTime.Now,

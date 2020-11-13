@@ -5,7 +5,9 @@
 }
 
 <h1>Tickets I've made</h1>
-
+<p>
+    <a class="btn btn-outline-dark" asp-action="Create">New Ticket</a>
+</p>
 <table id="ticketsIndex" class="table">
     <thead>
         <tr>
@@ -85,6 +87,7 @@
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                 </td>
             </tr>
         }

@@ -10,25 +10,44 @@ using Komodo.Models;
 using Komodo.Models.ViewModels;
 using Komodo.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Komodo.Controllers
 {
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles="Admin,ProjectManager")]
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _bTProjectService;
+        private readonly UserManager<BTUser> _userManager;
 
-        public ProjectsController(ApplicationDbContext context, IBTProjectService bTProjectService)
+        public ProjectsController(ApplicationDbContext context, IBTProjectService bTProjectService, UserManager<BTUser> userManager)
         {
             _context = context;
             _bTProjectService = bTProjectService;
+            _userManager = userManager;
         }
 
         // GET: Projects
         public async Task<IActionResult> Index()
         {
             return View(await _context.Projects.ToListAsync());
+        }
+
+        [Authorize(Roles = "ProjectManager")]
+        public async Task<IActionResult> MyProjects()
+        {
+            var userId = _userManager.GetUserId(User);
+            var projectUserRecords = await _context.ProjectUsers
+                                    .Where(p => p.UserId == userId)
+                                    .Include(pu => pu.Project)
+                                    .ToListAsync();
+            var projects = new List<Project>();
+            foreach (var projectUserRecord in projectUserRecords)
+            {
+                projects.Add(projectUserRecord.Project);
+            }
+            return View(projects);
         }
 
         // GET: Projects/Details/5

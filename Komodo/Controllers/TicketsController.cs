@@ -48,22 +48,6 @@ namespace Komodo.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        [Authorize(Roles="ProjectManager")]
-        public async Task<IActionResult> MyProjects()
-        {
-            var userId = _userManager.GetUserId(User);
-            var projectUserRecords = await _context.ProjectUsers
-                                    .Where(p => p.UserId == userId)
-                                    .Include(pu => pu.Project)
-                                    .ToListAsync();
-            var projects = new List<Project>();
-            foreach(var projectUserRecord in projectUserRecords)
-            {
-                projects.Add(projectUserRecord.Project);
-            }
-            return View(projects);
-        }
-
         [Authorize(Roles = "ProjectManager,Developer")]
         public async Task<IActionResult> ProjectTickets()
         {
@@ -219,7 +203,7 @@ namespace Komodo.Controllers
             return View(ticket);
         }
 
-        [Authorize(Roles = "Admin,ProjectManager,Developer")]
+        [Authorize(Roles = "Admin,ProjectManager,Developer,Submitter")]
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -244,6 +228,11 @@ namespace Komodo.Controllers
                 {
                     return RedirectToAction("Index");
                 }
+            }
+
+            if (await _rolesService.IsUserInRole(user, "Submitter") && ticket.OwnerUserId != user.Id)
+            {
+                return RedirectToAction("Index");
             }
 
             if (ticket == null)

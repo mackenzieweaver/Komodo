@@ -67,22 +67,26 @@ namespace Komodo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var memoryStream = new MemoryStream();
-                attachment.CopyTo(memoryStream);
-                byte[] bytes = memoryStream.ToArray();
-                memoryStream.Close();
-                memoryStream.Dispose();
-                var binary = Convert.ToBase64String(bytes);
-                var ext = Path.GetExtension(attachment.FileName);
+                if (attachment != null)
+                {
+                    var memoryStream = new MemoryStream();
+                    attachment.CopyTo(memoryStream);
+                    byte[] bytes = memoryStream.ToArray();
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                    var binary = Convert.ToBase64String(bytes);
+                    var ext = Path.GetExtension(attachment.FileName);
 
-                ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
-                ticketAttachment.FileData = bytes;
-                ticketAttachment.Description = attachment.FileName;
-                ticketAttachment.Created = DateTime.Now;
-            
-                _context.Add(ticketAttachment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
+                    ticketAttachment.FileData = bytes;
+                    ticketAttachment.Description = attachment.FileName;
+                    ticketAttachment.Created = DateTime.Now;
+
+                    _context.Add(ticketAttachment);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);

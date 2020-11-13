@@ -1,7 +1,9 @@
 ﻿@model Komodo.Models.Ticket
-
+@inject Microsoft.AspNetCore.Identity.UserManager<BTUser> _userManager
+@inject Komodo.Services.IBTProjectService _projectService
 @{
     ViewData["Title"] = "Edit";
+    var userId = _userManager.GetUserId(User);
 }
 
 <h1>Edit</h1>
@@ -12,7 +14,14 @@
     <div class="col-md-4">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @* Hiddens *@
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="@Model.Created" />
+            <input type="hidden" asp-for="Updated" value="@DateTime.Now" />
+            <input type="hidden" asp-for="@Model.ProjectId" />
+            <input type="hidden" asp-for="@Model.OwnerUserId" />
+
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -23,24 +32,6 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="@Model.Created" />
-            <input type="hidden" asp-for="Updated" value="@DateTime.Now" />
-            @*<div class="form-group">
-        <label asp-for="Created" class="control-label"></label>
-        <input asp-for="Created" class="form-control" />
-        <span asp-validation-for="Created" class="text-danger"></span>
-        </div>*@
-            @*<div class="form-group">
-        <label asp-for="Updated" class="control-label"></label>
-        <input asp-for="Updated" class="form-control" />
-        <span asp-validation-for="Updated" class="text-danger"></span>
-        </div>*@
-            <input type="hidden" asp-for="@Model.ProjectId" />
-            @*<div class="form-group">
-        <label asp-for="ProjectId" class="control-label"></label>
-        <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-        <span asp-validation-for="ProjectId" class="text-danger"></span>
-        </div>*@
             <div class="form-group">
                 <label asp-for="TicketTypeId" class="control-label"></label>
                 <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
@@ -51,22 +42,27 @@
                 <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
                 <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TicketStatusId" class="control-label"></label>
-                <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
-                <span asp-validation-for="TicketStatusId" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="@Model.OwnerUserId" />
-            @*<div class="form-group">
-        <label asp-for="OwnerUserId" class="control-label"></label>
-        <select asp-for="OwnerUserId" class="form-control" asp-items="ViewBag.OwnerUserId"></select>
-        <span asp-validation-for="OwnerUserId" class="text-danger"></span>
-        </div>*@
-            <div class="form-group">
-                <label asp-for="DeveloperUserId" class="control-label"></label>
-                <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
-                <span asp-validation-for="DeveloperUserId" class="text-danger"></span>
-            </div>
+
+            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
+            {
+                <div class="form-group">
+                    <label asp-for="TicketStatusId" class="control-label"></label>
+                    <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
+                    <span asp-validation-for="TicketStatusId" class="text-danger"></span>
+                </div>
+            }
+            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+            {
+                <div class="form-group">
+                    <label asp-for="DeveloperUserId" class="control-label"></label>
+                    <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
+                    <span asp-validation-for="DeveloperUserId" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <input type="hidden" asp-for="DeveloperUserId" />
+            }
             <div class="form-group">
                 <label for="FileName" class="control-label"></label><br />
                 <input name="attachment" type="file" />
