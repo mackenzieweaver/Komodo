@@ -51,6 +51,10 @@
                     <span asp-validation-for="TicketStatusId" class="text-danger"></span>
                 </div>
             }
+            else
+            {
+                <input type="hidden" asp-for="TicketStatusId" />
+            }
             @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
             {
                 <div class="form-group">

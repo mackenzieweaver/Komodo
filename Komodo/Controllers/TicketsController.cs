@@ -169,9 +169,32 @@ namespace Komodo.Controllers
         }
         [Authorize(Roles = "Admin,ProjectManager,Developer,Submitter")]
         // GET: Tickets/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            var user = await _userManager.GetUserAsync(User);
+            if(await _rolesService.IsUserInRole(user, "Admin"))
+            {
+                ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            }
+            else if (await _rolesService.IsUserInRole(user, "ProjectManager"))
+            {
+                var projects = await _projectService.ListUserProjects(user.Id);
+                var users = new List<ICollection<BTUser>>();
+                foreach(var project in projects)
+                {
+                    users.Add(await _projectService.UsersOnProject(project.Id));
+                }
+                List<BTUser> flatUsers = users.SelectMany(u => u).Distinct().ToList();
+                List<BTUser> devs = new List<BTUser>();
+                foreach(var flatuser in flatUsers)
+                {
+                    if(await _rolesService.IsUserInRole(flatuser, "Developer"))
+                    {
+                        devs.Add(flatuser);
+                    }
+                }
+                ViewData["DeveloperUserId"] = new SelectList(devs, "Id", "FullName");
+            }
             ViewData["OwnerUserId"] = new SelectList(_context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
@@ -212,34 +235,54 @@ namespace Komodo.Controllers
                 return NotFound();
             }
             var ticket = await _context.Tickets.FindAsync(id);
-
-            // is user in role project manager?
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+            // is user project manager or dev?
             var user = await _userManager.GetUserAsync(User);
             if (await _rolesService.IsUserInRole(user, "ProjectManager") || await _rolesService.IsUserInRole(user, "Developer"))
             {
-                // is user on project?
+                //if so is user on project?
                 var projectUser = (await _context.ProjectUsers.FirstOrDefaultAsync(pu => pu.UserId == user.Id && pu.ProjectId == ticket.ProjectId));
                 if(projectUser == null)
                 {
                     return RedirectToAction("Index");
                 }
-                // is developer assigned to the ticket?
-                if (ticket.DeveloperUserId != user.Id)
-                {
-                    return RedirectToAction("Index");
-                }
             }
-
+            if (await _rolesService.IsUserInRole(user, "Developer") && ticket.DeveloperUserId != user.Id)
+            {
+                // is developer assigned to the ticket?
+                return RedirectToAction("Index");
+            }
             if (await _rolesService.IsUserInRole(user, "Submitter") && ticket.OwnerUserId != user.Id)
             {
                 return RedirectToAction("Index");
             }
 
-            if (ticket == null)
+            if (await _rolesService.IsUserInRole(user, "ProjectManager"))
             {
-                return NotFound();
+                var projects = await _projectService.ListUserProjects(user.Id);
+                var users = new List<ICollection<BTUser>>();
+                foreach (var project in projects)
+                {
+                    users.Add(await _projectService.UsersOnProject(project.Id));
+                }
+                List<BTUser> flatUsers = users.SelectMany(u => u).Distinct().ToList();
+                List<BTUser> devs = new List<BTUser>();
+                foreach (var flatuser in flatUsers)
+                {
+                    if (await _rolesService.IsUserInRole(flatuser, "Developer"))
+                    {
+                        devs.Add(flatuser);
+                    }
+                }
+                ViewData["DeveloperUserId"] = new SelectList(devs, "Id", "FullName");
             }
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.DeveloperUserId);
+            else
+            {
+                ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.DeveloperUserId);
+            }
             ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.OwnerUserId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
             ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);

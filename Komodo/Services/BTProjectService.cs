@@ -81,7 +81,8 @@ namespace Komodo.Services
                 .ThenInclude(p => p.Project)
                 .FirstOrDefaultAsync(p => p.Id == userId);
 
-            List<Project> projects = user.ProjectUsers.SelectMany(p => (IEnumerable<Project>)p.Project).ToList();
+            //List<Project> projects = user.ProjectUsers.SelectMany(p => (IEnumerable<Project>)p.Project).ToList();
+            List<Project> projects = user.ProjectUsers.Select(p => p.Project).ToList();
             return projects;
         }
 

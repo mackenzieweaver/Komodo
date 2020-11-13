@@ -1,4 +1,6 @@
 ﻿@model Komodo.Models.Project
+@inject Microsoft.AspNetCore.Identity.UserManager<BTUser> _userManager
+@inject Komodo.Services.IBTRolesService _rolesService
 
 @{
     ViewData["Title"] = "Details";
@@ -32,10 +34,22 @@
             Team Members
         </dt>
         <dd class="col-sm-10">
-            @foreach (var user in Model.ProjectUsers)
-            {
-                @user.User.FullName <br />                
-            }
+            <div class="row">
+                @foreach (var user in Model.ProjectUsers)
+                {
+                    <div class="col-md-3">
+                        <b>@user.User.FullName</b>
+                    </div>
+                    <div class="col-md-3">
+                        @foreach (var role in await _rolesService.ListUserRoles(user.User))
+                        {
+                            <em>@role</em>
+                        }
+                    </div>
+                    <div class="col-md-6"></div>
+                    <br />
+                }
+            </div>
         </dd>
     </dl>
 </div>
@@ -108,7 +122,7 @@
                         @ticket.OwnerUser.FullName
                     </td>
                     <td>
-                        @if(ticket.DeveloperUserId == null)
+                        @if (ticket.DeveloperUserId == null)
                         {
                             <p>Unassigned</p>
                         }

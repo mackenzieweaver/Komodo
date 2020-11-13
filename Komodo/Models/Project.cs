@@ -25,6 +25,7 @@ namespace Komodo.Models
         public byte[] ImageData { get; set; }
 
         public List<ProjectUser> ProjectUsers { get; set; }
+
         public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }
