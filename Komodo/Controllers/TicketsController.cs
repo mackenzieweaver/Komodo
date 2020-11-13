@@ -167,7 +167,7 @@ namespace Komodo.Controllers
 
             return View(ticket);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager,Developer,Submitter")]
         // GET: Tickets/Create
         public IActionResult Create()
         {
