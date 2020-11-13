@@ -94,10 +94,14 @@
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                 @if (User.IsInRole("Admin") ||
-                    User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, item.ProjectId) ||
-                    User.IsInRole("Developer") && item.DeveloperUserId == userId ||
-                    User.IsInRole("Submitter") && item.OwnerUserId == userId){
+                   User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, item.ProjectId) ||
+                   User.IsInRole("Developer") && item.DeveloperUserId == userId ||
+                   User.IsInRole("Submitter") && item.OwnerUserId == userId){
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>}
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                }
             </td>
         </tr>
 }
