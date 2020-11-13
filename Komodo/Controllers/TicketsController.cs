@@ -174,7 +174,7 @@ namespace Komodo.Controllers
             var user = await _userManager.GetUserAsync(User);
             if(await _rolesService.IsUserInRole(user, "Admin"))
             {
-                ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
+                ViewData["DeveloperUserId"] = new SelectList(_context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName");
             }
             else if (await _rolesService.IsUserInRole(user, "ProjectManager"))
             {

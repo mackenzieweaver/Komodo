@@ -189,23 +189,16 @@ namespace Komodo.Controllers
             return View(model);
         }
 
-        //[Authorize(Roles="Admin,ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ProjectUsersViewModel model)
         {
-            //foreach(var userId in projectUsers.SelectedUsers)
-            //{
-            //    await _bTProjectService.AddUserToProject(userId, projectUsers.Project.Id);
-            //}
-            //return View(projectUsers);
             if (ModelState.IsValid)
             {
                 if(model.SelectedUsers != null)
                 {
                     var currentMembers = await _context.Projects.Include(p => p.ProjectUsers).FirstOrDefaultAsync(p => p.Id == model.Project.Id);
                     List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
-                    //memberIds.ForEach(i => _bTProjectService.RemoveUserFromProject(i, model.Project.Id));
                     foreach(string id in memberIds)
                     {
                         await _bTProjectService.RemoveUserFromProject(id, model.Project.Id);

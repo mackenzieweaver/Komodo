@@ -9,7 +9,9 @@ namespace Komodo.Models.ViewModels
     public class ProjectUsersViewModel
     {
         public Project Project { get; set; }
-        public MultiSelectList Users { get; set; } // populates list box
-        public string[] SelectedUsers { get; set; } // receives selected users
+        // populates list box
+        public MultiSelectList Users { get; set; }
+        // receives selected users
+        public string[] SelectedUsers { get; set; } 
     }
 }
