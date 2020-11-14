@@ -12,6 +12,7 @@ using Komodo.Models.ViewModels;
 using Komodo.Data;
 using Microsoft.EntityFrameworkCore;
 using Komodo.Services;
+using Komodo.Utilities;
 
 namespace Komodo.Controllers
 {
@@ -23,7 +24,11 @@ namespace Komodo.Controllers
         private readonly IBTProjectService _projectService;
         private readonly IBTRolesService _rolesService;
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, UserManager<BTUser> userManager, IBTProjectService projectService, IBTRolesService rolesService)
+        public HomeController(ApplicationDbContext context,
+            ILogger<HomeController> logger,
+            UserManager<BTUser> userManager,
+            IBTProjectService projectService,
+            IBTRolesService rolesService)
         {
             _context = context;
             _logger = logger;
@@ -36,14 +41,44 @@ namespace Komodo.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var vm = new HomePMViewModel();
-            if(await _userManager.IsInRoleAsync(user, "ProjectManager"))
+
+            // suggest action to pm
+            if (await _userManager.IsInRoleAsync(user, "ProjectManager"))
             {
-                var num = 5;
-                var tCount = _context.Tickets.ToList().Count;
-                num = tCount < num ? tCount : num;
-                for(var i = 0; i < num; i++)
+                // all pm projects
+                var projects = await _projectService.ListUserProjects(user.Id);
+                // all users on all projects, potential list of lists
+                var users = new List<ICollection<BTUser>>();
+                foreach (var project in projects)
                 {
+                    users.Add(await _projectService.UsersOnProject(project.Id));
+                }
+                // flatten multi list into single list of unique users
+                List<BTUser> flatUsers = users
+                    .SelectMany(u => u)
+                    .Distinct()
+                    .ToList();
+                // remove users that are not developers
+                List<BTUser> devs = new List<BTUser>();
+                foreach (var flatuser in flatUsers)
+                {
+                    if (await _rolesService.IsUserInRole(flatuser, "Developer"))
+                    {
+                        devs.Add(flatuser);
+                    }
+                }
+
+                // maximum suggestions
+                var num = 5;
+                // minimum suggestions = number of tickets
+                var tCount = _context.Tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
+                // if it's less than max
+                num = tCount < num ? tCount : num;
+                for (var i = 0; i < num; i++)
+                {
+                    // get ticket
                     var ticket = _context.Tickets
+                        .Where(t => t.DeveloperUserId == null)
                         .Include(t => t.TicketPriority)
                         .Include(t => t.TicketStatus)
                         .Include(t => t.TicketType)
@@ -52,32 +87,15 @@ namespace Komodo.Controllers
                         .Skip(i)
                         .Take(1)
                         .ToList()[0];
-                    // no dev on ticket
-                    if(ticket.DeveloperUserId == null)
-                    {
-                        // add ticket
-                        vm.Tickets.Add(ticket);
+                    vm.Tickets.Add(ticket);
 
-                        var projects = await _projectService.ListUserProjects(user.Id);
-                        var users = new List<ICollection<BTUser>>();
-                        foreach (var project in projects)
-                        {
-                            users.Add(await _projectService.UsersOnProject(project.Id));
-                        }
-                        List<BTUser> flatUsers = users.SelectMany(u => u).Distinct().OrderBy(u => u.ProjectUsers.Count).ToList();
-                        List<BTUser> devs = new List<BTUser>();
-                        foreach (var flatuser in flatUsers)
-                        {
-                            if (await _rolesService.IsUserInRole(flatuser, "Developer"))
-                            {
-                                devs.Add(flatuser);
-                            }
-                        }
-                        vm.Developers.Add(devs[0]);
+                    // get dev
+                    devs = BubbleSort.SortListOfDevsByTicketCount(devs, _context);
+                    vm.Developers.Add(devs[0]);
 
-                        var tickets = _context.Tickets.Where(t => t.DeveloperUserId == devs[0].Id).ToList();
-                        vm.Count.Add(tickets.Count);
-                    }
+                    // get task count
+                    var tickets = _context.Tickets.Where(t => t.DeveloperUserId == devs[0].Id).ToList();
+                    vm.Count.Add(tickets.Count);
                 }
             }
             return View(vm);
