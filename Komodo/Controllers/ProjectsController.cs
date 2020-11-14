@@ -186,9 +186,9 @@ namespace Komodo.Controllers
             List<BTUser> members = (List<BTUser>)await _bTProjectService.UsersOnProject(id);
 
             var usersOnProj = await _bTProjectService.UsersOnProject(project.Id);
-            model.UsersOnProject = new MultiSelectList(usersOnProj, "Id", "FullName", members);
+            model.UsersOnProject = new MultiSelectList(usersOnProj.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName", members);
             var usersOffProj = await _bTProjectService.UsersNotOnProject(project.Id);
-            model.UsersOffProject = new MultiSelectList(usersOffProj, "Id", "FullName", members);
+            model.UsersOffProject = new MultiSelectList(usersOffProj.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName", members);
 
             return View(model);
         }
