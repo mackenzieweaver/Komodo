@@ -146,7 +146,7 @@ namespace Komodo.Controllers
             }
             return View(project);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
