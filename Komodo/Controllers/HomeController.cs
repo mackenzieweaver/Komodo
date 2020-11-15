@@ -67,35 +67,37 @@ namespace Komodo.Controllers
                         devs.Add(flatuser);
                     }
                 }
-
-                // maximum suggestions
-                var num = 5;
-                // minimum suggestions = number of tickets
-                var tCount = _context.Tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
-                // if it's less than max
-                num = tCount < num ? tCount : num;
-                for (var i = 0; i < num; i++)
+                if (devs.Count > 0)
                 {
-                    // get ticket
-                    var ticket = _context.Tickets
-                        .Where(t => t.DeveloperUserId == null)
-                        .Include(t => t.TicketPriority)
-                        .Include(t => t.TicketStatus)
-                        .Include(t => t.TicketType)
-                        .OrderBy(t => t.TicketPriorityId)
-                        .ThenBy(t => t.TicketStatusId)
-                        .Skip(i)
-                        .Take(1)
-                        .ToList()[0];
-                    vm.Tickets.Add(ticket);
+                    // maximum suggestions
+                    var num = 5;
+                    // minimum suggestions = number of tickets
+                    var tCount = _context.Tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
+                    // if it's less than max
+                    num = tCount < num ? tCount : num;
+                    for (var i = 0; i < num; i++)
+                    {
+                        // get ticket
+                        var ticket = _context.Tickets
+                            .Where(t => t.DeveloperUserId == null)
+                            .Include(t => t.TicketPriority)
+                            .Include(t => t.TicketStatus)
+                            .Include(t => t.TicketType)
+                            .OrderBy(t => t.TicketPriorityId)
+                            .ThenBy(t => t.TicketStatusId)
+                            .Skip(i)
+                            .Take(1)
+                            .ToList()[0];
+                        vm.Tickets.Add(ticket);
 
-                    // get dev
-                    devs = BubbleSort.SortListOfDevsByTicketCount(devs, _context);
-                    vm.Developers.Add(devs[0]);
+                        // get dev
+                        devs = BubbleSort.SortListOfDevsByTicketCount(devs, _context);
+                        vm.Developers.Add(devs[0]);
 
-                    // get task count
-                    var tickets = _context.Tickets.Where(t => t.DeveloperUserId == devs[0].Id).ToList();
-                    vm.Count.Add(tickets.Count);
+                        // get task count
+                        var tickets = _context.Tickets.Where(t => t.DeveloperUserId == devs[0].Id).ToList();
+                        vm.Count.Add(tickets.Count);
+                    }
                 }
             }
             return View(vm);
