@@ -41,6 +41,16 @@ namespace Komodo.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var vm = new HomePMViewModel();
+            vm.numProjects = _context.Projects.ToList().Count;
+            vm.numTickets = _context.Tickets.ToList().Count;
+            vm.numClosed = _context.Tickets
+                .Include(t => t.TicketStatus)
+                .Where(t => t.TicketStatus.Name == "Closed")
+                .ToList().Count;
+            vm.numOpened = _context.Tickets
+                .Include(t => t.TicketStatus)
+                .Where(t => t.TicketStatus.Name == "Opened")
+                .ToList().Count;
 
             // suggest action to pm
             if (await _userManager.IsInRoleAsync(user, "ProjectManager"))
