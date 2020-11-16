@@ -303,7 +303,14 @@ namespace Komodo.Controllers
                 return NotFound();
             }
             // snapshot of record. AsNoTracking gives the data in the DB right now.
-            Ticket oldTic = await _context.Tickets.AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
+            Ticket oldTic = await _context.Tickets
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.Project)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == ticket.Id);
             if (ModelState.IsValid)
             {
                 try
@@ -324,7 +331,16 @@ namespace Komodo.Controllers
                 }
                 // Add History
                 var userId = _userManager.GetUserId(User);
-                await _historyService.AddHistory(oldTic, ticket, userId);
+                Ticket newTic = await _context.Tickets
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType)
+                    .Include(t => t.DeveloperUser)
+                    .Include(t => t.Project)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(t => t.Id == ticket.Id);
+
+                await _historyService.AddHistory(oldTic, newTic, userId);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);

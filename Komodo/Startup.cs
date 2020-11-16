@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Komodo.Models;
 using Komodo.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Komodo
 {
@@ -45,6 +46,10 @@ namespace Komodo
             services.AddScoped<IBTProjectService, BTProjectService>();
             services.AddScoped<IBTHistoryService, BTHistoryService>();
             services.AddScoped<IBTAccessService, BTAccessService>();
+            services.AddScoped<IBTNotificationService, BTNotificationService>();
+
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IEmailSender, EmailService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

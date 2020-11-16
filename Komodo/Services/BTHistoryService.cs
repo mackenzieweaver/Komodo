@@ -1,6 +1,7 @@
 ﻿using Komodo.Data;
 using Komodo.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,19 @@ namespace Komodo.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IEmailSender _emailService;
+        private readonly IBTNotificationService _notificationService;
 
-        public BTHistoryService(ApplicationDbContext context, UserManager<BTUser> userManager)
+        public BTHistoryService(
+            ApplicationDbContext context, 
+            UserManager<BTUser> userManager,
+            IEmailSender emailService,
+            IBTNotificationService notificationService)
         {
             _context = context;
             _userManager = userManager;
+            _emailService = emailService;
+            _notificationService = notificationService;
         }
         public async Task AddHistory(Ticket oldTicket, Ticket newTicket, string userId)
         {
@@ -55,8 +64,8 @@ namespace Komodo.Services
                 {
                     TicketId = newTicket.Id,
                     Property = "Type",
-                    OldValue = _context.TicketTypes.Find(oldTicket.TicketTypeId).Name,
-                    NewValue = _context.TicketTypes.Find(newTicket.TicketTypeId).Name,
+                    OldValue = oldTicket.TicketType.Name,
+                    NewValue = newTicket.TicketType.Name,
                     Created = DateTime.Now,
                     UserId = userId
                 };
@@ -69,8 +78,8 @@ namespace Komodo.Services
                 {
                     TicketId = newTicket.Id,
                     Property = "Priority",
-                    OldValue = _context.TicketPriorities.Find(oldTicket.TicketPriorityId).Name,
-                    NewValue = _context.TicketPriorities.Find(newTicket.TicketPriorityId).Name,
+                    OldValue = oldTicket.TicketPriority.Name,
+                    NewValue = newTicket.TicketPriority.Name,
                     Created = DateTime.Now,
                     UserId = userId
                 };
@@ -83,27 +92,28 @@ namespace Komodo.Services
                 {
                     TicketId = newTicket.Id,
                     Property = "Status",
-                    OldValue = _context.TicketStatuses.Find(oldTicket.TicketStatusId).Name,
-                    NewValue = _context.TicketStatuses.Find(newTicket.TicketStatusId).Name,
+                    OldValue = oldTicket.TicketStatus.Name,
+                    NewValue = newTicket.TicketStatus.Name,
                     Created = DateTime.Now,
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
             }
-            // Developer User
+            // New Developer
             if (oldTicket.DeveloperUserId != newTicket.DeveloperUserId)
             {
-                var oldval = oldTicket.DeveloperUserId == null ? "Unassigned" : _context.Users.Find(oldTicket.DeveloperUserId).FullName;
+                var oldval = oldTicket.DeveloperUserId == null ? "Unassigned" : oldTicket.DeveloperUser.FullName;
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
                     Property = "Developer",
                     OldValue = oldval,
-                    NewValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
+                    NewValue = newTicket.DeveloperUser.FullName,
                     Created = DateTime.Now,
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
+                await _notificationService.Notify(userId, newTicket, "New Ticket Assignment");
             }
             await _context.SaveChangesAsync();
         }

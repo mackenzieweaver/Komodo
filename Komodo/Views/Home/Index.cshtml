@@ -21,9 +21,9 @@
     <h4>Role --> <em>@roleName</em></h4>
 </div>
 
-<div class="row">
+<div class="row mt-5">
     <div class="col-xl-3 col-md-6">
-        <div class="card bg-primary text-white mb-1">
+        <div class="card bg-dark text-white mb-1">
             <div class="card-body">#Projects (@Model.numProjects)</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" asp-controller="Projects" asp-action="Index">View Details</a>
@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="col-xl-3 col-md-6">
-        <div class="card bg-warning text-white mb-1">
+        <div class="card bg-dark text-white mb-1">
             <div class="card-body">#Tickets (@Model.numTickets)</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" asp-controller="Tickets" asp-action="Index">View Details</a>
@@ -41,7 +41,7 @@
         </div>
     </div>
     <div class="col-xl-3 col-md-6">
-        <div class="card bg-success text-white mb-1">
+        <div class="card bg-dark text-white mb-1">
             <div class="card-body">#Closed (@Model.numClosed)</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" href="#">View Details</a>
@@ -50,7 +50,7 @@
         </div>
     </div>
     <div class="col-xl-3 col-md-6">
-        <div class="card bg-danger text-white mb-1">
+        <div class="card bg-dark text-white mb-1">
             <div class="card-body">#Opened (@Model.numOpened)</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" href="#">View Details</a>
@@ -61,7 +61,7 @@
 </div>
 @if (User.IsInRole("ProjectManager"))
 {
-    <div class="col-md-7 pl-0 pr-0 border border-dark">
+    <div class="col-md-7 mt-3 pl-0 pr-0">
         <h5 class="text-center mb-4 pt-4">Suggested Actions</h5>
         <table class="table table-striped table-responsive-md">
             <thead>
