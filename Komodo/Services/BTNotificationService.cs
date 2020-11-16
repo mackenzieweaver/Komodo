@@ -18,12 +18,12 @@ namespace Komodo.Services
             _context = context;
             _emailService = emailService;
         }
-        public async Task Notify(string userId, Ticket ticket, string subject)
+        public async Task Notify(string userId, Ticket ticket, TicketHistory change)
         {
             var notification = new Notification
             {
                 TicketId = ticket.Id,
-                Description = "You have a new ticket.",
+                Description = $"The {change.Property} was updated from {change.OldValue} to {change.NewValue}.",
                 Created = DateTime.Now,
                 SenderId = userId,
                 RecipientId = ticket.DeveloperUserId
@@ -31,8 +31,8 @@ namespace Komodo.Services
             await _context.Notifications.AddAsync(notification);
             await _context.SaveChangesAsync();
             var to = ticket.DeveloperUser.Email;
-            var body = $"For project: { ticket.Project.Name }, ticket: { ticket.Title }, priority: { ticket.TicketPriority.Name }";
-            await _emailService.SendEmailAsync(to, subject, body);
+            var subject = $"For project: { ticket.Project.Name }, ticket: { ticket.Title }, priority: { ticket.TicketPriority.Name }";
+            await _emailService.SendEmailAsync(to, subject, notification.Description);
         }
     }
 }

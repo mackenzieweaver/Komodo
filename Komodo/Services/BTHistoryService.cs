@@ -42,6 +42,11 @@ namespace Komodo.Services
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
+                // someone other than the developer made a change
+                if(oldTicket.DeveloperUserId != userId)
+                {
+                    await _notificationService.Notify(userId, newTicket, history);
+                }
             }
             //Description
             if (oldTicket.Description != newTicket.Description)
@@ -113,7 +118,7 @@ namespace Komodo.Services
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
-                await _notificationService.Notify(userId, newTicket, "New Ticket Assignment");
+                await _notificationService.Notify(userId, newTicket, history);
             }
             await _context.SaveChangesAsync();
         }
