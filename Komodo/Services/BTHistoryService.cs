@@ -42,7 +42,7 @@ namespace Komodo.Services
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
-                // someone other than the developer made a change
+                // notify developer that someone else made a change
                 if(oldTicket.DeveloperUserId != userId)
                 {
                     await _notificationService.Notify(userId, newTicket, history);
@@ -61,6 +61,11 @@ namespace Komodo.Services
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
+                // notify developer that someone else made a change
+                if (oldTicket.DeveloperUserId != userId)
+                {
+                    await _notificationService.Notify(userId, newTicket, history);
+                }
             }
             // Ticket Type
             if (oldTicket.TicketTypeId != newTicket.TicketTypeId)
@@ -75,6 +80,11 @@ namespace Komodo.Services
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
+                // notify developer that someone else made a change
+                if (oldTicket.DeveloperUserId != userId)
+                {
+                    await _notificationService.Notify(userId, newTicket, history);
+                }
             }
             // Ticket Priority
             if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
@@ -89,6 +99,11 @@ namespace Komodo.Services
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
+                // notify developer that someone else made a change
+                if (oldTicket.DeveloperUserId != userId)
+                {
+                    await _notificationService.Notify(userId, newTicket, history);
+                }
             }
             // Ticket Status
             if (oldTicket.TicketStatusId != newTicket.TicketStatusId)
@@ -103,6 +118,11 @@ namespace Komodo.Services
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
+                // notify developer that someone else made a change
+                if (oldTicket.DeveloperUserId != userId)
+                {
+                    await _notificationService.Notify(userId, newTicket, history);
+                }
             }
             // New Developer
             if (oldTicket.DeveloperUserId != newTicket.DeveloperUserId)

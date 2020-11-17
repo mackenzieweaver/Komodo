@@ -9,6 +9,7 @@ using Komodo.Data;
 using Komodo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Komodo.Services;
 
 namespace Komodo.Controllers
 {
@@ -17,11 +18,13 @@ namespace Komodo.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTNotificationService _notificationService;
 
-        public TicketCommentsController(ApplicationDbContext context, UserManager<BTUser> userManager)
+        public TicketCommentsController(ApplicationDbContext context, UserManager<BTUser> userManager, IBTNotificationService notificationService)
         {
             _context = context;
             _userManager = userManager;
+            _notificationService = notificationService;
         }
 
         // GET: TicketComments
@@ -66,7 +69,8 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment, string content, int ticketId)
         {
-            ticketComment.UserId = _userManager.GetUserId(User);
+            var userId = _userManager.GetUserId(User);
+            ticketComment.UserId = userId;
             if(content != null)
             {
                 ticketComment.Comment = content;
@@ -77,6 +81,14 @@ namespace Komodo.Controllers
             {
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();
+                var ticket = await _context.Tickets
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType)
+                    .Include(t => t.DeveloperUser)
+                    .Include(t => t.Project)
+                    .FirstOrDefaultAsync(t => t.Id == ticketId);
+                await _notificationService.NotifyOfComment(userId, ticket, ticketComment);
                 return RedirectToAction("Details", "Tickets", new { id = ticketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);

@@ -10,6 +10,8 @@ using Komodo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Komodo.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace Komodo.Controllers
 {
@@ -17,10 +19,14 @@ namespace Komodo.Controllers
     public class TicketAttachmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BTUser> _userManager;
+        private readonly IBTNotificationService _notificationService;
 
-        public TicketAttachmentsController(ApplicationDbContext context)
+        public TicketAttachmentsController(ApplicationDbContext context, UserManager<BTUser> userManager, IBTNotificationService notificationService)
         {
             _context = context;
+            _userManager = userManager;
+            _notificationService = notificationService;
         }
 
         // GET: TicketAttachments
@@ -84,6 +90,16 @@ namespace Komodo.Controllers
 
                     _context.Add(ticketAttachment);
                     await _context.SaveChangesAsync();
+
+                    var ticket = await _context.Tickets
+                        .Include(t => t.TicketPriority)
+                        .Include(t => t.TicketStatus)
+                        .Include(t => t.TicketType)
+                        .Include(t => t.DeveloperUser)
+                        .Include(t => t.Project)
+                        .FirstOrDefaultAsync(t => t.Id == ticketAttachment.TicketId);
+
+                    await _notificationService.NotifyOfAttachment(_userManager.GetUserId(User), ticket, ticketAttachment);
                     return RedirectToAction(nameof(Index));
                 }
                 return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
