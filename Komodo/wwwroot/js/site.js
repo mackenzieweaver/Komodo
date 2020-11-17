@@ -5,6 +5,7 @@
 $(document).ready(function () {
     $('.ticketsIndex').DataTable();      
     InitDonut();
+    InitBarChart();
 });
 
 function InitDonut() {
@@ -39,4 +40,64 @@ function InitDonut() {
     );
 
     donut.render();
+}
+
+function InitBarChart() {
+    var sCol = {
+        chart: {
+            height: 350,
+            type: 'bar',
+            toolbar: {
+                show: false,
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        series: [{
+            name: 'Assigned',
+            data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 44, 55, 57, 56, 61, 58, 63, 60, 66]
+        }, {
+            name: 'Closed',
+                data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 44, 55, 57, 56, 61, 58, 63, 60, 66]
+        }],
+        xaxis: {
+            categories: ['Dev1', 'Dev2', 'Dev3', 'Dev4', 'Dev5', 'Dev6', 'Dev7', 'Dev8', 'Dev9', 'Dev1', 'Dev2', 'Dev3', 'Dev4', 'Dev5', 'Dev6', 'Dev7', 'Dev8', 'Dev9'],
+        },
+        yaxis: {
+            title: {
+                text: '(#tickets)'
+            }
+        },
+        fill: {
+            opacity: 1
+
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return "$ " + val + " thousands"
+                }
+            }
+        }
+    }
+
+    var chart = new ApexCharts(
+        document.querySelector("#bar-chart"),
+        sCol
+    );
+
+    chart.render();
 }

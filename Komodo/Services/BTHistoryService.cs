@@ -43,7 +43,7 @@ namespace Komodo.Services
                 };
                 _context.TicketHistories.Add(history);
                 // notify developer that someone else made a change
-                if(oldTicket.DeveloperUserId != userId)
+                if(oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
                     await _notificationService.Notify(userId, newTicket, history);
                 }
@@ -62,7 +62,7 @@ namespace Komodo.Services
                 };
                 _context.TicketHistories.Add(history);
                 // notify developer that someone else made a change
-                if (oldTicket.DeveloperUserId != userId)
+                if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
                     await _notificationService.Notify(userId, newTicket, history);
                 }
@@ -81,7 +81,7 @@ namespace Komodo.Services
                 };
                 _context.TicketHistories.Add(history);
                 // notify developer that someone else made a change
-                if (oldTicket.DeveloperUserId != userId)
+                if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
                     await _notificationService.Notify(userId, newTicket, history);
                 }
@@ -100,7 +100,7 @@ namespace Komodo.Services
                 };
                 _context.TicketHistories.Add(history);
                 // notify developer that someone else made a change
-                if (oldTicket.DeveloperUserId != userId)
+                if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
                     await _notificationService.Notify(userId, newTicket, history);
                 }
@@ -119,7 +119,7 @@ namespace Komodo.Services
                 };
                 _context.TicketHistories.Add(history);
                 // notify developer that someone else made a change
-                if (oldTicket.DeveloperUserId != userId)
+                if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
                     await _notificationService.Notify(userId, newTicket, history);
                 }

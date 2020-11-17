@@ -48,6 +48,58 @@ namespace Komodo.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        // GET: Tickets
+        public async Task<IActionResult> Filter(string filter)
+        {
+            List<Ticket> tickets = new List<Ticket>();
+            switch (filter)
+            {
+                case "Critical":
+                    tickets = await _context.Tickets
+                        .Where(t => t.TicketPriority.Name == "Critical")
+                        .Include(t => t.DeveloperUser)
+                        .Include(t => t.OwnerUser)
+                        .Include(t => t.Project)
+                        .Include(t => t.TicketPriority)
+                        .Include(t => t.TicketStatus)
+                        .Include(t => t.TicketType)
+                        .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                        .Include(t => t.Attachments)
+                        .ToListAsync();
+                    break;
+                case "Unassigned":
+                    tickets = await _context.Tickets
+                        .Where(t => t.DeveloperUserId == null)
+                        .Include(t => t.DeveloperUser)
+                        .Include(t => t.OwnerUser)
+                        .Include(t => t.Project)
+                        .Include(t => t.TicketPriority)
+                        .Include(t => t.TicketStatus)
+                        .Include(t => t.TicketType)
+                        .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                        .Include(t => t.Attachments)
+                        .ToListAsync();
+                    break;
+                case "Open":
+                    tickets = await _context.Tickets
+                        .Where(t => t.TicketStatus.Name == "Opened")
+                        .Include(t => t.DeveloperUser)
+                        .Include(t => t.OwnerUser)
+                        .Include(t => t.Project)
+                        .Include(t => t.TicketPriority)
+                        .Include(t => t.TicketStatus)
+                        .Include(t => t.TicketType)
+                        .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                        .Include(t => t.Attachments)
+                        .ToListAsync();
+                    break;
+                default:
+                    tickets = await _context.Tickets.ToListAsync();
+                    break;
+            }
+            return View("Index", tickets);
+        }
+
         [Authorize(Roles = "ProjectManager,Developer")]
         public async Task<IActionResult> ProjectTickets()
         {
@@ -158,6 +210,7 @@ namespace Komodo.Controllers
                 .Include(t => t.TicketType)
                 .Include(t => t.Comments).ThenInclude(tc => tc.User)
                 .Include(t => t.Attachments)
+                .Include(t => t.Histories)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (ticket == null)
