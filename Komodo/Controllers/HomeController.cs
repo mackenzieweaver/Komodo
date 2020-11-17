@@ -41,15 +41,17 @@ namespace Komodo.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var vm = new HomePMViewModel();
-            vm.numProjects = _context.Projects.ToList().Count;
             vm.numTickets = _context.Tickets.ToList().Count;
-            vm.numClosed = _context.Tickets
-                .Include(t => t.TicketStatus)
-                .Where(t => t.TicketStatus.Name == "Closed")
+            vm.numCritical = _context.Tickets
+                .Include(t => t.TicketPriority)
+                .Where(t => t.TicketPriority.Name == "Critical")
                 .ToList().Count;
-            vm.numOpened = _context.Tickets
+            vm.numOpen = _context.Tickets
                 .Include(t => t.TicketStatus)
                 .Where(t => t.TicketStatus.Name == "Opened")
+                .ToList().Count;
+            vm.numUnassigned = _context.Tickets
+                .Where(t => t.DeveloperUserId == null)
                 .ToList().Count;
 
             // suggest action to pm
@@ -68,6 +70,7 @@ namespace Komodo.Controllers
                     .SelectMany(u => u)
                     .Distinct()
                     .ToList();
+                vm.UsersOnProject = flatUsers;
                 // remove users that are not developers
                 List<BTUser> devs = new List<BTUser>();
                 foreach (var flatuser in flatUsers)

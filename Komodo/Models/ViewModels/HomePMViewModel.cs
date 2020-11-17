@@ -15,11 +15,12 @@ namespace Komodo.Models.ViewModels
         }
         public List<Ticket> Tickets { get; set; }
         public List<BTUser> Developers { get; set; }
+        public List<BTUser> UsersOnProject { get; set; }
         public List<int> Count { get; set; }
 
-        public int numProjects { get; set; }
         public int numTickets { get; set; }
-        public int numClosed { get; set; }
-        public int numOpened { get; set; }
+        public int numCritical { get; set; }
+        public int numUnassigned { get; set; }
+        public int numOpen { get; set; }
     }
 }
