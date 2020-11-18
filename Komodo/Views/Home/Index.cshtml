@@ -29,7 +29,7 @@
                 <div class="card bg-primary text-white mb-1">
                     <div class="card-body">#Tickets (@Model.numTickets)</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" asp-controller="Tickets" asp-action="Index">View Details</a>
+                        <a class="small text-white stretched-link" asp-controller="Tickets" asp-action="Filter">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -152,7 +152,10 @@
             </div>
         </div>
     </div>
+}
 
+@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+{
     <h5 class="text-center mb-4 pt-4">Users</h5>
     <hr />
     <div class="row">

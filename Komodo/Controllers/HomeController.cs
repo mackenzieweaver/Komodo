@@ -36,11 +36,13 @@ namespace Komodo.Controllers
             _projectService = projectService;
             _rolesService = rolesService;
         }
+
         [Authorize]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
             var vm = new HomePMViewModel();
+
             vm.numTickets = _context.Tickets.ToList().Count;
             vm.numCritical = _context.Tickets
                 .Include(t => t.TicketPriority)
@@ -53,6 +55,7 @@ namespace Komodo.Controllers
             vm.numUnassigned = _context.Tickets
                 .Where(t => t.DeveloperUserId == null)
                 .ToList().Count;
+            vm.UsersOnProject = await _context.Users.ToListAsync();
 
             // suggest action to pm
             if (await _userManager.IsInRoleAsync(user, "ProjectManager"))
@@ -61,19 +64,35 @@ namespace Komodo.Controllers
                 var projects = await _projectService.ListUserProjects(user.Id);
                 // all users on all projects, potential list of lists
                 var users = new List<ICollection<BTUser>>();
+                var ticketSet = new List<List<Ticket>>();
                 foreach (var project in projects)
                 {
                     users.Add(await _projectService.UsersOnProject(project.Id));
+
+                    var ptickets = await _context.Tickets
+                        .Where(t => t.Project.Id == project.Id)
+                        .Include(p => p.TicketType)
+                        .Include(p => p.TicketPriority)
+                        .Include(p => p.TicketStatus)
+                        .Include(t => t.Comments)
+                        .Include(t => t.Attachments)
+                        .Include(t => t.Notifications)
+                        .Include(t => t.Histories)
+                        .ToListAsync();
+
+                    ticketSet.Add(ptickets);
                 }
                 // flatten multi list into single list of unique users
-                List<BTUser> flatUsers = users
-                    .SelectMany(u => u)
-                    .Distinct()
-                    .ToList();
-                vm.UsersOnProject = flatUsers;
+                vm.UsersOnProject = users.SelectMany(u => u).Distinct().ToList();                
+                var tickets = ticketSet.SelectMany(t => t).ToList();
+
+                vm.numTickets = ticketSet.SelectMany(t => t).ToList().Count;
+                vm.numCritical = tickets.Where(t => t.TicketPriority.Name == "Critical").ToList().Count;
+                vm.numUnassigned = tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
+                vm.numOpen = tickets.Where(t => t.TicketStatus.Name == "Opened").ToList().Count;
                 // remove users that are not developers
                 List<BTUser> devs = new List<BTUser>();
-                foreach (var flatuser in flatUsers)
+                foreach (var flatuser in vm.UsersOnProject)
                 {
                     if (await _rolesService.IsUserInRole(flatuser, "Developer"))
                     {
@@ -108,8 +127,8 @@ namespace Komodo.Controllers
                         vm.Developers.Add(devs[0]);
 
                         // get task count
-                        var tickets = _context.Tickets.Where(t => t.DeveloperUserId == devs[0].Id).ToList();
-                        vm.Count.Add(tickets.Count);
+                        var devtickets = _context.Tickets.Where(t => t.DeveloperUserId == devs[0].Id).ToList();
+                        vm.Count.Add(devtickets.Count);
                     }
                 }
             }

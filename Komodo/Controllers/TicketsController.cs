@@ -51,50 +51,41 @@ namespace Komodo.Controllers
         // GET: Tickets
         public async Task<IActionResult> Filter(string filter)
         {
-            List<Ticket> tickets = new List<Ticket>();
+            var user = await _userManager.GetUserAsync(User);
+            var tickets = await _context.Tickets
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
+                .Include(t => t.Notifications)
+                .Include(t => t.Histories)
+                .ToListAsync();
+            if (await _userManager.IsInRoleAsync(user, "ProjectManager"))
+            {
+                var userProjects = await _projectService.ListUserProjects(user.Id);
+                var ticketSet = new List<List<Ticket>>();
+                foreach (var project in userProjects)
+                {
+                    ticketSet.Add(tickets.Where(t => t.Project.Id == project.Id).ToList());
+                }
+                tickets = ticketSet.SelectMany(t => t).ToList();
+            }
             switch (filter)
             {
                 case "Critical":
-                    tickets = await _context.Tickets
-                        .Where(t => t.TicketPriority.Name == "Critical")
-                        .Include(t => t.DeveloperUser)
-                        .Include(t => t.OwnerUser)
-                        .Include(t => t.Project)
-                        .Include(t => t.TicketPriority)
-                        .Include(t => t.TicketStatus)
-                        .Include(t => t.TicketType)
-                        .Include(t => t.Comments).ThenInclude(tc => tc.User)
-                        .Include(t => t.Attachments)
-                        .ToListAsync();
+                    tickets = tickets.Where(t => t.TicketPriority.Name == "Critical").ToList();
                     break;
                 case "Unassigned":
-                    tickets = await _context.Tickets
-                        .Where(t => t.DeveloperUserId == null)
-                        .Include(t => t.DeveloperUser)
-                        .Include(t => t.OwnerUser)
-                        .Include(t => t.Project)
-                        .Include(t => t.TicketPriority)
-                        .Include(t => t.TicketStatus)
-                        .Include(t => t.TicketType)
-                        .Include(t => t.Comments).ThenInclude(tc => tc.User)
-                        .Include(t => t.Attachments)
-                        .ToListAsync();
+                    tickets = tickets.Where(t => t.DeveloperUserId == null).ToList();
                     break;
                 case "Open":
-                    tickets = await _context.Tickets
-                        .Where(t => t.TicketStatus.Name == "Opened")
-                        .Include(t => t.DeveloperUser)
-                        .Include(t => t.OwnerUser)
-                        .Include(t => t.Project)
-                        .Include(t => t.TicketPriority)
-                        .Include(t => t.TicketStatus)
-                        .Include(t => t.TicketType)
-                        .Include(t => t.Comments).ThenInclude(tc => tc.User)
-                        .Include(t => t.Attachments)
-                        .ToListAsync();
+                    tickets = tickets.Where(t => t.TicketStatus.Name == "Opened").ToList();
                     break;
                 default:
-                    tickets = await _context.Tickets.ToListAsync();
                     break;
             }
             return View("Index", tickets);
