@@ -15,5 +15,6 @@ namespace Komodo.Services
         public Task RemoveUserFromProject(string userId, int projectId);
         public Task<ICollection<BTUser>> UsersOnProject(int projectId);
         public Task<ICollection<BTUser>> UsersNotOnProject(int projectId);
+        public Task<List<BTUser>> SortListOfDevsByTicketCountAsync(List<BTUser> users, List<Ticket> tickets);
     }
 }

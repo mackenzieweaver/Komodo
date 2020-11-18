@@ -42,54 +42,40 @@ namespace Komodo.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var vm = new HomePMViewModel();
-
-            vm.numTickets = _context.Tickets.ToList().Count;
-            vm.numCritical = _context.Tickets
+            var tickets = await _context.Tickets
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
                 .Include(t => t.TicketPriority)
-                .Where(t => t.TicketPriority.Name == "Critical")
-                .ToList().Count;
-            vm.numOpen = _context.Tickets
                 .Include(t => t.TicketStatus)
-                .Where(t => t.TicketStatus.Name == "Opened")
-                .ToList().Count;
-            vm.numUnassigned = _context.Tickets
-                .Where(t => t.DeveloperUserId == null)
-                .ToList().Count;
+                .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
+                .Include(t => t.Notifications)
+                .Include(t => t.Histories)
+                .ToListAsync();
+            vm.numTickets = tickets.Count;
+            vm.numCritical = tickets.Where(t => t.TicketPriority.Name == "Critical").ToList().Count;
+            vm.numOpen = tickets.Where(t => t.TicketStatus.Name == "Opened").ToList().Count;
+            vm.numUnassigned = tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
             vm.UsersOnProject = await _context.Users.ToListAsync();
-
-            // suggest action to pm
+            
+            // give pm personalized data
             if (await _userManager.IsInRoleAsync(user, "ProjectManager"))
             {
                 // all pm projects
                 var projects = await _projectService.ListUserProjects(user.Id);
-                // all users on all projects, potential list of lists
+                // all users on all projects --> list of lists
                 var users = new List<ICollection<BTUser>>();
                 var ticketSet = new List<List<Ticket>>();
                 foreach (var project in projects)
                 {
-                    users.Add(await _projectService.UsersOnProject(project.Id));
-
-                    var ptickets = await _context.Tickets
-                        .Where(t => t.Project.Id == project.Id)
-                        .Include(p => p.TicketType)
-                        .Include(p => p.TicketPriority)
-                        .Include(p => p.TicketStatus)
-                        .Include(t => t.Comments)
-                        .Include(t => t.Attachments)
-                        .Include(t => t.Notifications)
-                        .Include(t => t.Histories)
-                        .ToListAsync();
-
-                    ticketSet.Add(ptickets);
+                    users.Add(await _projectService.UsersOnProject(project.Id));                    
+                    ticketSet.Add(tickets.Where(t => t.Project.Id == project.Id).ToList());
                 }
-                // flatten multi list into single list of unique users
-                vm.UsersOnProject = users.SelectMany(u => u).Distinct().ToList();                
-                var tickets = ticketSet.SelectMany(t => t).ToList();
-
-                vm.numTickets = ticketSet.SelectMany(t => t).ToList().Count;
-                vm.numCritical = tickets.Where(t => t.TicketPriority.Name == "Critical").ToList().Count;
-                vm.numUnassigned = tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
-                vm.numOpen = tickets.Where(t => t.TicketStatus.Name == "Opened").ToList().Count;
+                // flatten list of lists
+                tickets = ticketSet.SelectMany(t => t).ToList();
+                vm.UsersOnProject = users.SelectMany(u => u).Distinct().ToList();
                 // remove users that are not developers
                 List<BTUser> devs = new List<BTUser>();
                 foreach (var flatuser in vm.UsersOnProject)
@@ -99,36 +85,36 @@ namespace Komodo.Controllers
                         devs.Add(flatuser);
                     }
                 }
+
+                // reassign view model properties if you're a pm
+                vm.numTickets = ticketSet.SelectMany(t => t).ToList().Count;
+                vm.numCritical = tickets.Where(t => t.TicketPriority.Name == "Critical").ToList().Count;
+                vm.numUnassigned = tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
+                vm.numOpen = tickets.Where(t => t.TicketStatus.Name == "Opened").ToList().Count;
+
+                // if we have developers make suggestion
                 if (devs.Count > 0)
                 {
                     // maximum suggestions
-                    var num = 5;
+                    var max = 5;
                     // minimum suggestions = number of tickets
-                    var tCount = _context.Tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
+                    var min = tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
                     // if it's less than max
-                    num = tCount < num ? tCount : num;
+                    var num = min < max ? min : max;
                     for (var i = 0; i < num; i++)
                     {
                         // get ticket
-                        var ticket = _context.Tickets
-                            .Where(t => t.DeveloperUserId == null)
-                            .Include(t => t.TicketPriority)
-                            .Include(t => t.TicketStatus)
-                            .Include(t => t.TicketType)
-                            .OrderBy(t => t.TicketPriorityId)
-                            .ThenBy(t => t.TicketStatusId)
-                            .Skip(i)
-                            .Take(1)
-                            .ToList()[0];
+                        var ticket = tickets.Where(t => t.DeveloperUserId == null)
+                            .OrderBy(t => t.TicketPriorityId).ThenBy(t => t.TicketStatusId)
+                            .Skip(i).Take(1).ToList()[0];
                         vm.Tickets.Add(ticket);
 
                         // get dev
-                        devs = BubbleSort.SortListOfDevsByTicketCount(devs, _context);
+                        devs = await _projectService.SortListOfDevsByTicketCountAsync(devs, tickets);
+                        //var dev = devs.Count > i ? devs[i] : devs[0];
                         vm.Developers.Add(devs[0]);
-
                         // get task count
-                        var devtickets = _context.Tickets.Where(t => t.DeveloperUserId == devs[0].Id).ToList();
-                        vm.Count.Add(devtickets.Count);
+                        vm.Count.Add(tickets.Where(t => t.DeveloperUserId == devs[0].Id).ToList().Count);
                     }
                 }
             }

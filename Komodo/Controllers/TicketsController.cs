@@ -95,31 +95,27 @@ namespace Komodo.Controllers
         public async Task<IActionResult> ProjectTickets()
         {
             var userId = _userManager.GetUserId(User);
-            var projectUsers = await _context.ProjectUsers.Where(p => p.UserId == userId).ToListAsync();
-            var projectIds = new List<int>();
-            foreach (var projectUser in projectUsers)
+            var projects = await _projectService.ListUserProjects(userId);
+            var tickets = await _context.Tickets
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
+                .Include(t => t.Notifications)
+                .Include(t => t.Histories)
+                .ToListAsync();
+
+            var ticketSet = new List<List<Ticket>>();
+            foreach (var project in projects)
             {
-                projectIds.Add(projectUser.ProjectId);
+                ticketSet.Add(tickets.Where(t => t.Project.Id == project.Id).ToList());
             }
-            var projects = new List<Project>();
-            foreach (var id in projectIds)
-            {
-                projects.Add(_context.Projects
-                    .Include(p => p.Tickets)
-                    .ThenInclude(t => t.TicketType)
-                    .Include(p => p.Tickets)
-                    .ThenInclude(t => t.TicketPriority)
-                    .Include(p => p.Tickets)
-                    .ThenInclude(t => t.TicketStatus)
-                    .Include(p => p.Tickets)
-                    .ThenInclude(t => t.TicketType)
-                    .Include(p => p.Tickets)
-                    .ThenInclude(t => t.DeveloperUser)
-                    .Include(p => p.Tickets)
-                    .ThenInclude(t => t.OwnerUser)
-                    .FirstOrDefault(p => p.Id == id));
-            }
-            return View(projects);
+            tickets = ticketSet.SelectMany(t => t).ToList();
+            return View("Index", tickets);
         }
 
         [Authorize(Roles = "Developer")]
@@ -137,7 +133,7 @@ namespace Komodo.Controllers
                 .Include(t => t.Comments).ThenInclude(tc => tc.User)
                 .Include(t => t.Attachments)
                 .ToListAsync();
-            return View(tickets);
+            return View("Index", tickets);
         }
 
         [Authorize(Roles="Submitter")]
@@ -155,7 +151,7 @@ namespace Komodo.Controllers
                 .Include(t => t.Comments).ThenInclude(tc => tc.User)
                 .Include(t => t.Attachments)
                 .ToListAsync();
-            return View(tickets);
+            return View("Index", tickets);
         }
 
         // GET: Tickets/Details/5
@@ -209,7 +205,7 @@ namespace Komodo.Controllers
                 return NotFound();
             }
 
-            return View(ticket);
+            return View("Details", ticket);
         }
         [Authorize(Roles = "Admin,ProjectManager,Developer,Submitter")]
         // GET: Tickets/Create

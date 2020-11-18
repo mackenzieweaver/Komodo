@@ -187,5 +187,37 @@ namespace Komodo.Services
         //    }
         //    return Users;
         //}
+
+        public async Task<List<BTUser>> SortListOfDevsByTicketCountAsync(List<BTUser> users, List<Ticket> tickets)
+        {
+            int i, j;
+            int N = users.Count;
+
+            for (j = N - 1; j > 0; j--)
+            {
+                for (i = 0; i < j; i++)
+                {
+                    var pu1 = users[i].ProjectUsers;
+                    int tc1 = 0;
+                    foreach (var pu in pu1)
+                    {
+                        tc1 += tickets.Where(t => t.DeveloperUserId == users[i].Id).ToList().Count;
+                    }
+                    var pu2 = users[i + 1].ProjectUsers;
+                    int tc2 = 0;
+                    foreach (var pu in pu2)
+                    {
+                        tc2 += tickets.Where(t => t.DeveloperUserId == users[i + 1].Id).ToList().Count;
+                    }
+                    if (tc2 < tc1)
+                    {
+                        var temp = users[i];
+                        users[i] = users[i + 1];
+                        users[i + 1] = temp;
+                    }
+                }
+            }
+            return users;
+        }
     }
 }
