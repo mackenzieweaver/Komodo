@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var message = (string)TempData["DemoLockout"];
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -102,6 +106,12 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    @if (!String.IsNullOrWhiteSpace(message))
+    {
+        <script>            
+            alert(@message);
+        </script>
+    }
     @RenderSection("Scripts", required: false)
 </body>
 </html>

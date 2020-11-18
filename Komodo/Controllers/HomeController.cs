@@ -76,6 +76,7 @@ namespace Komodo.Controllers
                 // flatten list of lists
                 tickets = ticketSet.SelectMany(t => t).ToList();
                 vm.UsersOnProject = users.SelectMany(u => u).Distinct().ToList();
+
                 // remove users that are not developers
                 List<BTUser> devs = new List<BTUser>();
                 foreach (var flatuser in vm.UsersOnProject)

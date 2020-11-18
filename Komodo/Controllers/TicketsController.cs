@@ -136,7 +136,7 @@ namespace Komodo.Controllers
             return View("Index", tickets);
         }
 
-        [Authorize(Roles="Submitter")]
+        [Authorize(Roles = "Submitter")]
         public async Task<IActionResult> CreatedTickets()
         {
             var userId = _userManager.GetUserId(User);
@@ -212,7 +212,7 @@ namespace Komodo.Controllers
         public async Task<IActionResult> Create()
         {
             var user = await _userManager.GetUserAsync(User);
-            if(await _rolesService.IsUserInRole(user, "Admin"))
+            if (await _rolesService.IsUserInRole(user, "Admin"))
             {
                 ViewData["DeveloperUserId"] = new SelectList(_context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName");
             }
@@ -220,15 +220,15 @@ namespace Komodo.Controllers
             {
                 var projects = await _projectService.ListUserProjects(user.Id);
                 var users = new List<ICollection<BTUser>>();
-                foreach(var project in projects)
+                foreach (var project in projects)
                 {
                     users.Add(await _projectService.UsersOnProject(project.Id));
                 }
                 List<BTUser> flatUsers = users.SelectMany(u => u).Distinct().ToList();
                 List<BTUser> devs = new List<BTUser>();
-                foreach(var flatuser in flatUsers)
+                foreach (var flatuser in flatUsers)
                 {
-                    if(await _rolesService.IsUserInRole(flatuser, "Developer"))
+                    if (await _rolesService.IsUserInRole(flatuser, "Developer"))
                     {
                         devs.Add(flatuser);
                     }
@@ -285,7 +285,7 @@ namespace Komodo.Controllers
             {
                 //if so is user on project?
                 var projectUser = (await _context.ProjectUsers.FirstOrDefaultAsync(pu => pu.UserId == user.Id && pu.ProjectId == ticket.ProjectId));
-                if(projectUser == null)
+                if (projectUser == null)
                 {
                     return RedirectToAction("Index");
                 }
@@ -338,6 +338,12 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("Details", "Tickets", new { id = ticket.Id });
+            }
+
             if (id != ticket.Id)
             {
                 return NotFound();
@@ -354,7 +360,7 @@ namespace Komodo.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {                    
+                {
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
                 }

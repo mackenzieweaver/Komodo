@@ -105,7 +105,7 @@
         </dl>
 
         @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
-      User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+     User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
         {
             <h5 class="mt-3">Add an attachment</h5>
             <form asp-controller="TicketAttachments" asp-action="Create" class="ml-0 pl-0" enctype="multipart/form-data">
