@@ -5,8 +5,12 @@
 @{ 
     var user = await UserManager.GetUserAsync(User);    
 }
-
-<ul class="navbar-nav">
+<style>
+    .navbar-expand-sm .navbar-item .nav-link {
+        line-height: 1rem;
+    }
+</style>
+<ul class="navbar-nav mr-4">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
