@@ -5,8 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title>@ViewData["Title"] - Komodo</title>
-    @*<link rel="icon" type="image/x-icon" href="~/assets/img/favicon.ico" />*@
-    <img src="~/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link href="~/assets/css/loader.css" rel="stylesheet" type="text/css" />
     <script src="~/assets/js/loader.js"></script>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -27,13 +26,13 @@
 </head>
 <body>
     <!-- BEGIN LOADER -->
-    <div id="load_screen">
+    @*<div id="load_screen">
         <div class="loader">
             <div class="loader-content">
                 <div class="spinner-grow align-self-center"></div>
             </div>
         </div>
-    </div>
+    </div>*@
     <!--  END LOADER -->
     <!--  BEGIN NAVBAR  -->
     <div class="header-container fixed-top">
@@ -42,7 +41,7 @@
             <ul class="navbar-item theme-brand flex-row  text-center">
                 <li class="nav-item theme-logo">
                     <a href="index.html">
-                        <img src="~/assets/img/90x90.jpg" class="navbar-logo" alt="logo">
+                        <img src="~/favicon.ico" class="navbar-logo" alt="logo">
                     </a>
                 </li>
                 <li class="nav-item theme-text">
@@ -60,7 +59,8 @@
                 </form>
             </li>
         </ul>*@
-
+            @if (User.Identity.IsAuthenticated)
+            {
             <ul class="navbar-item flex-row ml-md-auto">
 
                 @*<li class="nav-item dropdown language-dropdown">
@@ -196,6 +196,7 @@
                 </li>
 
             </ul>
+            }
         </header>
     </div>
     <!--  END NAVBAR  -->
@@ -241,7 +242,7 @@
 
         <div class="overlay"></div>
         <div class="search-overlay"></div>
-
+        @if (User.Identity.IsAuthenticated) { 
         <!--  BEGIN SIDEBAR  -->
         <div class="sidebar-wrapper sidebar-theme mt-5" style="top:0 !important;">
 
@@ -809,15 +810,16 @@
             </nav>
 
         </div>
+        }
         <!--  END SIDEBAR  -->
         <!--  BEGIN CONTENT AREA  -->
-        <div id="content" class="main-content mt-3" style="top: 0 !important;">
+        <div id="content" class="main-content mt-5" style="top: 0 !important;">
             <div class="layout-px-spacing">
 
                 @RenderBody()
 
             </div>
-            <div class="footer-wrapper">
+            <div class="footer-wrapper mt-5 mb-0 pt-5 pb-0">
                 <div class="footer-section f-section-1">
                     <p class="">Copyright © 2020 <a target="_blank" href="https://designreset.com">DesignReset</a>, All rights reserved.</p>
                 </div>

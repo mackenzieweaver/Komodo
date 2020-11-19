@@ -4,9 +4,9 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-center">@ViewData["Title"]</h1>
 
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h4>Create a new account.</h4>
@@ -37,10 +37,10 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-light btn-lg">Register</button>
         </form>
     </div>
-    <div class="col-md-6 col-md-offset-2">
+    @*<div class="col-md-6 col-md-offset-2">
         <section>
             <h4>Use another service to register.</h4>
             <hr />
@@ -69,9 +69,11 @@
                 }
             }
         </section>
-    </div>
+    </div>*@
 </div>
-
+<script>
+    document.getElementById("content").style.marginLeft = 0;
+</script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
