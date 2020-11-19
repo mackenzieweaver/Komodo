@@ -37,6 +37,11 @@ namespace Komodo.Controllers
             _rolesService = rolesService;
         }
 
+        public async Task<IActionResult> Temp()
+        {
+            return View();
+        }
+
         [Authorize]
         public async Task<IActionResult> Index()
         {
