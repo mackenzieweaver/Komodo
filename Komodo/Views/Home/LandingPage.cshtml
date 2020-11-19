@@ -59,7 +59,7 @@
         </nav>*@
 
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark box-shadow mb-3" style="background-color: #12162e !important">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Komodo</a>
             </div>
@@ -87,9 +87,9 @@
                         <h4 class="card-title">Admin</h4>
                         <p class="card-text">Admins have full control over the applications users, projects and tickets.</p>
                     </div>
-                    <div class="card-footer">
+                    @*<div class="card-footer">
                         <a href="#" class="btn btn-dark">See Admin</a>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -100,9 +100,9 @@
                         <h4 class="card-title">Project Manager</h4>
                         <p class="card-text">A team leader with special insights and analytics to help them make informed decisions.</p>
                     </div>
-                    <div class="card-footer">
+                    @*<div class="card-footer">
                         <a href="#" class="btn btn-dark">See Project Manager</a>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -113,9 +113,9 @@
                         <h4 class="card-title">Developer</h4>
                         <p class="card-text">The developer handles assigned tickets and solves problems.</p>
                     </div>
-                    <div class="card-footer">
+                    @*<div class="card-footer">
                         <a href="#" class="btn btn-dark">See Developer</a>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -126,9 +126,9 @@
                         <h4 class="card-title">Submitter</h4>
                         <p class="card-text">Many times they're the interface between the client and your internal team. They do so by submitting tickets.</p>
                     </div>
-                    <div class="card-footer">
+                    @*<div class="card-footer">
                         <a href="#" class="btn btn-dark">See Submitter</a>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -153,3 +153,8 @@
 </body>
 
 </html>
+
+<script>
+    document.body.style.backgroundColor = "#060818";
+    //document.getElementsByTagName("nav").backgroundColor = "#12162e";
+</script>
