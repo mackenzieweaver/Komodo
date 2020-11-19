@@ -3,10 +3,12 @@
 
 // Write your JavaScript code.
 $(document).ready(function () {
-    $('.ticketsIndex').DataTable();      
+    $('.ticketsIndex').DataTable({
+        stripeClasses: []
+    });      
     InitDonut();
-    InitBarChart();
-});
+    InitBarChart();    
+});    
 
 function InitDonut() {
     var donutChart = {
