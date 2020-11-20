@@ -62,7 +62,7 @@ namespace Komodo.Controllers
             }
             return RedirectToAction("ManageUserRoles");
         }
-
+        [Authorize(Roles = "")]
         public async Task<IActionResult> MyRole()
         {
             var userId = _userManager.GetUserId(User);

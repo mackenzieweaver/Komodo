@@ -26,14 +26,14 @@ namespace Komodo.Controllers
             _userManager = userManager;
             _notificationService = notificationService;
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.TicketComments.Include(t => t.Ticket).Include(t => t.User);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -53,7 +53,7 @@ namespace Komodo.Controllers
 
             return View(ticketComment);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments/Create
         public IActionResult Create()
         {
@@ -98,7 +98,7 @@ namespace Komodo.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
             return View(ticketComment);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -153,7 +153,7 @@ namespace Komodo.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
             return View(ticketComment);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

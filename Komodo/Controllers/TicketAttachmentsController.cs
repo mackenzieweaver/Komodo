@@ -28,14 +28,14 @@ namespace Komodo.Controllers
             _userManager = userManager;
             _notificationService = notificationService;
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketAttachments
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.TicketAttachments.Include(t => t.Ticket).Include(t => t.User);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketAttachments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -55,7 +55,7 @@ namespace Komodo.Controllers
 
             return View(ticketAttachment);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketAttachments/Create
         public IActionResult Create()
         {
@@ -110,7 +110,7 @@ namespace Komodo.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
             return View(ticketAttachment);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketAttachments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -165,7 +165,7 @@ namespace Komodo.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
             return View(ticketAttachment);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketAttachments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

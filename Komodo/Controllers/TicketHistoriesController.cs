@@ -20,7 +20,7 @@ namespace Komodo.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories
         public async Task<IActionResult> Index()
         {
@@ -29,7 +29,7 @@ namespace Komodo.Controllers
                 .Include(t => t.User);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -49,7 +49,7 @@ namespace Komodo.Controllers
 
             return View(ticketHistory);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories/Create
         public IActionResult Create()
         {
@@ -75,7 +75,7 @@ namespace Komodo.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketHistory.UserId);
             return View(ticketHistory);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -130,7 +130,7 @@ namespace Komodo.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketHistory.UserId);
             return View(ticketHistory);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
