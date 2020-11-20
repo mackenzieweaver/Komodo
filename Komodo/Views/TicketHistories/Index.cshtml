@@ -4,12 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Histories</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-striped table-responsive ticketsIndex">
     <thead>
         <tr>
             <th>
@@ -40,16 +40,16 @@
                 @Html.DisplayFor(modelItem => item.Property)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OldValue)
+                @Html.Raw(item.OldValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NewValue)
+                @Html.Raw(item.NewValue)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Created)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Ticket.Description)
+                @Html.Raw(item.Ticket.Description)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.User.FullName)

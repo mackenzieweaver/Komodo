@@ -9,20 +9,42 @@
 
   <ItemGroup>
     <Compile Remove="Views\Notifications\**" />
+    <Compile Remove="Views\TicketHistories\**" />
+    <Compile Remove="Views\TicketPriorities\**" />
+    <Compile Remove="Views\TicketStatus\**" />
+    <Compile Remove="Views\TicketTypes\**" />
     <Content Remove="Views\Notifications\**" />
+    <Content Remove="Views\TicketHistories\**" />
+    <Content Remove="Views\TicketPriorities\**" />
+    <Content Remove="Views\TicketStatus\**" />
+    <Content Remove="Views\TicketTypes\**" />
     <EmbeddedResource Remove="Views\Notifications\**" />
+    <EmbeddedResource Remove="Views\TicketHistories\**" />
+    <EmbeddedResource Remove="Views\TicketPriorities\**" />
+    <EmbeddedResource Remove="Views\TicketStatus\**" />
+    <EmbeddedResource Remove="Views\TicketTypes\**" />
     <None Remove="Views\Notifications\**" />
+    <None Remove="Views\TicketHistories\**" />
+    <None Remove="Views\TicketPriorities\**" />
+    <None Remove="Views\TicketStatus\**" />
+    <None Remove="Views\TicketTypes\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Controllers\NotificationsController.cs" />
+    <Compile Remove="Controllers\TicketPrioritiesController.cs" />
+    <Compile Remove="Controllers\TicketStatusController.cs" />
+    <Compile Remove="Controllers\TicketTypesController.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Home\FourOhFour.cshtml" />
+    <Content Remove="Views\Shared\pages_error404.cshtml" />
     <Content Remove="Views\Shared\_Layout_old.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Home\FourOhFour.cshtml" />
     <None Include="wwwroot\assets\img\contact-us-map-pin.svg" />
     <None Include="wwwroot\assets\img\faq.svg" />
     <None Include="wwwroot\assets\img\mindset.svg" />

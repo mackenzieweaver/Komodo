@@ -69,14 +69,23 @@ namespace Komodo
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            //app.Use(async (context, next) =>
+            //{
+            //    await next();
+            //    if(context.Response.StatusCode == 404)
+            //    {
+            //        context.Request.Path = "/Home/FourOhFour";
+            //        await next();
+            //    }
+            //});
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -42,6 +42,11 @@ namespace Komodo.Controllers
             return View();
         }
 
+        public IActionResult FourOhFour()
+        {
+            return View();
+        }
+
         [Authorize]
         public async Task<IActionResult> Index()
         {

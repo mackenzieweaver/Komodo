@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Komodo.Controllers
 {
-    [Authorize(Roles = "Admin,ProjectManager")]
     public class TicketStatusController : Controller
     {
         private readonly ApplicationDbContext _context;
