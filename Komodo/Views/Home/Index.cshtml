@@ -9,7 +9,10 @@
     string roleName = "";
     foreach (var role in roles)
     {
-        roleName = role;
+        if(role != "Demo")
+        {
+            roleName = role;
+        }
     }
 
     var num = 5;

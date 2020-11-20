@@ -98,8 +98,10 @@ namespace Komodo.Controllers
                         .Include(t => t.DeveloperUser)
                         .Include(t => t.Project)
                         .FirstOrDefaultAsync(t => t.Id == ticketAttachment.TicketId);
-
-                    await _notificationService.NotifyOfAttachment(_userManager.GetUserId(User), ticket, ticketAttachment);
+                    if(ticket.DeveloperUserId != null)
+                    {
+                        await _notificationService.NotifyOfAttachment(_userManager.GetUserId(User), ticket, ticketAttachment);
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });

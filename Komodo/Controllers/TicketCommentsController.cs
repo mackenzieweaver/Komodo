@@ -88,7 +88,10 @@ namespace Komodo.Controllers
                     .Include(t => t.DeveloperUser)
                     .Include(t => t.Project)
                     .FirstOrDefaultAsync(t => t.Id == ticketId);
-                await _notificationService.NotifyOfComment(userId, ticket, ticketComment);
+                if(ticket.DeveloperUserId != null)
+                {
+                    await _notificationService.NotifyOfComment(userId, ticket, ticketComment);
+                }
                 return RedirectToAction("Details", "Tickets", new { id = ticketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
