@@ -22,7 +22,7 @@
     <link href="~/css/apexcharts.css" rel="stylesheet" />
     <script src="~/js/apexcharts.min.js"></script>
     <script src="~/js/custom-apexcharts.js"></script>
-
+    <script src="https://cdn.tiny.cloud/1/5hebe8k5m07qf4mcta3paw6it1x1fve47c5l4qh7m2e7nbhv/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 <body>
     <!-- BEGIN LOADER -->
@@ -315,7 +315,12 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @*<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>*@
     <script src="~/js/datatables.js"></script>
-
+    <script>
+        tinymce.init({
+            selector: '#tinycontent',
+            height: 400
+        });
+    </script>
     @if (TempData["DemoLockout"] != null)
     {
         <script>alert("Demo users can't change data...");</script>

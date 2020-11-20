@@ -901,7 +901,7 @@ namespace Komodo.Data
                 {
                     await userManager.CreateAsync(demoPM, demoPassword);
                     await userManager.AddToRoleAsync(demoPM, Roles.ProjectManager.ToString());
-                    await userManager.AddToRoleAsync(demoAdmin, Roles.Demo.ToString());
+                    await userManager.AddToRoleAsync(demoPM, Roles.Demo.ToString());
                 }
             }
             catch (Exception ex)
@@ -931,7 +931,7 @@ namespace Komodo.Data
                 {
                     await userManager.CreateAsync(demoDev, demoPassword);
                     await userManager.AddToRoleAsync(demoDev, Roles.Developer.ToString());
-                    await userManager.AddToRoleAsync(demoAdmin, Roles.Demo.ToString());
+                    await userManager.AddToRoleAsync(demoDev, Roles.Demo.ToString());
                 }
             }
             catch (Exception ex)
@@ -961,7 +961,7 @@ namespace Komodo.Data
                 {
                     await userManager.CreateAsync(demoSub, demoPassword);
                     await userManager.AddToRoleAsync(demoSub, Roles.Submitter.ToString());
-                    await userManager.AddToRoleAsync(demoAdmin, Roles.Demo.ToString());
+                    await userManager.AddToRoleAsync(demoSub, Roles.Demo.ToString());
                 }
             }
             catch (Exception ex)
@@ -991,7 +991,7 @@ namespace Komodo.Data
                 {
                     await userManager.CreateAsync(demoNew, demoPassword);
                     await userManager.AddToRoleAsync(demoNew, Roles.NewUser.ToString());
-                    await userManager.AddToRoleAsync(demoAdmin, Roles.Demo.ToString());
+                    await userManager.AddToRoleAsync(demoNew, Roles.Demo.ToString());
                 }
             }
             catch (Exception ex)

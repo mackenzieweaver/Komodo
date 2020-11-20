@@ -10,8 +10,8 @@
 
 <h4>Ticket</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="col-md-8">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -29,32 +29,39 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <input id="tinycontent" asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TicketTypeId" class="control-label"></label>
-                <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
-                <span asp-validation-for="TicketTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TicketPriorityId" class="control-label"></label>
-                <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
-                <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
-            </div>
-
-            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
-            {
-                <div class="form-group">
-                    <label asp-for="TicketStatusId" class="control-label"></label>
-                    <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
-                    <span asp-validation-for="TicketStatusId" class="text-danger"></span>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="TicketTypeId" class="control-label"></label>
+                        <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
+                        <span asp-validation-for="TicketTypeId" class="text-danger"></span>
+                    </div>
                 </div>
-            }
-            else
-            {
-                <input type="hidden" asp-for="TicketStatusId" />
-            }
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="TicketPriorityId" class="control-label"></label>
+                        <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
+                        <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
+                    {
+                        <div class="form-group">
+                            <label asp-for="TicketStatusId" class="control-label"></label>
+                            <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
+                            <span asp-validation-for="TicketStatusId" class="text-danger"></span>
+                        </div>
+                    }
+                    else
+                    {
+                        <input type="hidden" asp-for="TicketStatusId" />
+                    }
+                </div>
+            </div>
             @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
             {
                 <div class="form-group">
@@ -72,7 +79,7 @@
                 <input name="attachment" type="file" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-light btn-lg" />
             </div>
         </form>
     </div>

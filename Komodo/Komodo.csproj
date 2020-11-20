@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Shared\_Layout_old.cshtml" />
+    <Content Remove="Views\Tickets\OldDetails.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
