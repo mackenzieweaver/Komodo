@@ -165,10 +165,31 @@
                                         <a class="nav-link" asp-area="" asp-controller="Tickets" asp-action="Create">Create</a>
                                     </li>
                                 }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a class="nav-link" asp-area="" asp-controller="TicketTypes" asp-action="Index">Types</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" asp-area="" asp-controller="TicketPriorities" asp-action="Index">Priorities</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" asp-area="" asp-controller="TicketStatus" asp-action="Index">Statuses</a>
+                                    </li>
+                                }
                                 @if (User.IsInRole("ProjectManager"))
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link" asp-area="" asp-controller="Tickets" asp-action="ProjectTickets">On My Projects</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" asp-area="" asp-controller="TicketTypes" asp-action="Index">Types</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" asp-area="" asp-controller="TicketPriorities" asp-action="Index">Priorities</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" asp-area="" asp-controller="TicketStatus" asp-action="Index">Statuses</a>
                                     </li>
                                 }
                                 @if (User.IsInRole("Developer"))
