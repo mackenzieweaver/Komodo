@@ -58,6 +58,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] TicketType ticketType)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction(nameof(Index));
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(ticketType);
@@ -94,7 +99,11 @@ namespace Komodo.Controllers
             {
                 return NotFound();
             }
-
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction(nameof(Index));
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -141,6 +150,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction(nameof(Index));
+            }
             var ticketType = await _context.TicketTypes.FindAsync(id);
             _context.TicketTypes.Remove(ticketType);
             await _context.SaveChangesAsync();

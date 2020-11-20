@@ -69,6 +69,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment, string content, int ticketId)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("Details", "Tickets", new { id = ticketId });
+            }
             var userId = _userManager.GetUserId(User);
             ticketComment.UserId = userId;
             if(content != null)
@@ -128,7 +133,11 @@ namespace Komodo.Controllers
             {
                 return NotFound();
             }
-
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction(nameof(Index));
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -179,6 +188,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("Details", "Tickets", new { id = id });
+            }
             var ticketComment = await _context.TicketComments.FindAsync(id);
             _context.TicketComments.Remove(ticketComment);
             await _context.SaveChangesAsync();

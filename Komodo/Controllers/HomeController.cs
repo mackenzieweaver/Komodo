@@ -37,7 +37,7 @@ namespace Komodo.Controllers
             _rolesService = rolesService;
         }
 
-        public async Task<IActionResult> Temp()
+        public IActionResult Temp()
         {
             return View();
         }
@@ -116,7 +116,7 @@ namespace Komodo.Controllers
                         vm.Tickets.Add(ticket);
 
                         // get dev
-                        devs = await _projectService.SortListOfDevsByTicketCountAsync(devs, tickets);
+                        devs = _projectService.SortListOfDevsByTicketCountAsync(devs, tickets);
                         //var dev = devs.Count > i ? devs[i] : devs[0];
                         vm.Developers.Add(devs[0]);
                         // get task count

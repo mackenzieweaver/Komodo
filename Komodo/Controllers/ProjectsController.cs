@@ -87,6 +87,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ImagePath,ImageData")] Project project)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("Index", "Projects", new { id = project.Id });
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(project);
@@ -123,7 +128,11 @@ namespace Komodo.Controllers
             {
                 return NotFound();
             }
-
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("Details", "Projects", new { id = project.Id });
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -170,6 +179,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("Index", "Projects", new { id = id });
+            }
             var project = await _context.Projects.FindAsync(id);
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
@@ -197,6 +211,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ProjectUsersViewModel model)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("AssignUsers", "Projects", new { id = model.Project.Id });
+            }
             if (ModelState.IsValid)
             {
                 if(model.SelectedUsers != null)
@@ -217,6 +236,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveUsers(ProjectUsersViewModel model)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("AssignUsers", "Projects", new { id = model.Project.Id });
+            }
             if (ModelState.IsValid)
             {
                 if (model.SelectedUsers != null)

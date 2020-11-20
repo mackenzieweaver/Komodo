@@ -71,6 +71,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment, IFormFile attachment)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction(nameof(Index));
+            }
             if (ModelState.IsValid)
             {
                 if (attachment != null)
@@ -140,7 +145,11 @@ namespace Komodo.Controllers
             {
                 return NotFound();
             }
-
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.Id });
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -191,6 +200,11 @@ namespace Komodo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction(nameof(Index));
+            }
             var ticketAttachment = await _context.TicketAttachments.FindAsync(id);
             _context.TicketAttachments.Remove(ticketAttachment);
             await _context.SaveChangesAsync();

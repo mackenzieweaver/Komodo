@@ -188,7 +188,7 @@ namespace Komodo.Services
         //    return Users;
         //}
 
-        public async Task<List<BTUser>> SortListOfDevsByTicketCountAsync(List<BTUser> users, List<Ticket> tickets)
+        public List<BTUser> SortListOfDevsByTicketCountAsync(List<BTUser> users, List<Ticket> tickets)
         {
             int i, j;
             int N = users.Count;
