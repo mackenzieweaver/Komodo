@@ -2,36 +2,50 @@
 @{
     ViewData["Title"] = "Manage User Roles";
 }
-<h1 class="ml-3">Manage the Roles of Users</h1>
-<div class="row ml-3 mr-3">
-    <p class="text-muted font-13 m-b-30">
-        This form displays the current roles assigned to each user. Use the dropdown to select the roles that this user should be assigned. Once roles are selected, click "Assign Roles" to submit the form.
-    </p>
-    @foreach (var btuser in Model.OrderBy(u => u.User.FullName))
-    {
-        <div class="card col-md-3">
-            <div class="card-body">
-                @*<h2 class="m-t-0 h3"><b>Assign Roles to @btuser.User.FullName</b></h2>*@
-
-                @*<hr />*@
-                <form asp-controller="UserRoles" asp-action="ManageUserRoles" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="@btuser.User.Id">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label asp-for="@btuser.Roles" class="control-label">Roles for @btuser.User.FullName</label>
-                            <select asp-for="@btuser.SelectedRoles" class="form-control" asp-items="@btuser.Roles" multiple="multiple"></select>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="col-12">
-                        <div class="form-group pull-right">
-                            <input type="submit" value="Assign Roles" class="btn btn-outline-dark" />
-                            <a class="btn btn-outline-dark" asp-controller="Users" asp-action="Index">Cancel</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="row">
+            <h1 class="">Manage the Roles of Users</h1>
+            <p class="text-muted font-13 mb-5">
+                This form displays the current roles assigned to each user. Use the dropdown to select the roles that this user should be assigned. Once roles are selected, click "Assign Roles" to submit the form.
+            </p>
+            <table class="table table-striped table-responsive ticketsIndex">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Roles
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var btuser in Model.OrderBy(u => u.User.FullName))
+                    {
+                        <tr>
+                            <form asp-controller="UserRoles" asp-action="ManageUserRoles" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="@btuser.User.Id">
+                                <td>
+                                    <label asp-for="@btuser.Roles" class="control-label">Roles for @btuser.User.FullName</label>
+                                </td>
+                                <td>
+                                    <select asp-for="@btuser.SelectedRole" class="form-control" asp-items="ViewBag.Roles">
+                                        @*<option selected="selected">@btuser.SelectedRole</option>*@
+                                    </select>
+                                    @*<select asp-for="@btuser.SelectedRoles" class="form-control" asp-items="@btuser.Roles"></select>*@
+                                </td>
+                                <td>
+                                    <input type="submit" value="Assign" class="btn btn-light" />
+                                    <a class="btn btn-dark" asp-controller="Home" asp-action="Index">Cancel</a>
+                                </td>
+                            </form>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-    }
+    </div>
 </div>

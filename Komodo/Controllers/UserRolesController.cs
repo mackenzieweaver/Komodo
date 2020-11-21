@@ -38,9 +38,12 @@ namespace Komodo.Controllers
             {
                 ManageUserRolesViewModel vm = new ManageUserRolesViewModel();
                 vm.User = user;
-                var selected = await _rolesService.ListUserRoles(user);
-                // items in list, goes to post, shows up in dropdown, the roles of the user
-                vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);
+                //vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);
+                var myRole = (await _rolesService.ListUserRoles(user)).FirstOrDefault(role => role != "Demo");
+                ViewData["Roles"] = new SelectList(_context.Roles
+                    .Where(r => r.Name != "Demo" && r.Name != "NewUser" && r.Name != myRole),
+                    "Name", "Name");
+                vm.SelectedRole = myRole;
                 model.Add(vm);
             }
             return View(model);
@@ -58,7 +61,7 @@ namespace Komodo.Controllers
             BTUser user = _context.Users.Find(btuser.User.Id);
             IEnumerable<string> roles = await _rolesService.ListUserRoles(user);
             await _userManager.RemoveFromRolesAsync(user, roles);
-            string userRole = btuser.SelectedRoles.FirstOrDefault();
+            string userRole = btuser.SelectedRole;
 
             if(Enum.TryParse(userRole, out Roles roleValue))
             {
