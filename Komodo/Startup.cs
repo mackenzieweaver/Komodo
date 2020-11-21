@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Komodo.Models;
 using Komodo.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Komodo.Utilities;
 
 namespace Komodo
 {
@@ -30,9 +31,12 @@ namespace Komodo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(DataHelper.GetConnectionString(Configuration)));
 
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
