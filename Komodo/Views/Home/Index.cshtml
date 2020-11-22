@@ -29,11 +29,13 @@
 
         <div class="row mt-5 mb-5 ml-1 mr-1">
             <div class="col-md-12 p-5 widget">
-                @*<h5 class="text-center mb-4 pt-3">Counters</h5>*@
+                <div class="widget-heading">
+                    <h3 class="mb-4">Quick ticket update</h3>
+                </div>
                 <div class="row">
                     <div class="col-xl-3 col-md-6">
                         <div class="card text-white mb-1" style="background-color: #5c1ac3">
-                            <div class="card-body">#Tickets (@Model.numTickets)</div>
+                            <div class="card-body">Total tickets (@Model.numTickets)</div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-white stretched-link" asp-controller="Tickets" asp-action="Filter">View Details</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -42,7 +44,7 @@
                     </div>
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-warning mb-1">
-                            <div class="card-body">#Unassigned (@Model.numUnassigned)</div>
+                            <div class="card-body">Unassigned tickets (@Model.numUnassigned)</div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small stretched-link" asp-controller="Tickets" asp-action="Filter" asp-route-filter="Unassigned">View Details</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -51,7 +53,7 @@
                     </div>
                     <div class="col-xl-3 col-md-6">
                         <div class="card mb-1" style="background-color: #009688">
-                            <div class="card-body text-white">#Open (@Model.numOpen)</div>
+                            <div class="card-body text-white">New tickets (@Model.numOpen)</div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small stretched-link" asp-controller="Tickets" asp-action="Filter" asp-route-filter="Open">View Details</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -60,7 +62,7 @@
                     </div>
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-danger text-white mb-1">
-                            <div class="card-body">#Critical (@Model.numCritical)</div>
+                            <div class="card-body">Urgent tickets (@Model.numCritical)</div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-white stretched-link" asp-controller="Tickets" asp-action="Filter" asp-route-filter="Critical">View Details</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
