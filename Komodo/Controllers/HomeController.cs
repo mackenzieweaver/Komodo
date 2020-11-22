@@ -152,6 +152,12 @@ namespace Komodo.Controllers
                 vm.TicketsCreatedByMe = tickets.Where(t => t.OwnerUserId == user.Id).ToList();
             }
 
+            // give submitter personalized data
+            if (await _userManager.IsInRoleAsync(user, "NewUser"))
+            {
+                vm.Tickets = tickets;
+            }
+
             return View(vm);
         }
 
