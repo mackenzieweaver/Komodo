@@ -129,6 +129,21 @@ namespace Komodo.Controllers
                     }
                 }
             }
+
+            // give developer personalized data
+            if (await _userManager.IsInRoleAsync(user, "Developer"))
+            {
+                vm.Tickets = tickets;
+
+                var projects = await _projectService.ListUserProjects(user.Id);
+                var ticketSet = new List<List<Ticket>>();
+                foreach (var project in projects)
+                {
+                    ticketSet.Add(tickets.Where(t => t.Project.Id == project.Id).ToList());
+                }
+                vm.TicketsOnDevProjs = ticketSet.SelectMany(t => t).ToList();
+                vm.TicketsAssignedToDev = vm.TicketsOnDevProjs.Where(t => t.DeveloperUserId == user.Id).ToList();
+            }
             return View(vm);
         }
 

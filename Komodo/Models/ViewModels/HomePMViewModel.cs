@@ -13,14 +13,20 @@ namespace Komodo.Models.ViewModels
             Developers = new List<BTUser>();
             Count = new List<int>();
         }
+        // data for everyone
+        public int numTickets { get; set; }
+        public int numCritical { get; set; }
+        public int numUnassigned { get; set; }
+        public int numOpen { get; set; }
+
+        // pm data
         public List<Ticket> Tickets { get; set; }
         public List<BTUser> Developers { get; set; }
         public List<BTUser> UsersOnProject { get; set; }
         public List<int> Count { get; set; }
 
-        public int numTickets { get; set; }
-        public int numCritical { get; set; }
-        public int numUnassigned { get; set; }
-        public int numOpen { get; set; }
+        // Developer data
+        public List<Ticket> TicketsAssignedToDev { get; set; }
+        public List<Ticket> TicketsOnDevProjs { get; set; }
     }
 }
