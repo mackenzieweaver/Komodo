@@ -8,136 +8,144 @@
 
 <div class="row">
     <div class="col-md">
-        <h1>Project</h1>
+        <div class="row">
+            <div class="col-md">
 
-        <h4>Details</h4>
+                <h1>Project</h1>
+
+                <h4>Details</h4>
+            </div>
+        </div>
+
         <hr />
-        <dl>
-            <dt class="col-sm-3">
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd class="col-sm-9">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-            @*<dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ImagePath)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ImagePath)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ImageData)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ImageData)
-            </dd>*@
-            <dt class="col-sm-2">
-                Team Members
-            </dt>
-            <dd class="col-sm-10">
-                <div class="row">
-                    @foreach (var user in Model.ProjectUsers)
-                    {
-                        <div class="col-md-3">
-                            <b>@user.User.FullName</b>
-                        </div>
-                        <div class="col-md-3">
-                            @foreach (var role in await _rolesService.ListUserRoles(user.User))
-                            {
-                                <em>@role</em>
-                            }
-                        </div>
-                        <div class="col-md-6"></div>
-                        <br />
-                    }
-                </div>
-            </dd>
-        </dl>
 
-        <table class="table table-striped table-responsive ticketsIndex">
-            <thead>
-                <tr>
-                    <th>
-                        Title
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
-                        Created
-                    </th>
-                    <th>
-                        Updated
-                    </th>
-                    <th>
-                        Project
-                    </th>
-                    <th>
-                        TicketType
-                    </th>
-                    <th>
-                        TicketPriority
-                    </th>
-                    <th>
-                        TicketStatus
-                    </th>
-                    <th>
-                        OwnerUser
-                    </th>
-                    <th>
-                        DeveloperUser
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var ticket in Model.Tickets)
-                {
-                    <tr>
-                        <td>
-                            @ticket.Title
-                        </td>
-                        <td>
-                            @Html.Raw(ticket.Description)
-                        </td>
-                        <td>
-                            @ticket.Created
-                        </td>
-                        <td>
-                            @ticket.Updated
-                        </td>
-                        <td>
-                            @Model.Name
-                        </td>
-                        <td>
-                            @ticket.TicketType.Name
-                        </td>
-                        <td>
-                            @ticket.TicketPriority.Name
-                        </td>
-                        <td>
-                            @ticket.TicketStatus.Name
-                        </td>
-                        <td>
-                            @ticket.OwnerUser.FullName
-                        </td>
-                        <td>
-                            @if (ticket.DeveloperUserId == null)
-                            {
-                                <p>Unassigned</p>
-                            }
-                            else
-                            {
-                                @ticket.DeveloperUser.FullName
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div>
-            <a asp-action="AssignUsers" asp-route-id="@Model.Id">Assign</a> |
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-            <a asp-action="Index">Back to List</a>
+        <div class="row text-white  m-1 mb-3">
+            <div class="col-md-5 widget">
+                <div class="row">
+                    <div class="col-md">
+                        <h1>@Html.DisplayNameFor(model => model.Name):</h1>
+                    </div>
+                    <div class="col-md align-baseline mt-2">
+                        <h3>"@Html.DisplayFor(model => model.Name)"</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md widget ml-3">
+                <div class="row">
+                    <div class="col-4">
+                        <h2>Team Members:</h2>
+                    </div>
+                    <div class="col h6">
+                        @foreach (var user in Model.ProjectUsers)
+                        {
+                            <span>@user.User.FullName</span>
+                            <span>
+                                @foreach (var role in await _rolesService.ListUserRoles(user.User))
+                                {
+                                    <span>(</span><span>@role</span><span>)</span>
+                                }
+                            </span>
+                            <br />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ml-1 mr-1">
+            <div class="col-md widget">
+                <div class="widget-heading">
+                    <h3 class="mb-4">Tickets on this project</h3>
+                </div>
+                <hr />
+                <table class="table table-striped ticketsIndex">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th>
+                                Created
+                            </th>
+                            <th>
+                                Updated
+                            </th>
+                            <th>
+                                Project
+                            </th>
+                            <th>
+                                Type
+                            </th>
+                            <th>
+                                Priority
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                Creator
+                            </th>
+                            <th>
+                                Developer
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticket in Model.Tickets)
+                        {
+                            <tr>
+                                <td>
+                                    @ticket.Title
+                                </td>
+                                <td>
+                                    @Html.Raw(ticket.Description)
+                                </td>
+                                <td>
+                                    @ticket.Created
+                                </td>
+                                <td>
+                                    @ticket.Updated
+                                </td>
+                                <td>
+                                    @Model.Name
+                                </td>
+                                <td>
+                                    @ticket.TicketType.Name
+                                </td>
+                                <td>
+                                    @ticket.TicketPriority.Name
+                                </td>
+                                <td>
+                                    @ticket.TicketStatus.Name
+                                </td>
+                                <td>
+                                    @ticket.OwnerUser.FullName
+                                </td>
+                                <td>
+                                    @if (ticket.DeveloperUserId == null)
+                                    {
+                                        <p>Unassigned</p>
+                                    }
+                                    else
+                                    {
+                                        @ticket.DeveloperUser.FullName
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md">
+                <a asp-action="AssignUsers" asp-route-id="@Model.Id" class="btn btn-outline-dark text-white">Assign</a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark text-white">Edit</a>
+                <a asp-action="Index" class="btn btn-outline-dark text-white">Back to List</a>
+            </div>
         </div>
     </div>
 </div>

@@ -20,6 +20,7 @@
     @*<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />*@
     <link href="~/css/datatables.css" rel="stylesheet" />
     <link href="~/css/apexcharts.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/8b5ae67e5c.js" crossorigin="anonymous"></script>
     <script src="~/js/apexcharts.min.js"></script>
     <script src="~/js/custom-apexcharts.js"></script>
     <script src="//cdn.tiny.cloud/1/5hebe8k5m07qf4mcta3paw6it1x1fve47c5l4qh7m2e7nbhv/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
@@ -179,6 +180,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" asp-area="" asp-controller="Tickets" asp-action="MyTickets">Assigned To Me</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-controller="Tickets" asp-action="ProjectTickets">On My Projects</a>
+                                    </li>
                                 }
                                 @if (User.IsInRole("Submitter"))
                                 {
@@ -188,65 +192,62 @@
                                 }
                             </ul>
                         </li>
-                        <li class="menu">
-                            <a href="#datatables" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                                    <span>Projects</span>
-                                </div>
-                                <div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                                </div>
-                            </a>
-                            <ul class="collapse submenu list-unstyled show" id="datatables" data-parent="#accordionExample">
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="Index">All</a>
-                                    </li>
-                                }
-                                @if (User.IsInRole("ProjectManager"))
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="Index">All</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="MyProjects">Assigned To Me</a>
-                                    </li>
-                                }
-                                @if (User.IsInRole("Developer"))
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Tickets" asp-action="ProjectTickets">On My Projects</a>
-                                    </li>
-                                }
-                            </ul>
-                        </li>
-                        <li class="menu">
-                            <a href="#users" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                    <span>Roles</span>
-                                </div>
-                                <div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                                </div>
-                            </a>
-                            <ul class="collapse submenu list-unstyled show" id="users" data-parent="#accordionExample">
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">Assign</a>
-                                    </li>
-                                }
-                                @if (User.IsInRole("ProjectManager"))
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">Assign</a>
-                                    </li>
-                                }
-                            </ul>
-                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                        {
+                            <li class="menu">
+                                <a href="#datatables" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                    <div class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                                        <span>Projects</span>
+                                    </div>
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </div>
+                                </a>
+                                <ul class="collapse submenu list-unstyled show" id="datatables" data-parent="#accordionExample">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="Index">All</a>
+                                        </li>
+                                    }
+                                    @if (User.IsInRole("ProjectManager"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="Index">All</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="MyProjects">Assigned To Me</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="menu">
+                                <a href="#users" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                    <div class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                        <span>Roles</span>
+                                    </div>
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </div>
+                                </a>
+                                <ul class="collapse submenu list-unstyled show" id="users" data-parent="#accordionExample">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">Assign</a>
+                                        </li>
+                                    }
+                                    @if (User.IsInRole("ProjectManager"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">Assign</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
                     </ul>
                 </nav>
             </div>

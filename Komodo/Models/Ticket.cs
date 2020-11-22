@@ -27,11 +27,17 @@ namespace Komodo.Models
         [DataType(DataType.Date)]
         public DateTimeOffset? Updated { get; set; }
 
+        [Display(Name = "Project")]
         public int ProjectId { get; set; }
+        [Display(Name = "Type")]
         public int TicketTypeId { get; set; }
+        [Display(Name = "Priority")]
         public int TicketPriorityId { get; set; }
+        [Display(Name = "Status")]
         public int TicketStatusId { get; set; }
+        [Display(Name = "Creator")]
         public string OwnerUserId { get; set; }
+        [Display(Name = "Developer")]
         public string DeveloperUserId { get; set; }
 
         public Project Project { get; set; }

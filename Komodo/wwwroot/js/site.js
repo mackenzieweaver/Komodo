@@ -21,6 +21,7 @@ function InitDonut() {
         },
 
         series: [10, 20, 30, 40],
+        colors: ['#e7515a', '#009688', '#e2a03f', '#5c1ac3'],
         labels: ["Admin", "Project Manager", "Developer", "Submitter"],
 
         responsive: [{
@@ -84,8 +85,8 @@ function InitBarChart() {
             }
         },
         fill: {
-            opacity: 1
-
+            opacity: 1,
+            colors: ['#009688', '#5c1ac3']
         },
         tooltip: {
             y: {

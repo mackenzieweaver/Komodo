@@ -6,12 +6,10 @@
     var userId = _userManager.GetUserId(User);
 }
 
-<h1>Edit</h1>
-
-<h4>Ticket</h4>
-<hr />
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-8 widget">
+        <h1>Edit this ticket</h1>
+        <hr />
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -64,10 +62,12 @@
             </div>
             @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
             {
-                <div class="form-group">
-                    <label asp-for="DeveloperUserId" class="control-label"></label>
-                    <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
-                    <span asp-validation-for="DeveloperUserId" class="text-danger"></span>
+                <div class="col-md-6 ml-0 pl-0">
+                    <div class="form-group">
+                        <label asp-for="DeveloperUserId" class="control-label"></label>
+                        <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
+                        <span asp-validation-for="DeveloperUserId" class="text-danger"></span>
+                    </div>
                 </div>
             }
             else
@@ -82,12 +82,12 @@
                 <input type="submit" value="Save" class="btn btn-light btn-lg" />
             </div>
         </form>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-dark text-white">Back to List</a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

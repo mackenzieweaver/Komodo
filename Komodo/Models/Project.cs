@@ -20,8 +20,10 @@ namespace Komodo.Models
         [Display(Name = "Project Name")]
         public string Name { get; set; }
 
-        [Display(Name = "Project Image")]
+        [Display(Name = "Image Path")]
         public string ImagePath { get; set; }
+
+        [Display(Name = "Image Data")]
         public byte[] ImageData { get; set; }
 
         public List<ProjectUser> ProjectUsers { get; set; }

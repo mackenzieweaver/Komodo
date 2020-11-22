@@ -9,7 +9,7 @@
     string roleName = "";
     foreach (var role in roles)
     {
-        if(role != "Demo")
+        if (role != "Demo")
         {
             roleName = role;
         }
@@ -19,194 +19,207 @@
     var tCount = Model.Developers.Count;
     num = tCount < num ? tCount : num;
 }
-<div>
-    <h1>Welcome back, @user.FirstName</h1>
-    <h4>Role --> <em>@roleName</em></h4>
-</div>
 
-<div class="row mt-3">
+<div class="row justify-content-center">
     <div class="col-md-12">
-        <h5 class="text-center mb-4 pt-3">Counters</h5>
-        <div class="row">
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-primary text-white mb-1">
-                    <div class="card-body">#Tickets (@Model.numTickets)</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" asp-controller="Tickets" asp-action="Filter">View Details</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+        <div>
+            <h1>Welcome back, @user.FirstName</h1>
+            <h4>Role --> <u>@roleName</u></h4>
+        </div>
+
+        <div class="row mt-5 mb-5 ml-1 mr-1">
+            <div class="col-md-12 p-5 widget">
+                @*<h5 class="text-center mb-4 pt-3">Counters</h5>*@
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card text-white mb-1" style="background-color: #5c1ac3">
+                            <div class="card-body">#Tickets (@Model.numTickets)</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link" asp-controller="Tickets" asp-action="Filter">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-danger text-white mb-1">
-                    <div class="card-body">#Critical (@Model.numCritical)</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" asp-controller="Tickets" asp-action="Filter" asp-route-filter="Critical">View Details</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-warning mb-1">
+                            <div class="card-body">#Unassigned (@Model.numUnassigned)</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small stretched-link" asp-controller="Tickets" asp-action="Filter" asp-route-filter="Unassigned">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-warning mb-1">
-                    <div class="card-body">#Unassigned (@Model.numUnassigned)</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-black-50 stretched-link" asp-controller="Tickets" asp-action="Filter" asp-route-filter="Unassigned">View Details</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card mb-1" style="background-color: #009688">
+                            <div class="card-body text-white">#Open (@Model.numOpen)</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small stretched-link" asp-controller="Tickets" asp-action="Filter" asp-route-filter="Open">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-light mb-1">
-                    <div class="card-body">#Open (@Model.numOpen)</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-black-50 stretched-link" asp-controller="Tickets" asp-action="Filter" asp-route-filter="Open">View Details</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-danger text-white mb-1">
+                            <div class="card-body">#Critical (@Model.numCritical)</div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a class="small text-white stretched-link" asp-controller="Tickets" asp-action="Filter" asp-route-filter="Critical">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        @if (User.IsInRole("ProjectManager"))
+        {
+            @* Suggested Action *@
+            <div class="row mt-5 mb-5 ml-1 mr-1">
+                <div class="col-md-12 p-5 widget">
+                    <h5 class="mb-4">Suggested Actions</h5>
+                    <table class="table table-striped table-responsive-md ticketsIndex">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Developer
+                                </th>
+                                <th>
+                                    #Tasks
+                                </th>
+                                <th>
+                                    Ticket
+                                </th>
+                                <th>
+                                    Priority
+                                </th>
+                                <th>
+                                    Type
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < num; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Model.Developers[i].FullName
+                                    </td>
+                                    <td>
+                                        @Model.Count[i]
+                                    </td>
+                                    <td>
+                                        @Model.Tickets[i].Title
+                                    </td>
+                                    <td>
+                                        @Model.Tickets[i].TicketPriority.Name
+                                    </td>
+                                    <td>
+                                        @Model.Tickets[i].TicketType.Name
+                                    </td>
+                                    <td>
+                                        @Model.Tickets[i].TicketStatus.Name
+                                    </td>
+                                    <td>
+                                        <form asp-controller="Tickets" asp-action="Edit">
+                                            <input type="hidden" name="Id" value="@Model.Tickets[i].Id" />
+                                            <input type="hidden" name="Title" value="@Model.Tickets[i].Title" />
+                                            <input type="hidden" name="Description" value="@Model.Tickets[i].Description" />
+                                            <input type="hidden" name="Created" value="@Model.Tickets[i].Created" />
+                                            <input type="hidden" name="Updated" value="@DateTime.Now" />
+                                            <input type="hidden" name="ProjectId" value="@Model.Tickets[i].ProjectId" />
+                                            <input type="hidden" name="TicketTypeId" value="@Model.Tickets[i].TicketTypeId" />
+                                            <input type="hidden" name="TicketPriorityId" value="@Model.Tickets[i].TicketPriorityId" />
+                                            <input type="hidden" name="TicketStatusId" value="@Model.Tickets[i].TicketStatusId" />
+                                            <input type="hidden" name="OwnerUserId" value="@Model.Tickets[i].OwnerUserId" />
+                                            <input type="hidden" name="DeveloperUserId" value="@Model.Developers[i].Id" />
+                                            <input type="submit" value="Assign" class="btn btn-light" />
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                @* Bar Chart *@
+                <div class="col">
+                    <div class="widget widget-chart-two p-5">
+                        <div class="widget-heading">
+                            <h5 class="mb-4">Developers</h5>
+                        </div>
+                        <div class="widget-content">
+                            <div id="bar-chart" class=""></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+        {            
+            <div class="row mt-3">
+                @* Donut Chart *@
+                <div id="userbasedonut" class="col-md">
+                    <div class="widget widget-chart-two p-5">
+                        <div class="widget-heading">
+                            <h5 class="mb-4">Types of Users</h5>
+                        </div>
+                        <div class="widget-content">
+                            <div id="donut-chart" class=""></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="row mr-1">
+                        <div class="col p-5 widget">
+                            <div class="widget-heading">
+                                <h5 class="mb-4">Individual Users</h5>
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-responsive-md ticketsIndex">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Name
+                                            </th>
+                                            <th>
+                                                Role
+                                            </th>
+                                            <th>
+                                                Email
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var u in Model.UsersOnProject)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @u.FullName
+                                                </td>
+                                                <td>
+                                                    @foreach (var role in await _rolesService.ListUserRoles(u))
+                                                    {
+                                                        @role
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @u.Email
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>
-@if (User.IsInRole("ProjectManager"))
-{
-    @* Suggested Action *@
-    <div class="row mr-1 ml-1 mt-3">
-        <div class="col-md-12">
-            <h5 class="text-center mb-4 pt-3">Suggested Actions</h5>
-            <table class="table table-striped table-responsive-md ticketsIndex">
-                <thead>
-                    <tr>
-                        <th>
-                            Developer
-                        </th>
-                        <th>
-                            #Tasks
-                        </th>
-                        <th>
-                            Ticket
-                        </th>
-                        <th>
-                            Priority
-                        </th>
-                        <th>
-                            Type
-                        </th>
-                        <th>
-                            Status
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (var i = 0; i < num; i++)
-                    {
-                        <tr>
-                            <td>
-                                @Model.Developers[i].FullName
-                            </td>
-                            <td>
-                                @Model.Count[i]
-                            </td>
-                            <td>
-                                @Model.Tickets[i].Title
-                            </td>
-                            <td>
-                                @Model.Tickets[i].TicketPriority.Name
-                            </td>
-                            <td>
-                                @Model.Tickets[i].TicketType.Name
-                            </td>
-                            <td>
-                                @Model.Tickets[i].TicketStatus.Name
-                            </td>
-                            <td>
-                                <form asp-controller="Tickets" asp-action="Edit">
-                                    <input type="hidden" name="Id" value="@Model.Tickets[i].Id" />
-                                    <input type="hidden" name="Title" value="@Model.Tickets[i].Title" />
-                                    <input type="hidden" name="Description" value="@Model.Tickets[i].Description" />
-                                    <input type="hidden" name="Created" value="@Model.Tickets[i].Created" />
-                                    <input type="hidden" name="Updated" value="@DateTime.Now" />
-                                    <input type="hidden" name="ProjectId" value="@Model.Tickets[i].ProjectId" />
-                                    <input type="hidden" name="TicketTypeId" value="@Model.Tickets[i].TicketTypeId" />
-                                    <input type="hidden" name="TicketPriorityId" value="@Model.Tickets[i].TicketPriorityId" />
-                                    <input type="hidden" name="TicketStatusId" value="@Model.Tickets[i].TicketStatusId" />
-                                    <input type="hidden" name="OwnerUserId" value="@Model.Tickets[i].OwnerUserId" />
-                                    <input type="hidden" name="DeveloperUserId" value="@Model.Developers[i].Id" />
-                                    <input type="submit" value="Assign" class="btn btn-light" />
-                                </form>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="row">
-        @* Bar Chart *@
-        <div class="col">
-            <div class="widget widget-chart-two">
-                <div class="widget-heading">
-                    <h5 class="text-center mb-4 pt-3">Developers</h5><hr />
-                </div>
-                <div class="widget-content">
-                    <div id="bar-chart" class=""></div>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-{
-    <h5 class="text-center mb-4 pt-4">Users</h5>
-    <hr />
-    <div class="row">
-        @* Donut Chart *@
-        <div id="userbasedonut" class="col-md mt-3 layout-spacing">
-            <div class="widget widget-chart-two">
-                <div class="widget-heading">
-                </div>
-                <div class="widget-content">
-                    <div id="donut-chart" class=""></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md mt-3">
-            <table class="table table-striped table-responsive-md ticketsIndex">
-                <thead>
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Role
-                        </th>
-                        <th>
-                            Email
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var u in Model.UsersOnProject)
-                    {
-                        <tr>
-                            <td>
-                                @u.FullName
-                            </td>
-                            <td>
-                                @foreach (var role in await _rolesService.ListUserRoles(u))
-                                {
-                                    @role
-                                }
-                            </td>
-                            <td>
-                                @u.Email
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-}

@@ -4,34 +4,37 @@
     ViewBag.Title = "Assign Users";
 }
 
-
-<h2>Assign Users</h2>
-<div class="panel panel-green margin-bottom-40"></div>
-<h5>To Project: <span>@Model.Project.Name</span></h5>
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="AssignUsers" asp-controller="Projects" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="@Model.Project.Id" />
-            <input type="hidden" asp-for="@Model.Project.Name" />
-            <div class="form-group">
-                <label>Add Team Members</label>
-                <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.UsersOffProject" multiple="multiple" style="height:25vh"></select>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>Assign Users</h2>
+        <div class="panel panel-green margin-bottom-40"></div>
+        <h5>To Project: <span>@Model.Project.Name</span></h5>
+        <div class="row">
+            <div class="col-md-6">
+                <form asp-action="AssignUsers" asp-controller="Projects" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="@Model.Project.Id" />
+                    <input type="hidden" asp-for="@Model.Project.Name" />
+                    <div class="form-group">
+                        <label>Add Team Members</label>
+                        <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.UsersOffProject" multiple="multiple" style="height:25vh"></select>
+                    </div>
+                    <button type="submit" class="btn btn-light">Add</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-outline-dark">Add</button>
-        </form>
-    </div>
-    <div class="col-md-6">
-        <form asp-action="RemoveUsers" asp-controller="Projects" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="@Model.Project.Id" />
-            <input type="hidden" asp-for="@Model.Project.Name" />
-            <div class="form-group">
-                <label>Remove Team Members</label>
-                <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.UsersOnProject" multiple="multiple" style="height:25vh"></select>
+            <div class="col-md-6">
+                <form asp-action="RemoveUsers" asp-controller="Projects" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="@Model.Project.Id" />
+                    <input type="hidden" asp-for="@Model.Project.Name" />
+                    <div class="form-group">
+                        <label>Remove Team Members</label>
+                        <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.UsersOnProject" multiple="multiple" style="height:25vh"></select>
+                    </div>
+                    <button type="submit" class="btn btn-light">Remove</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-outline-dark">Remove</button>
-        </form>
+        </div>
+        <a asp-action="Details" asp-route-id="@Model.Project.Id" class="btn btn-outline-dark text-white mt-3">Back to List</a>
     </div>
 </div>
-<a asp-action="Details" asp-route-id="@Model.Project.Id">Back to List</a>

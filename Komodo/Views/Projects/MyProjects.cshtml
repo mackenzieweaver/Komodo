@@ -6,7 +6,7 @@
 
 <h1>My Projects</h1>
 <p>
-    <a class="btn btn-outline-dark" asp-controller="Projects" asp-action="Create">New Project</a>
+    <a class="btn btn-light btn-lg" asp-controller="Projects" asp-action="Create">New Project</a>
 </p>
 <table class="table">
     <thead>
@@ -20,7 +20,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.ImageData)
             </th>*@
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -37,9 +37,9 @@
                     @Html.DisplayFor(modelItem => item.ImageData)
                 </td>*@
             <td>
-                <a asp-controller="Projects" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                <span> | </span><a asp-action="AssignUsers" asp-route-id="@item.Id">Assign</a>
+                <a asp-action="AssignUsers" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Assign</a>
+                <a asp-controller="Projects" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Edit</a>
+                <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Details</a>
             </td>
             </tr>
         }

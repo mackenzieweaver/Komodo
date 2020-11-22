@@ -4,53 +4,65 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>All Projects</h1>
+<div class="row">
+    <div class="col-md">
+        <h1>All Projects</h1>
 
-<p>
-    <a class="btn btn-outline-dark" asp-controller="Projects" asp-action="Create">New Project</a>
-</p>
-<table class="table table-striped table-responsive-md ticketsIndex">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.ImagePath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageData)
-            </th>*@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageData)
-            </td>*@
-        <td>
-            @*<a asp-controller="ProjectUsers" asp-action="AddProjectUsers" asp-route-projectId="@item.Id">Users</a> |*@
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-            @if (User.IsInRole("Admin"))
-            {
-                <span> | </span><a asp-action="AssignUsers" asp-route-id="@item.Id">Assign</a>
-                <span> | </span><a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            }
-            @if (User.IsInRole("ProjectManager"))
-            {
-                <span> | </span><a asp-action="AssignUsers" asp-route-id="@item.Id">Assign</a>
-            }
-        </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <p>
+            <a class="btn btn-light btn-lg" asp-controller="Projects" asp-action="Create">New Project</a>
+        </p>
+    </div>
+</div>
+
+<div class="row ml-1 mr-1">
+    <div class="col-md widget">
+        <table class="table table-striped table-responsive-md ticketsIndex">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    @*<th>
+                        @Html.DisplayNameFor(model => model.ImagePath)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ImageData)
+                    </th>*@
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.ImagePath)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ImageData)
+                        </td>*@
+                        <td>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="AssignUsers" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Assign</a>
+                            }
+                            @if (User.IsInRole("ProjectManager"))
+                            {
+                                <a asp-action="AssignUsers" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Assign</a>
+                            }
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Details</a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Delete</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

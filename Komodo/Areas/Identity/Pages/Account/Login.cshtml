@@ -4,107 +4,115 @@
 @{
     ViewData["Title"] = "Log in";
 }
-
-<h1 class="text-center">@ViewData["Title"]</h1>
 <div class="row justify-content-center">
-    <div class="col-md-5">
+    <div class="col-md-6 p-5">
+        <h1 class="text-center">@ViewData["Title"]</h1>
+        <hr />
         <section>
-            <form id="account" method="post">
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Input.Email"></label>
-                    <input asp-for="Input.Email" class="form-control" />
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div class="row ml-1 mr-1">
+                <div class="col-md-7 text-center widget">
+                    <form id="account" method="post">
+                        <h4>Login to your personal account</h4>
+                        <hr />
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Input.Email"></label>
+                            <input asp-for="Input.Email" class="form-control" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Password"></label>
+                            <input asp-for="Input.Password" class="form-control" />
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label asp-for="Input.RememberMe">
+                                    <input asp-for="Input.RememberMe" />
+                                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-lg btn-light">Log in</button>
+                        </div>
+                        <div class="form-group">
+                            <p>
+                                <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                            </p>
+                            <p>
+                                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                            </p>
+                            <p>
+                                <a asp-controller="Home" asp-action="LandingPage">Landing Page</a>
+                            </p>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Input.Password"></label>
-                    <input asp-for="Input.Password" class="form-control" />
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <div class="col-md-1 align-self-center mb-5 pb-5">
+                    OR <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label asp-for="Input.RememberMe">
-                            <input asp-for="Input.RememberMe" />
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
-                    </div>
+                <div class="col-md text-center widget">
+                    <h4>Demo the App</h4><hr />
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoAdminEmail" class="btn btn-outline-dark text-white">As the Admin</button>
+                        </div>
+                    </form>
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoPMEmail" class="btn btn-outline-dark text-white">As a Project Manager</button>
+                        </div>
+                    </form>
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoDevEmail" class="btn btn-outline-dark text-white">As a Developer</button>
+                        </div>
+                    </form>
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoSubEmail" class="btn btn-outline-dark text-white">As a Submitter</button>
+                        </div>
+                    </form>
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoNewEmail" class="btn btn-outline-dark text-white">As a New User</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-lg btn-light">Log in</button>
-                </div>
-                <div class="form-group">
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a asp-controller="Home" asp-action="LandingPage">Landing Page</a>
-                    </p>
-                </div>
-            </form>
-            <div class="row ml-0 mr-0">
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoAdminEmail" class="btn btn-sm btn-light mr-3">Demo Admin</button>
-                    </div>
-                </form>
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoPMEmail" class="btn btn-sm btn-light mr-3">Demo Project Manager</button>
-                    </div>
-                </form>
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoDevEmail" class="btn btn-sm btn-light mr-3">Demo Developer</button>
-                    </div>
-                </form>
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoSubEmail" class="btn btn-sm btn-light mr-3">Demo Submitter</button>
-                    </div>
-                </form>
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoNewEmail" class="btn btn-sm btn-light mr-3">Demo New User</button>
-                    </div>
-                </form>
             </div>
         </section>
     </div>
     @*<div class="col-md-6 col-md-offset-2">
-        <section>
-            <h4>Use another service to log in.</h4>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+            <section>
+                <h4>Use another service to log in.</h4>
+                <hr />
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
                         <div>
                             <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
+                                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                                for details on setting up this ASP.NET application to support logging in via external services.
                             </p>
                         </div>
-                    </form>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
                 }
-            }
-        </section>
-    </div>*@
+            </section>
+        </div>*@
 </div>
 <script>
     document.getElementById("content").style.marginLeft = 0;
