@@ -28,5 +28,8 @@ namespace Komodo.Models.ViewModels
         // Developer data
         public List<Ticket> TicketsAssignedToDev { get; set; }
         public List<Ticket> TicketsOnDevProjs { get; set; }
+
+        // Submitter data
+        public List<Ticket> TicketsCreatedByMe { get; set; }
     }
 }

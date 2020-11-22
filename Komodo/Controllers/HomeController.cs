@@ -144,6 +144,14 @@ namespace Komodo.Controllers
                 vm.TicketsOnDevProjs = ticketSet.SelectMany(t => t).ToList();
                 vm.TicketsAssignedToDev = vm.TicketsOnDevProjs.Where(t => t.DeveloperUserId == user.Id).ToList();
             }
+
+            // give submitter personalized data
+            if (await _userManager.IsInRoleAsync(user, "Submitter"))
+            {
+                vm.Tickets = tickets;
+                vm.TicketsCreatedByMe = tickets.Where(t => t.OwnerUserId == user.Id).ToList();
+            }
+
             return View(vm);
         }
 

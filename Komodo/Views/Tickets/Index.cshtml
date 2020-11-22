@@ -7,12 +7,12 @@
     var userId = _userManager.GetUserId(User);
 }
 
-<h1>All Tickets</h1>
+<h1>Tickets</h1>
 
 @if (!User.IsInRole("NewUser"))
 {
     <p>
-        <a class="btn btn-light btn-lg" asp-action="Create">New Ticket</a>
+        <a class="btn btn-light btn-lg mt-3 mb-3" asp-action="Create">New Ticket</a>
     </p>
 }
 <div class="row ml-1">
