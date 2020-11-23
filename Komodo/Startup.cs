@@ -51,6 +51,7 @@ namespace Komodo
             services.AddScoped<IBTHistoryService, BTHistoryService>();
             services.AddScoped<IBTAccessService, BTAccessService>();
             services.AddScoped<IBTNotificationService, BTNotificationService>();
+            services.AddScoped<IBTFileService, BTFileService>();
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IEmailSender, EmailService>();

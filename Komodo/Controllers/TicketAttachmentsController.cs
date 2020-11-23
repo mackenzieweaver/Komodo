@@ -69,52 +69,83 @@ namespace Komodo.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment, IFormFile attachment)
+        public async Task<IActionResult> Create([Bind("Id,FormFile,Image,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment)
         {
-            if (User.IsInRole("Demo"))
-            {
-                TempData["DemoLockout"] = "Demo users can't submit data.";
-                return RedirectToAction(nameof(Index));
-            }
             if (ModelState.IsValid)
             {
-                if (attachment != null)
-                {
-                    var memoryStream = new MemoryStream();
-                    attachment.CopyTo(memoryStream);
-                    byte[] bytes = memoryStream.ToArray();
-                    memoryStream.Close();
-                    memoryStream.Dispose();
-                    var binary = Convert.ToBase64String(bytes);
-                    var ext = Path.GetExtension(attachment.FileName);
+                MemoryStream ms = new MemoryStream();
+                await ticketAttachment.FormFile.CopyToAsync(ms);
 
-                    ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
-                    ticketAttachment.FileData = bytes;
-                    ticketAttachment.Description = attachment.FileName;
-                    ticketAttachment.Created = DateTime.Now;
+                ticketAttachment.FileData = ms.ToArray();
+                ticketAttachment.FileName = ticketAttachment.FormFile.FileName;
 
-                    _context.Add(ticketAttachment);
-                    await _context.SaveChangesAsync();
+                var binary = Convert.ToBase64String(ticketAttachment.FileData);
+                var ext = Path.GetExtension(ticketAttachment.FileName);
+                ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
 
-                    var ticket = await _context.Tickets
-                        .Include(t => t.TicketPriority)
-                        .Include(t => t.TicketStatus)
-                        .Include(t => t.TicketType)
-                        .Include(t => t.DeveloperUser)
-                        .Include(t => t.Project)
-                        .FirstOrDefaultAsync(t => t.Id == ticketAttachment.TicketId);
-                    if(ticket.DeveloperUserId != null)
-                    {
-                        await _notificationService.NotifyOfAttachment(_userManager.GetUserId(User), ticket, ticketAttachment);
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
-                return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
+                ticketAttachment.Created = DateTimeOffset.Now;
+                ticketAttachment.UserId = _userManager.GetUserId(User);
+
+                _context.Add(ticketAttachment);
+                await _context.SaveChangesAsync();
+                Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", ticketAttachment.FileData.ToString());
+                return RedirectToAction(nameof(Index));
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
             return View(ticketAttachment);
         }
+       
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment, IFormFile attachment)
+        //{
+        //    if (User.IsInRole("Demo"))
+        //    {
+        //        TempData["DemoLockout"] = "Demo users can't submit data.";
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (attachment != null)
+        //        {
+        //            var memoryStream = new MemoryStream();
+        //            attachment.CopyTo(memoryStream);
+        //            byte[] bytes = memoryStream.ToArray();
+        //            memoryStream.Close();
+        //            memoryStream.Dispose();
+        //            var binary = Convert.ToBase64String(bytes);
+        //            var ext = Path.GetExtension(attachment.FileName);
+
+        //            ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
+        //            ticketAttachment.FileData = bytes;
+        //            ticketAttachment.Description = attachment.FileName;
+        //            ticketAttachment.Created = DateTime.Now;
+
+        //            _context.Add(ticketAttachment);
+        //            await _context.SaveChangesAsync();
+
+        //            var ticket = await _context.Tickets
+        //                .Include(t => t.TicketPriority)
+        //                .Include(t => t.TicketStatus)
+        //                .Include(t => t.TicketType)
+        //                .Include(t => t.DeveloperUser)
+        //                .Include(t => t.Project)
+        //                .FirstOrDefaultAsync(t => t.Id == ticketAttachment.TicketId);
+        //            if(ticket.DeveloperUserId != null)
+        //            {
+        //                await _notificationService.NotifyOfAttachment(_userManager.GetUserId(User), ticket, ticketAttachment);
+        //            }
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //        return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
+        //    }
+        //    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
+        //    ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
+        //    return View(ticketAttachment);
+        //}
+
         [Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketAttachments/Edit/5
         public async Task<IActionResult> Edit(int? id)

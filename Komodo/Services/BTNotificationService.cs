@@ -19,6 +19,7 @@ namespace Komodo.Services
             _context = context;
             _emailService = emailService;
         }
+
         public async Task Notify(string userId, Ticket ticket, TicketHistory change)
         {
             var notification = new Notification

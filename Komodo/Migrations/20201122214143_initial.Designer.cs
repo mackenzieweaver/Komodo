@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Komodo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201120222725_npgsql")]
-    partial class npgsql
+    [Migration("20201122214143_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -247,6 +247,9 @@ namespace Komodo.Migrations
 
                     b.Property<byte[]>("FileData")
                         .HasColumnType("bytea");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("text");
 
                     b.Property<string>("FilePath")
                         .HasColumnType("text");

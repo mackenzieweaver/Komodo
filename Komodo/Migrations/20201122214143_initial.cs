@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Komodo.Migrations
 {
-    public partial class npgsql : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -336,6 +336,7 @@ namespace Komodo.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FilePath = table.Column<string>(nullable: true),
+                    FileName = table.Column<string>(nullable: true),
                     FileData = table.Column<byte[]>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Created = table.Column<DateTimeOffset>(nullable: false),
