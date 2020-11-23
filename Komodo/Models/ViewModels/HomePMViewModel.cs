@@ -18,9 +18,9 @@ namespace Komodo.Models.ViewModels
         public int numCritical { get; set; }
         public int numUnassigned { get; set; }
         public int numOpen { get; set; }
+        public List<Ticket> Tickets { get; set; }
 
         // pm data
-        public List<Ticket> Tickets { get; set; }
         public List<BTUser> Developers { get; set; }
         public List<BTUser> UsersOnProject { get; set; }
         public List<int> Count { get; set; }
@@ -31,5 +31,8 @@ namespace Komodo.Models.ViewModels
 
         // Submitter data
         public List<Ticket> TicketsCreatedByMe { get; set; }
+
+        // notifications
+        public List<Notification> Notifications { get; set; }
     }
 }

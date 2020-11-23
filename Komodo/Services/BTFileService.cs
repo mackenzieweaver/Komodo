@@ -18,9 +18,7 @@ namespace Komodo.Services
             var byteFile = memoryStream.ToArray();
             memoryStream.Close();
             memoryStream.Dispose();
-
             return byteFile;
-
         }
 
         public string ConvertByteArrayToFile(byte[] fileData, string extension)

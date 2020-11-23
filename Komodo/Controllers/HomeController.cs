@@ -69,7 +69,15 @@ namespace Komodo.Controllers
             vm.numOpen = tickets.Where(t => t.TicketStatus.Name == "Opened").ToList().Count;
             vm.numUnassigned = tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
             vm.UsersOnProject = await _context.Users.ToListAsync();
-            
+            var notifications = new List<ICollection<Notification>>();
+            foreach(var ticket in tickets)
+            {
+                notifications.Add(ticket.Notifications);
+            }
+            vm.Notifications = notifications.SelectMany(n => n)
+                .Where(n => n.RecipientId == user.Id)
+                .Where(n => n.Viewed == false)
+                .ToList();
             // give pm personalized data
             if (await _userManager.IsInRoleAsync(user, "ProjectManager"))
             {

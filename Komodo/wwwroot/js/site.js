@@ -71,13 +71,13 @@ function InitBarChart() {
         },
         series: [{
             name: 'Assigned',
-            data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 44, 55, 57, 56, 61, 58, 63, 60, 66]
+            data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
         }, {
             name: 'Closed',
-                data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 44, 55, 57, 56, 61, 58, 63, 60, 66]
+                data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
         }],
         xaxis: {
-            categories: ['Dev1', 'Dev2', 'Dev3', 'Dev4', 'Dev5', 'Dev6', 'Dev7', 'Dev8', 'Dev9', 'Dev1', 'Dev2', 'Dev3', 'Dev4', 'Dev5', 'Dev6', 'Dev7', 'Dev8', 'Dev9'],
+            categories: ['Dev1', 'Dev2', 'Dev3', 'Dev4', 'Dev5', 'Dev6', 'Dev7', 'Dev8', 'Dev9'],
         },
         yaxis: {
             title: {

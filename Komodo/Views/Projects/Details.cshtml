@@ -104,10 +104,10 @@
                                     @Html.Raw(ticket.Description)
                                 </td>
                                 <td>
-                                    @ticket.Created
+                                    @ticket.Created.ToString("G")
                                 </td>
                                 <td>
-                                    @ticket.Updated
+                                    @ticket.Updated.ToString().Replace(" -08:00", "")
                                 </td>
                                 <td>
                                     @Model.Name

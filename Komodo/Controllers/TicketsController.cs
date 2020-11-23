@@ -12,6 +12,8 @@ using Komodo.Utilities;
 using Komodo.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using MimeKit;
+using System.IO;
 
 namespace Komodo.Controllers
 {
@@ -161,7 +163,6 @@ namespace Komodo.Controllers
             {
                 return NotFound();
             }
-
             var ticket = await _context.Tickets
                 .Include(t => t.DeveloperUser)
                 .Include(t => t.OwnerUser)
@@ -172,13 +173,36 @@ namespace Komodo.Controllers
                 .Include(t => t.Comments).ThenInclude(tc => tc.User)
                 .Include(t => t.Attachments)
                 .Include(t => t.Histories)
+                .Include(t => t.Notifications)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
                 return NotFound();
             }
-
+            var userId = _userManager.GetUserId(User);
+            foreach(var notification in ticket.Notifications.Where(n => n.RecipientId == userId && n.Viewed ==  false))
+            {
+                var n = _context.Notifications.FirstOrDefault(n => n.Id == notification.Id);
+                n.Viewed = true;
+                try
+                {
+                    _context.Update(n);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
             return View(ticket);
+        }
+
+        public async Task<IActionResult> ShowFile(int? id)
+        {
+            TicketAttachment ta = await _context.TicketAttachments.FirstOrDefaultAsync(ta => ta.Id == id);
+            Response.Headers.Add("Content-Disposition", $"inline; filename={ta.FileName}");
+            var type = Path.GetExtension(ta.FileName).Replace(".", "");
+            return File(ta.FileData, $"application/{type}");
         }
 
         public async Task<IActionResult> ProjectTicketDetails(int? id)
