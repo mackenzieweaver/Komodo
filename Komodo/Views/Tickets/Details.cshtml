@@ -114,9 +114,9 @@
                     </div>
                 </div>
                 @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
-               User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+              User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
                 {
-                    <div class="row">
+                    <div class="row mt-5">
                         <div class="col-md">
                             @*<h5 class="mt-3">Add an attachment</h5>*@
                             @*<form asp-controller="TicketAttachments" asp-action="Create" class="ml-0 pl-0" enctype="multipart/form-data">
@@ -131,15 +131,19 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="@Model.Id" name="TicketId">
 
-                                <div class="media-body">
-                                    <label class="form-label d-block mb-2 h5 text-white">Add Attachment</label>
-                                    Description
-                                    <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control w-50 mb-3" />
-                                    <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" class="mb-3" />
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <button type="submit" class="btn btn-light">Add attachment</button>
-                                        </div>
+                                <div class="media-body row">
+                                    <div class="col-md">
+                                        <label class="form-label d-block mb-2 h5 text-white">Add Attachment</label>
+                                    </div>
+                                    <div class="col-md">
+                                        Description
+                                        <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
+                                    </div>
+                                    <div class="col-auto">
+                                        <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" class="mb-3" />
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-light">Add attachment</button>
                                     </div>
                                 </div>
                             </form>
@@ -170,7 +174,7 @@
                     </div>
                 </div>
                 @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
-               User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+              User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
                 {
                     <div class="row">
                         <div class="col-md">
@@ -191,7 +195,7 @@
         <div class="row mt-5">
             <div class="col-md-12 widget p-5">
                 <h3 class="text-center">History</h3><hr />
-                <table class="table table-striped ticketsIndex">
+                <table class="table table-striped ticketsIndex table-responsive-md">
                     <thead>
                         <tr>
                             <th>

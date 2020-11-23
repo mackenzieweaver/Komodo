@@ -40,9 +40,7 @@ namespace Komodo.Controllers
                 vm.User = user;
                 //vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);
                 var myRole = (await _rolesService.ListUserRoles(user)).FirstOrDefault(role => role != "Demo");
-                ViewData["Roles"] = new SelectList(_context.Roles
-                    .Where(r => r.Name != "Demo" && r.Name != "NewUser" && r.Name != myRole),
-                    "Name", "Name");
+                ViewData["Roles"] = new SelectList(_context.Roles.Where(r => r.Name != "Demo" && r.Name != "NewUser" && r.Name != myRole), "Name", "Name");
                 vm.SelectedRole = myRole;
                 model.Add(vm);
             }
