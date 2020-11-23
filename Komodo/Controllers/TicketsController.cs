@@ -172,7 +172,7 @@ namespace Komodo.Controllers
                 .Include(t => t.TicketType)
                 .Include(t => t.Comments).ThenInclude(tc => tc.User)
                 .Include(t => t.Attachments)
-                .Include(t => t.Histories)
+                .Include(t => t.Histories).ThenInclude(h => h.User)
                 .Include(t => t.Notifications)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)

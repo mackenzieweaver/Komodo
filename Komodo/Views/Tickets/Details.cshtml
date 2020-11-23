@@ -216,15 +216,7 @@
                         {
                             <tr>
                                 <td>
-                                    @if (history.UserId != null)
-                                    {
-                                        @history.User.FullName
-                                    }
-                                    else
-                                    {
-                                        <span>Unassigned</span>
-                                    }
-                                </td>
+                                    @history.User.FullName
                                 <td>
                                     @history.Created.ToString("g")
                                 </td>

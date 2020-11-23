@@ -30,25 +30,32 @@
                 <h4>Role --> <u>@roleName</u></h4>
             </div>
             <div class="col-md">
-                <div class="row justify-content-end">
+                <div class="row justify-content-end mb-5">
                     <div class="nav-item dropdown notification-dropdown" style="list-style-type: none;">
                         <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="notificationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="h5">(@Model.Notifications.Count)</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class="badge badge-success"></span>
-                        </a>
-                        <div class="dropdown-menu position-absolute" aria-labelledby="notificationDropdown" style="background-color: whitesmoke">
+                        </a>                        
+                        <div class="dropdown-menu position-absolute mr-5" aria-labelledby="notificationDropdown" style="background-color: whitesmoke">
                             <div class="notification-scroll">
 
                                 <div class="dropdown-item">
                                     <div class="media">
                                         <div class="media-body">
                                             <div class="notification-para">
-                                                @foreach (var n in Model.Notifications)
+                                                @if (Model.Notifications.Count > 0)
                                                 {
-                                                    <a asp-controller="Tickets" asp-action="Details" asp-route-id="@n.TicketId" class="text-black">
-                                                        <span>@n.Ticket.Title</span><span>: @n.Description</span>
-                                                    </a>
-                                                    <br />
+                                                    @foreach (var n in Model.Notifications)
+                                                    {
+                                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@n.TicketId" class="text-black">
+                                                            <span>@n.Ticket.Title</span><span>: @n.Description</span>
+                                                        </a>
+                                                        <br />
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <p class="text-black mt-2"> &lt; no new notifications &gt; </p>
                                                 }
                                             </div>
                                         </div>

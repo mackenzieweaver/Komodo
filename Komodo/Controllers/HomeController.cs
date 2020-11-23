@@ -62,7 +62,7 @@ namespace Komodo.Controllers
                 .Include(t => t.Comments).ThenInclude(tc => tc.User)
                 .Include(t => t.Attachments)
                 .Include(t => t.Notifications)
-                .Include(t => t.Histories)
+                .Include(t => t.Histories).ThenInclude(h => h.User)
                 .ToListAsync();
             vm.numTickets = tickets.Count;
             vm.numCritical = tickets.Where(t => t.TicketPriority.Name == "Critical").ToList().Count;
