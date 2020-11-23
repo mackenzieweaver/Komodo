@@ -89,11 +89,11 @@ namespace Komodo.Controllers
                 _context.Add(ticketAttachment);
                 await _context.SaveChangesAsync();
                 Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", ticketAttachment.FileData.ToString());
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
-            return View(ticketAttachment);
+            return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
         }
        
 

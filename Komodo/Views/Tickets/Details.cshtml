@@ -19,8 +19,8 @@
     }
 </style>
 
-<div class="row justify-content-center">
-    <div class="col-md-7">
+<div class="row justify-content-around">
+    <div class="col-md-6">
         <div class="row">
             <div class="col-md widget p-5">
                 <div class="row">
@@ -85,115 +85,111 @@
             </div>
         </div>
 
-        <div class="row mt-5">
+        <div class="row mt-5 mb-5">
             <div class="col-md widget p-5">
                 <div class="row">
-                    <div class="col-md-6">
-                        <h6>Attachments:</h6>
-                        @*@foreach (var attachment in Model.Attachments)
-                        {
-                            <a href="@attachment.FilePath" download>@attachment.FileName</a><br />
-                        }*@
-                        <div class="row clearfix">
-                            @foreach (TicketAttachment item in Model.Attachments)
+                    <div class="col-md">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3>Attachments:</h3>
+                            </div>
+                            @*@foreach (var attachment in Model.Attachments)
                             {
-                                <div class="col-sm-2">
-                                    <div class="card">
-                                        <div class="file">
-                                            <a href="javascript:void(0);">
-                                                <div class="hover">
-                                                    <button type="button" class="btn btn-icon btn-danger">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                                <div class="icon">
-                                                    <img src="@_BTFileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
-                                                </div>
-                                                <div class="file-name">
-                                                    <p class="m-b-5 text-muted">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
-                                                    <small>Size: @_BTFileService.FormatFileSize(item.FileData.Length) <span class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</span></small>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
+                                <a href="@attachment.FilePath" download>@attachment.FileName</a><br />
+                            }*@
+                            <div class="col-md">
+                                <div class="row" style="font-size: 12px;">
+                                    @foreach (TicketAttachment item in Model.Attachments)
+                                    {
+                                    <a href="javascript:void(0);" class="mr-3">
+                                        <img src="@_BTFileService.GetFileIcon(item.FileName)" style="height:50px;width:50px" />
+                                        <p class="m-b-5 text-muted mt-3">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
+                                        <p class="mb-1 text-muted">Size: @_BTFileService.FormatFileSize(item.FileData.Length)</p>
+                                        <p class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</p>
+                                    </a>
+                                    }
                                 </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row mb-3 m-0">
-                            <h6>Comments:</h6>
-                            <span>
-                                @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
-                                {
-                                    @comment.Created.ToString("MMM dd H:mm:ss")
-                                    <span> : </span>
-                                    @comment.User.FullName
-                                    <span> : </span>
-                                    @comment.Comment
-                                    <br />
-                                }
-                            </span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
+                  User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+                {
+                    <div class="row">
+                        <div class="col-md">
+                            @*<h5 class="mt-3">Add an attachment</h5>*@
+                            @*<form asp-controller="TicketAttachments" asp-action="Create" class="ml-0 pl-0" enctype="multipart/form-data">
+                                    <input type="file" name="attachment" />
+                                    <input type="hidden" name="TicketId" value="@Model.Id" />
+                                    <input type="hidden" name="UserId" value="@userId" />
+                                    <div class="form-group mt-3">
+                                        <input type="submit" value="Upload" class="btn btn-light mt-4" />
+                                    </div>
+                                </form>*@
+                            <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="@Model.Id" name="TicketId">
 
-                <div class="row">
-                    <div class="col">
-                        @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
-                         User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+                                <div class="media-body">
+                                    <label class="form-label d-block mb-2 h5 text-white">Add Attachment</label>
+                                    Description
+                                    <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control w-50 mb-3" />
+                                    <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" class="mb-3" />
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <button type="submit" class="btn btn-light">Add attachment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md widget p-5">
+                <div class="row justify-content-between">
+                    <div class="col-md-3">
+                        <h3>Comments:</h3>
+                    </div>
+                    <div class="col-md">
+                        @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
                         {
-                            <div class="row justify-content-between">
-                                <div class="col">
-                                    @*<h5 class="mt-3">Add an attachment</h5>*@
-                                    @*<form asp-controller="TicketAttachments" asp-action="Create" class="ml-0 pl-0" enctype="multipart/form-data">
-                                            <input type="file" name="attachment" />
-                                            <input type="hidden" name="TicketId" value="@Model.Id" />
-                                            <input type="hidden" name="UserId" value="@userId" />
-                                            <div class="form-group mt-3">
-                                                <input type="submit" value="Upload" class="btn btn-light mt-4" />
-                                            </div>
-                                        </form>*@
-                                    <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
-                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <input type="hidden" asp-for="@Model.Id" name="TicketId">
-
-                                        <div class="media-body ml-3">
-                                            <label class="form-label d-block mb-2 h5 text-white">Add Attachment</label>
-                                            <label>
-                                                Description
-                                                <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
-                                            </label><br />
-                                            <label class="btn btn-outline-light btn-sm">
-                                                <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" />
-                                            </label>
-                                            <div class="row">
-                                                <div class="col-md">
-                                                    <button type="submit" class="btn btn-secondary btn-sm md-btn-flat mb-2">Add attachment</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="col">
-                                    <h5>Add a comment</h5>
-                                    <form asp-controller="TicketComments" asp-action="Create" class="ml-0 pl-0">
-                                        <textarea name="content" class="form-control"></textarea>
-                                        <input type="hidden" name="ticketId" value="@Model.Id" />
-                                        <div class="form-group mt-3">
-                                            <input type="submit" value="Post" class="btn btn-light" />
-                                        </div>
-                                    </form>
-                                </div>
+                            <div class="row text-white">
+                                @comment.Comment
+                            </div>
+                            <div class="row mb-3">
+                                by @comment.User.FullName
+                                at @comment.Created.ToString("g")
                             </div>
                         }
                     </div>
                 </div>
+                @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
+                  User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+                {
+                    <div class="row">
+                        <div class="col-md">
+                            <h5 class="mb-3">Add a comment</h5>
+                            <form asp-controller="TicketComments" asp-action="Create" class="ml-0 pl-0">
+                                <textarea name="content" class="form-control"></textarea>
+                                <input type="hidden" name="ticketId" value="@Model.Id" />
+                                <div class="form-group mt-3">
+                                    <input type="submit" value="Post" class="btn btn-light" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
+
     </div>
-    <div class="col-1 mb-5"></div>
-    <div class="col-md-3 widget" style="max-height:100%">
+    <div class="col-md-4 widget" style="max-height:100%">
         <div class="row">
             <div class="col-md-12">
                 <h3 class="text-center">History</h3><hr />
@@ -212,7 +208,7 @@
 <div class="row justify-content-center mt-3">
     <div class="col-md-11 ml-0 pl-0">
         @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
-          User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
         {
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark text-white">Edit</a>
         }
