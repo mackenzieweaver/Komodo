@@ -16,5 +16,7 @@ namespace Komodo.Services
 
         public string FormatFileSize(long bytes);
 
+        public string ShortenFileName(string name, int length);
+
     }
 }

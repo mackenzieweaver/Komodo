@@ -13,7 +13,7 @@ $(document).ready(function () {
 function InitDonut() {
     var donutChart = {
         chart: {
-            height: 350,
+            height: 'auto',
             type: 'pie',
             toolbar: {
                 show: false,

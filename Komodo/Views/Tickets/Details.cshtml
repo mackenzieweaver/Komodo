@@ -12,7 +12,7 @@
     div.row > div.col-md > p {
         font-size: 18px;
         background-color: whitesmoke;
-        min-height: 300px;
+        min-height: 200px;
         color: black !important;
         border-radius: 5px;
         padding: 1rem;
@@ -103,7 +103,7 @@
                                     {
                                         <a asp-action="ShowFile" asp-controller="Tickets" asp-route-id="@item.Id" class="mr-3">
                                             <img src="@_BTFileService.GetFileIcon(item.FileName)" style="height:50px;width:50px" />
-                                            <p class="m-b-5 text-muted mt-3">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
+                                            <p class="m-b-5 text-muted mt-3">@_BTFileService.ShortenFileName(item.FileName, 15)</p>
                                             <p class="mb-1 text-muted">Size: @_BTFileService.FormatFileSize(item.FileData.Length)</p>
                                             <p class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</p>
                                         </a>
@@ -132,18 +132,18 @@
                                 <input type="hidden" asp-for="@Model.Id" name="TicketId">
 
                                 <div class="media-body row">
-                                    <div class="col-md">
-                                        <label class="form-label d-block mb-2 h5 text-white">Add Attachment</label>
+                                    <div class="col-md-6">
+                                        <label class="h4 d-block mb-2 text-white">Add Attachment:</label>
                                     </div>
                                     <div class="col-md">
-                                        Description
-                                        <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" class="mb-3" />
-                                    </div>
-                                    <div class="col-auto">
-                                        <button type="submit" class="btn btn-light">Add attachment</button>
+                                        <div class="row mb-3">
+                                            Description
+                                            <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
+                                        </div>
+                                        <div class="row justify-content-between">
+                                            <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" class="mb-3" />
+                                            <button type="submit" class="btn btn-light">Add attachment</button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>

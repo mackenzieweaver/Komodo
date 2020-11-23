@@ -46,5 +46,14 @@ namespace Komodo.Services
             return string.Format("{0:n1}{1}", number, suffixes[counter]);
         }
 
+        public string ShortenFileName (string name, int length)
+        {
+            name = Path.GetFileNameWithoutExtension(name);
+            var len = name.Length > length ? length : name.Length;
+            string result = name.Substring(0, len);
+            result = $"{result}...";
+            return result;
+        }
+
     }
 }
