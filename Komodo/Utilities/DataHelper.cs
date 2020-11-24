@@ -63,7 +63,9 @@ namespace Komodo.Utilities
                 await ContextSeed.SeedRolesAsync(roleManager);
                 await ContextSeed.SeedDefaultUsersAsync(userManager);
                 await ContextSeed.SeedTicketListsAsync(context);
-
+                await ContextSeed.SeedProjectAsync(context);
+                await ContextSeed.SeedProjectUsersAsync(context, userManager);
+                await ContextSeed.SeedTicketsAsync(context, userManager);
             }
             catch (Exception ex)
             {

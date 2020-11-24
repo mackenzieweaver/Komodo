@@ -1,5 +1,6 @@
 ﻿using Komodo.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -1062,6 +1063,158 @@ namespace Komodo.Data
             {
                 Debug.WriteLine("*********** ERROR **********");
                 Debug.WriteLine("Error Seeding Ticket Priorities.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+        }
+
+        public static async Task SeedProjectAsync(ApplicationDbContext context)
+        {
+            Project seedProject1 = new Project
+            {
+                Name = "Blog"
+            };
+            try
+            {
+                var project = context.Projects.FirstOrDefault(p => p.Name == "Blog");
+                if (project == null)
+                {
+                    await context.Projects.AddAsync(seedProject1);
+                }
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Project1");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            Project seedProject2 = new Project
+            {
+                Name = "Bug Tracker"
+            };
+            try
+            {
+                var project = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker");
+                if (project == null)
+                {
+                    await context.Projects.AddAsync(seedProject2);
+                }
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Project2");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            Project seedProject3 = new Project
+            {
+                Name = "Financial Portal"
+            };
+            try
+            {
+                var project = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal");
+                if (project == null)
+                {
+                    await context.Projects.AddAsync(seedProject3);
+                }
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Project3");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+        }
+
+        public static async Task SeedProjectUsersAsync(ApplicationDbContext context, UserManager<BTUser> userManager)
+        {
+            string adminId = (await userManager.FindByEmailAsync("garretreynolds@mailinator.com")).Id;
+            string pmId = (await userManager.FindByEmailAsync("alexheim@mailinator.com")).Id;
+            string devId = (await userManager.FindByEmailAsync("dennisenerson@mailinator.com")).Id;
+            string subId = (await userManager.FindByEmailAsync("larryedwards@mailinator.com")).Id;
+            int project1Id = context.Projects.FirstOrDefault(p => p.Name == "Blog").Id;
+            int project2Id = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker").Id;
+            int project3Id = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal").Id;
+
+            List<string> userIds = new List<string> { adminId, pmId, devId, subId };
+            List<int> projectIds = new List<int> { project1Id, project2Id, project3Id };
+
+            ProjectUser projectUser = new ProjectUser();
+            foreach(var userId in userIds)
+            {
+                foreach(var projectId in projectIds)
+                {
+                    projectUser.UserId = userId;
+                    projectUser.ProjectId = projectId;
+                    try
+                    {
+                        var record = context.ProjectUsers.FirstOrDefault(p => p.UserId == userId && p.ProjectId == projectId);
+                        if (record == null)
+                        {
+                            await context.ProjectUsers.AddAsync(projectUser);
+                            await context.SaveChangesAsync();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("*********** ERROR **********");
+                        Debug.WriteLine($"Error Seeding {userId} for {projectId}");
+                        Debug.WriteLine(ex.Message);
+                        Debug.WriteLine("****************************");
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public static async Task SeedTicketsAsync(ApplicationDbContext context, UserManager<BTUser> userManager)
+        {
+            string adminId = (await userManager.FindByEmailAsync("garretreynolds@mailinator.com")).Id;
+            string pmId = (await userManager.FindByEmailAsync("alexheim@mailinator.com")).Id;
+            string devId = (await userManager.FindByEmailAsync("dennisenerson@mailinator.com")).Id;
+            string subId = (await userManager.FindByEmailAsync("larryedwards@mailinator.com")).Id;
+            int project1Id = context.Projects.FirstOrDefault(p => p.Name == "Blog").Id;
+            int project2Id = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker").Id;
+            int project3Id = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal").Id;
+            int statusId = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Opened")).Id;
+            int typeId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "UI")).Id;
+            int priorityId = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Low")).Id;
+            Ticket ticket = new Ticket
+            {
+                Title = "Need more Blog Posts",
+                Description = "IF there aren't enough blog posts then employers will wonder why you call youself a blogger.",
+                Created = DateTimeOffset.Now.AddDays(-7),
+                Updated = DateTimeOffset.Now.AddHours(-30),
+                ProjectId = project1Id,
+                TicketPriorityId = priorityId,
+                TicketStatusId = statusId,
+                TicketTypeId = typeId,
+                DeveloperUserId = devId,
+                OwnerUserId = subId
+            };
+            try
+            {
+                var myticket = context.Tickets.FirstOrDefault(t => t.Title == "Need more Blog Posts");
+                if (myticket == null)
+                {
+                    await context.Tickets.AddAsync(ticket);
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding ticket 1");
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine("****************************");
                 throw;
