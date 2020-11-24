@@ -26,41 +26,41 @@ namespace Komodo.Controllers
             _userManager = userManager;
             _notificationService = notificationService;
         }
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.TicketComments.Include(t => t.Ticket).Include(t => t.User);
-            return View(await applicationDbContext.ToListAsync());
-        }
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //public async Task<IActionResult> Index()
+        //{
+        //    var applicationDbContext = _context.TicketComments.Include(t => t.Ticket).Include(t => t.User);
+        //    return View(await applicationDbContext.ToListAsync());
+        //}
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var ticketComment = await _context.TicketComments
-                .Include(t => t.Ticket)
-                .Include(t => t.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ticketComment == null)
-            {
-                return NotFound();
-            }
+        //    var ticketComment = await _context.TicketComments
+        //        .Include(t => t.Ticket)
+        //        .Include(t => t.User)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (ticketComment == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(ticketComment);
-        }
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //    return View(ticketComment);
+        //}
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments/Create
-        public IActionResult Create()
-        {
-            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
-            ViewData["UserId"] = new SelectList(_context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName");
-            return View();
-        }
+        //public IActionResult Create()
+        //{
+        //    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
+        //    ViewData["UserId"] = new SelectList(_context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName");
+        //    return View();
+        //}
 
         // POST: TicketComments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -105,101 +105,101 @@ namespace Komodo.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
             return View(ticketComment);
         }
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var ticketComment = await _context.TicketComments.FindAsync(id);
-            if (ticketComment == null)
-            {
-                return NotFound();
-            }
-            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
-            return View(ticketComment);
-        }
+        //    var ticketComment = await _context.TicketComments.FindAsync(id);
+        //    if (ticketComment == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
+        //    ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
+        //    return View(ticketComment);
+        //}
 
         // POST: TicketComments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
-        {
-            if (id != ticketComment.Id)
-            {
-                return NotFound();
-            }
-            if (User.IsInRole("Demo"))
-            {
-                TempData["DemoLockout"] = "Demo users can't submit data.";
-                return RedirectToAction(nameof(Index));
-            }
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(ticketComment);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TicketCommentExists(ticketComment.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
-            return View(ticketComment);
-        }
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
+        //{
+        //    if (id != ticketComment.Id)
+        //    {
+        //        return NotFound();
+        //    }
+        //    if (User.IsInRole("Demo"))
+        //    {
+        //        TempData["DemoLockout"] = "Demo users can't submit data.";
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(ticketComment);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!TicketCommentExists(ticketComment.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
+        //    ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
+        //    return View(ticketComment);
+        //}
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketComments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var ticketComment = await _context.TicketComments
-                .Include(t => t.Ticket)
-                .Include(t => t.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ticketComment == null)
-            {
-                return NotFound();
-            }
+        //    var ticketComment = await _context.TicketComments
+        //        .Include(t => t.Ticket)
+        //        .Include(t => t.User)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (ticketComment == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(ticketComment);
-        }
+        //    return View(ticketComment);
+        //}
 
         // POST: TicketComments/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (User.IsInRole("Demo"))
-            {
-                TempData["DemoLockout"] = "Demo users can't submit data.";
-                return RedirectToAction("Details", "Tickets", new { id = id });
-            }
-            var ticketComment = await _context.TicketComments.FindAsync(id);
-            _context.TicketComments.Remove(ticketComment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    if (User.IsInRole("Demo"))
+        //    {
+        //        TempData["DemoLockout"] = "Demo users can't submit data.";
+        //        return RedirectToAction("Details", "Tickets", new { id = id });
+        //    }
+        //    var ticketComment = await _context.TicketComments.FindAsync(id);
+        //    _context.TicketComments.Remove(ticketComment);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool TicketCommentExists(int id)
         {

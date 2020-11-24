@@ -20,7 +20,7 @@ namespace Komodo.Controllers
         {
             _context = context;
         }
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories
         //public async Task<IActionResult> Index()
         //{
@@ -29,7 +29,7 @@ namespace Komodo.Controllers
         //        .Include(t => t.User);
         //    return View(await applicationDbContext.ToListAsync());
         //}
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories/Details/5
         //public async Task<IActionResult> Details(int? id)
         //{
@@ -49,7 +49,7 @@ namespace Komodo.Controllers
 
         //    return View(ticketHistory);
         //}
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories/Create
         //public IActionResult Create()
         //{
@@ -80,30 +80,30 @@ namespace Komodo.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketHistory.UserId);
             return View(ticketHistory);
         }
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var ticketHistory = await _context.TicketHistories.FindAsync(id);
-            if (ticketHistory == null)
-            {
-                return NotFound();
-            }
-            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketHistory.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketHistory.UserId);
-            return View(ticketHistory);
-        }
+        //    var ticketHistory = await _context.TicketHistories.FindAsync(id);
+        //    if (ticketHistory == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketHistory.TicketId);
+        //    ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketHistory.UserId);
+        //    return View(ticketHistory);
+        //}
 
         // POST: TicketHistories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Edit(int id, [Bind("Id,TicketId,Property,OldValue,NewValue,Created,UserId")] TicketHistory ticketHistory)
         //{
         //    if (id != ticketHistory.Id)
@@ -140,7 +140,7 @@ namespace Komodo.Controllers
         //    return View(ticketHistory);
         //}
 
-        [Authorize(Roles = "Admin,ProjectManager")]
+        //[Authorize(Roles = "Admin,ProjectManager")]
         // GET: TicketHistories/Delete/5
         //public async Task<IActionResult> Delete(int? id)
         //{
@@ -162,7 +162,7 @@ namespace Komodo.Controllers
         //}
 
         // POST: TicketHistories/Delete/5
-        [HttpPost, ActionName("Delete")]
+        //[HttpPost, ActionName("Delete")]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> DeleteConfirmed(int id)
         //{

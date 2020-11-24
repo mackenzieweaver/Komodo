@@ -6,9 +6,13 @@
 
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <h2>Assign Users</h2>
-        <div class="panel panel-green margin-bottom-40"></div>
-        <h5>To Project: <span>@Model.Project.Name</span></h5>
+        <div class="row text-center mb-5">
+            <div class="col-md pl-0">
+                <h2>Assign Users</h2>
+                <div class="panel panel-green margin-bottom-40"></div>
+                <h5>To Project: <span>@Model.Project.Name</span></h5>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md widget">
                 <form asp-action="AssignUsers" asp-controller="Projects" method="post">
@@ -16,13 +20,17 @@
                     <input type="hidden" asp-for="@Model.Project.Id" />
                     <input type="hidden" asp-for="@Model.Project.Name" />
                     <div class="form-group">
-                        <label>Add Team Members</label>
+                        <div class="row justify-content-end mr-1">
+                            <label>Add Team Members</label>
+                        </div>
                         <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.UsersOffProject" multiple="multiple" style="height:25vh"></select>
                     </div>
-                    <button type="submit" class="btn btn-light">Add</button>
+                    <div class="row justify-content-end mr-1">
+                        <button type="submit" class="btn btn-light">Add <i class="fas fa-chevron-right"></i></button>
+                    </div>
                 </form>
             </div>
-            <div class="col-md-1"></div>
+            <div class="col-md-1 mb-5"></div>
             <div class="col-md widget">
                 <form asp-action="RemoveUsers" asp-controller="Projects" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -32,10 +40,15 @@
                         <label>Remove Team Members</label>
                         <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.UsersOnProject" multiple="multiple" style="height:25vh"></select>
                     </div>
-                    <button type="submit" class="btn btn-light">Remove</button>
+                    <button type="submit" class="btn btn-light"><i class="fas fa-chevron-left"></i> Remove</button>
                 </form>
             </div>
         </div>
-        <a asp-action="Details" asp-route-id="@Model.Project.Id" class="btn btn-outline-dark text-white mt-3">Back to List</a>
+
+        <div class="row">
+            <div class="col-md pl-0">
+                <a asp-action="Details" asp-route-id="@Model.Project.Id" class="btn btn-outline-dark text-white mt-3">Back to List</a>
+            </div>
+        </div>
     </div>
 </div>

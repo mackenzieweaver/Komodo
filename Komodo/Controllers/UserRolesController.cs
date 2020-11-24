@@ -68,13 +68,13 @@ namespace Komodo.Controllers
             }
             return RedirectToAction("ManageUserRoles");
         }
-        [Authorize(Roles = "")]
-        public async Task<IActionResult> MyRole()
-        {
-            var userId = _userManager.GetUserId(User);
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            var roles = await _rolesService.ListUserRoles(user);
-            return View(roles);
-        }
+        //[Authorize(Roles = "")]
+        //public async Task<IActionResult> MyRole()
+        //{
+        //    var userId = _userManager.GetUserId(User);
+        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        //    var roles = await _rolesService.ListUserRoles(user);
+        //    return View(roles);
+        //}
     }
 }

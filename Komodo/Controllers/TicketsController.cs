@@ -198,10 +198,18 @@ namespace Komodo.Controllers
             }
             return View(ticket);
         }
-
+        // or return a Task<FileResult>
         public async Task<IActionResult> ShowFile(int? id)
         {
+            if(id == null)
+            {
+                return null;
+            }
             TicketAttachment ta = await _context.TicketAttachments.FirstOrDefaultAsync(ta => ta.Id == id);
+            if (ta == null)
+            {
+                return null;
+            }
             Response.Headers.Add("Content-Disposition", $"inline; filename={ta.FileName}");
             var type = Path.GetExtension(ta.FileName).Replace(".", "");
             return File(ta.FileData, $"application/{type}");
