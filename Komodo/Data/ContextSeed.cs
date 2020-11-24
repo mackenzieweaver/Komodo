@@ -1186,38 +1186,48 @@ namespace Komodo.Data
             int project1Id = context.Projects.FirstOrDefault(p => p.Name == "Blog").Id;
             int project2Id = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker").Id;
             int project3Id = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal").Id;
-            int statusId = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Opened")).Id;
-            int typeId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "UI")).Id;
-            int priorityId = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Low")).Id;
-            Ticket ticket = new Ticket
+            List<int> projects = new List<int> { project1Id, project2Id, project3Id };
+            //int statusId = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Opened")).Id;
+            //int typeId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "UI")).Id;
+            //int priorityId = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Low")).Id;
+            int numTickets = 10;
+            var statuses = context.TicketStatuses.ToList();
+            var types = context.TicketTypes.ToList();
+            var priorities = context.TicketPriorities.ToList();
+            for (var i = 0; i < numTickets; i++)
             {
-                Title = "Need more Blog Posts",
-                Description = "IF there aren't enough blog posts then employers will wonder why you call youself a blogger.",
-                Created = DateTimeOffset.Now.AddDays(-7),
-                Updated = DateTimeOffset.Now.AddHours(-30),
-                ProjectId = project1Id,
-                TicketPriorityId = priorityId,
-                TicketStatusId = statusId,
-                TicketTypeId = typeId,
-                DeveloperUserId = devId,
-                OwnerUserId = subId
-            };
-            try
-            {
-                var myticket = context.Tickets.FirstOrDefault(t => t.Title == "Need more Blog Posts");
-                if (myticket == null)
+                int random = new Random().Next(numTickets);
+                bool hasDeveloper = random > (numTickets / 2) ? true : false;
+                Ticket ticket = new Ticket
                 {
-                    await context.Tickets.AddAsync(ticket);
-                    await context.SaveChangesAsync();
+                    Title = $"Random: {random}",
+                    Description = $"{random} uniquely identifies this ticket",
+                    Created = DateTimeOffset.Now.AddDays(-(random * random)),
+                    Updated = DateTimeOffset.Now.AddHours(-(random * random)),
+                    ProjectId = projects[new Random().Next(projects.Count)],
+                    TicketPriorityId = priorities[new Random().Next(priorities.Count)].Id,
+                    TicketStatusId = statuses[new Random().Next(statuses.Count)].Id,
+                    TicketTypeId = types[new Random().Next(types.Count)].Id,
+                    DeveloperUserId = hasDeveloper ? devId : null,
+                    OwnerUserId = subId
+                };
+                try
+                {
+                    var myticket = context.Tickets.FirstOrDefault(t => t.Title == ticket.Title);
+                    if (myticket == null)
+                    {
+                        await context.Tickets.AddAsync(ticket);
+                        await context.SaveChangesAsync();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("*********** ERROR **********");
-                Debug.WriteLine("Error Seeding ticket 1");
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine("****************************");
-                throw;
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("*********** ERROR **********");
+                    Debug.WriteLine($"Error Seeding ticket {random}");
+                    Debug.WriteLine(ex.Message);
+                    Debug.WriteLine("****************************");
+                    throw;
+                }
             }
         }
     }
