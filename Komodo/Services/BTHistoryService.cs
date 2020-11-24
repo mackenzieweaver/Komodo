@@ -45,7 +45,8 @@ namespace Komodo.Services
                 // notify developer that someone else made a change
                 if(oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
-                    await _notificationService.Notify(userId, newTicket, history);
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    await _notificationService.Notify(userId, newTicket, description);
                 }
             }
             //Description
@@ -64,7 +65,8 @@ namespace Komodo.Services
                 // notify developer that someone else made a change
                 if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
-                    await _notificationService.Notify(userId, newTicket, history);
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    await _notificationService.Notify(userId, newTicket, description);
                 }
             }
             // Ticket Type
@@ -83,7 +85,8 @@ namespace Komodo.Services
                 // notify developer that someone else made a change
                 if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
-                    await _notificationService.Notify(userId, newTicket, history);
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    await _notificationService.Notify(userId, newTicket, description);
                 }
             }
             // Ticket Priority
@@ -102,7 +105,8 @@ namespace Komodo.Services
                 // notify developer that someone else made a change
                 if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
-                    await _notificationService.Notify(userId, newTicket, history);
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    await _notificationService.Notify(userId, newTicket, description);
                 }
             }
             // Ticket Status
@@ -121,7 +125,8 @@ namespace Komodo.Services
                 // notify developer that someone else made a change
                 if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
                 {
-                    await _notificationService.Notify(userId, newTicket, history);
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    await _notificationService.Notify(userId, newTicket, description);
                 }
             }
             // New Developer
@@ -138,7 +143,8 @@ namespace Komodo.Services
                     UserId = userId
                 };
                 _context.TicketHistories.Add(history);
-                await _notificationService.Notify(userId, newTicket, history);
+                var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                await _notificationService.Notify(userId, newTicket, description);
             }
             await _context.SaveChangesAsync();
         }

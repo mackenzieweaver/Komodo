@@ -95,7 +95,9 @@ namespace Komodo.Controllers
                     .FirstOrDefaultAsync(t => t.Id == ticketId);
                 if(ticket.DeveloperUserId != null)
                 {
-                    await _notificationService.NotifyOfComment(userId, ticket, ticketComment);
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                    var description = $"{user.FullName} left a comment on Ticket titled: '{ticket.Title}' saying, '{ticketComment.Comment}'";
+                    await _notificationService.Notify(userId, ticket, description);
                 }
                 return RedirectToAction("Details", "Tickets", new { id = ticketId });
             }

@@ -9,8 +9,8 @@ namespace Komodo.Services
 {
     public interface IBTNotificationService
     {
-        public Task Notify(string userId, Ticket ticket, TicketHistory change);
-        public Task NotifyOfComment(string userId, Ticket ticket, TicketComment comment);
-        public Task NotifyOfAttachment(string userId, Ticket ticket, TicketAttachment attachment);
+        public Task Notify(string userId, Ticket ticket, string description);
+        public Task SendNotificationEmail(Ticket ticket, Notification notification);
+        public Task NotifyPM(Ticket ticket, string userId);
     }
 }

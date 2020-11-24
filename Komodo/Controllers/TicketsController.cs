@@ -25,14 +25,16 @@ namespace Komodo.Controllers
         private readonly IBTHistoryService _historyService;
         private readonly IBTRolesService _rolesService;
         private readonly IBTProjectService _projectService;
+        private readonly IBTNotificationService _notificationService;
 
-        public TicketsController(ApplicationDbContext context, IBTHistoryService historyService, UserManager<BTUser> userManager, IBTRolesService rolesService, IBTProjectService projectService)
+        public TicketsController(ApplicationDbContext context, IBTHistoryService historyService, UserManager<BTUser> userManager, IBTRolesService rolesService, IBTProjectService projectService, IBTNotificationService notificationService)
         {
             _context = context;
             _userManager = userManager;
             _historyService = historyService;
             _rolesService = rolesService;
             _projectService = projectService;
+            _notificationService = notificationService;
         }
 
         // GET: Tickets
@@ -285,6 +287,7 @@ namespace Komodo.Controllers
             {
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
+                await _notificationService.NotifyPM(ticket, _userManager.GetUserId(User));
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);

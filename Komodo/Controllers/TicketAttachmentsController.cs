@@ -73,29 +73,41 @@ namespace Komodo.Controllers
         {
             if (ModelState.IsValid)
             {
-                MemoryStream ms = new MemoryStream();
-                await ticketAttachment.FormFile.CopyToAsync(ms);
+                if (ticketAttachment != null)
+                {
+                    MemoryStream ms = new MemoryStream();
+                    await ticketAttachment.FormFile.CopyToAsync(ms);
 
-                ticketAttachment.FileData = ms.ToArray();
-                ticketAttachment.FileName = ticketAttachment.FormFile.FileName;
+                    ticketAttachment.FileData = ms.ToArray();
+                    ticketAttachment.FileName = ticketAttachment.FormFile.FileName;
 
-                var binary = Convert.ToBase64String(ticketAttachment.FileData);
-                var ext = Path.GetExtension(ticketAttachment.FileName);
-                ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
+                    var binary = Convert.ToBase64String(ticketAttachment.FileData);
+                    var ext = Path.GetExtension(ticketAttachment.FileName);
+                    ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
 
-                ticketAttachment.Created = DateTimeOffset.Now;
-                ticketAttachment.UserId = _userManager.GetUserId(User);
+                    ticketAttachment.Created = DateTimeOffset.Now;
+                    ticketAttachment.UserId = _userManager.GetUserId(User);
+                    _context.Add(ticketAttachment);
+                    await _context.SaveChangesAsync();
+                    Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", ticketAttachment.FileData.ToString());
 
-                _context.Add(ticketAttachment);
-                await _context.SaveChangesAsync();
-                Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", ticketAttachment.FileData.ToString());
-                return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
+                    var ticket = await _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.Project).Include(t => t.TicketPriority).FirstOrDefaultAsync(t => t.Id == ticketAttachment.TicketId);
+                    if (ticket.DeveloperUserId != null)
+                    {
+                        var userId = _userManager.GetUserId(User);
+                        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                        var description = $"{user.FullName} added an attachment on Ticket titled: '{ticket.Title}': '{ticketAttachment.Description}'";
+                        await _notificationService.Notify(userId, ticket, description);
+                    }
+                    return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
+
+                }
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
             return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
         }
-       
+
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
