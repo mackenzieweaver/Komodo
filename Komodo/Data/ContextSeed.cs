@@ -1071,69 +1071,28 @@ namespace Komodo.Data
 
         public static async Task SeedProjectAsync(ApplicationDbContext context)
         {
-            Project seedProject1 = new Project
+            List<string> projectNames = new List<string> { "Blog", "Bug Tracker", "Financial Portal" };
+            Project project = new Project();
+            foreach(var projectName in projectNames)
             {
-                Name = "Blog"
-            };
-            try
-            {
-                var project = context.Projects.FirstOrDefault(p => p.Name == "Blog");
-                if (project == null)
-                {
-                    await context.Projects.AddAsync(seedProject1);
+                project.Name = projectName;
+                try
+                {                    
+                    if (context.Projects.FirstOrDefault(p => p.Name == projectName) == null)
+                    {
+                        await context.Projects.AddAsync(project);
+                        await context.SaveChangesAsync();
+                    }
                 }
-                await context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("*********** ERROR **********");
-                Debug.WriteLine("Error Seeding Project1");
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine("****************************");
-                throw;
-            }
-            Project seedProject2 = new Project
-            {
-                Name = "Bug Tracker"
-            };
-            try
-            {
-                var project = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker");
-                if (project == null)
+                catch (Exception ex)
                 {
-                    await context.Projects.AddAsync(seedProject2);
+                    Debug.WriteLine("*********** ERROR **********");
+                    Debug.WriteLine($"Error Seeding Project: {projectName}");
+                    Debug.WriteLine(ex.Message);
+                    Debug.WriteLine("****************************");
+                    throw;
                 }
-                await context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("*********** ERROR **********");
-                Debug.WriteLine("Error Seeding Project2");
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine("****************************");
-                throw;
-            }
-            Project seedProject3 = new Project
-            {
-                Name = "Financial Portal"
-            };
-            try
-            {
-                var project = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal");
-                if (project == null)
-                {
-                    await context.Projects.AddAsync(seedProject3);
-                }
-                await context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("*********** ERROR **********");
-                Debug.WriteLine("Error Seeding Project3");
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine("****************************");
-                throw;
-            }
+            }            
         }
 
         public static async Task SeedProjectUsersAsync(ApplicationDbContext context, UserManager<BTUser> userManager)
@@ -1228,6 +1187,16 @@ namespace Komodo.Data
                     Debug.WriteLine("****************************");
                     throw;
                 }
+            }
+        }
+
+        public static async Task DeleteAllTicketsAsync(ApplicationDbContext context)
+        {
+            var tickets = await context.Tickets.ToListAsync();
+            foreach(var ticket in tickets)
+            {
+                context.Remove(ticket);
+                await context.SaveChangesAsync();
             }
         }
     }
