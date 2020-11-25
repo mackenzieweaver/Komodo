@@ -67,6 +67,7 @@ namespace Komodo.Controllers
             vm.numTickets = tickets.Count;
             vm.numCritical = tickets.Where(t => t.TicketPriority.Name == "Critical").ToList().Count;
             vm.numOpen = tickets.Where(t => t.TicketStatus.Name == "Opened").ToList().Count;
+            vm.numAssigned = tickets.Where(t => t.DeveloperUserId != null).ToList().Count;
             vm.numUnassigned = tickets.Where(t => t.DeveloperUserId == null).ToList().Count;
             vm.UsersOnProject = await _context.Users.ToListAsync();
             var notifications = new List<ICollection<Notification>>();

@@ -83,6 +83,9 @@ namespace Komodo.Controllers
                 case "Critical":
                     tickets = tickets.Where(t => t.TicketPriority.Name == "Critical").ToList();
                     break;
+                case "Assigned":
+                    tickets = tickets.Where(t => t.DeveloperUserId != null).ToList();
+                    break;
                 case "Unassigned":
                     tickets = tickets.Where(t => t.DeveloperUserId == null).ToList();
                     break;

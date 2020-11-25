@@ -1072,9 +1072,9 @@ namespace Komodo.Data
         public static async Task SeedProjectAsync(ApplicationDbContext context)
         {
             List<string> projectNames = new List<string> { "Blog", "Bug Tracker", "Financial Portal" };
-            Project project = new Project();
             foreach(var projectName in projectNames)
             {
+                Project project = new Project();
                 project.Name = projectName;
                 try
                 {                    
@@ -1138,17 +1138,12 @@ namespace Komodo.Data
 
         public static async Task SeedTicketsAsync(ApplicationDbContext context, UserManager<BTUser> userManager)
         {
-            string adminId = (await userManager.FindByEmailAsync("garretreynolds@mailinator.com")).Id;
-            string pmId = (await userManager.FindByEmailAsync("alexheim@mailinator.com")).Id;
             string devId = (await userManager.FindByEmailAsync("dennisenerson@mailinator.com")).Id;
             string subId = (await userManager.FindByEmailAsync("larryedwards@mailinator.com")).Id;
             int project1Id = context.Projects.FirstOrDefault(p => p.Name == "Blog").Id;
             int project2Id = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker").Id;
             int project3Id = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal").Id;
             List<int> projects = new List<int> { project1Id, project2Id, project3Id };
-            //int statusId = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Opened")).Id;
-            //int typeId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "UI")).Id;
-            //int priorityId = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Low")).Id;
             int numTickets = 10;
             var statuses = context.TicketStatuses.ToList();
             var types = context.TicketTypes.ToList();
@@ -1187,16 +1182,6 @@ namespace Komodo.Data
                     Debug.WriteLine("****************************");
                     throw;
                 }
-            }
-        }
-
-        public static async Task DeleteAllTicketsAsync(ApplicationDbContext context)
-        {
-            var tickets = await context.Tickets.ToListAsync();
-            foreach(var ticket in tickets)
-            {
-                context.Remove(ticket);
-                await context.SaveChangesAsync();
             }
         }
     }

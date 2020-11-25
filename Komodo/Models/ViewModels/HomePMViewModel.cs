@@ -16,6 +16,7 @@ namespace Komodo.Models.ViewModels
         // data for everyone
         public int numTickets { get; set; }
         public int numCritical { get; set; }
+        public int numAssigned { get; set; }
         public int numUnassigned { get; set; }
         public int numOpen { get; set; }
         public List<Ticket> Tickets { get; set; }
