@@ -47,17 +47,17 @@
                         <td>
                             @if (User.IsInRole("Admin"))
                             {
-                                <a asp-action="AssignUsers" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Assign</a>
+                                <a asp-action="AssignUsers" asp-route-id="@item.Id" class="btn btn-light btn-sm">Assign</a>
                             }
                             @if (User.IsInRole("ProjectManager"))
                             {
-                                <a asp-action="AssignUsers" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Assign</a>
+                                <a asp-action="AssignUsers" asp-route-id="@item.Id" class="btn btn-light btn-sm">Assign</a>
                             }
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Edit</a>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Details</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-light btn-sm">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-light btn-sm">Details</a>
                             @if (User.IsInRole("Admin"))
                             {
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Delete</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-light btn-sm">Delete</a>
                             }
                         </td>
                     </tr>

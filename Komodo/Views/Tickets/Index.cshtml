@@ -98,16 +98,16 @@
                             }
                         </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Details</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light">Details</a>
                             @if (User.IsInRole("Admin") ||
                               User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, item.ProjectId) ||
                               User.IsInRole("Developer") && item.DeveloperUserId == userId ||
                               User.IsInRole("Submitter") && item.OwnerUserId == userId)
                             {
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Edit</a>}
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-light">Edit</a>}
                             @if (User.IsInRole("Admin"))
                             {
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Delete</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light mt-1">Delete</a>
                             }
                         </td>
                     </tr>
