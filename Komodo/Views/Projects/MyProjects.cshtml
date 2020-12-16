@@ -37,9 +37,9 @@
                     @Html.DisplayFor(modelItem => item.ImageData)
                 </td>*@
             <td>
-                <a asp-action="AssignUsers" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Assign</a>
-                <a asp-controller="Projects" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Edit</a>
-                <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark text-white">Details</a>
+                <a asp-action="AssignUsers" asp-route-id="@item.Id" class="btn btn-light btn-sm">Assign</a>
+                <a asp-controller="Projects" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-light btn-sm">Edit</a>
+                <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id" class="btn btn-light btn-sm">Details</a>
             </td>
             </tr>
         }

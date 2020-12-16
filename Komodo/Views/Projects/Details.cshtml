@@ -38,14 +38,39 @@
                     <div class="col h6">
                         @foreach (var user in Model.ProjectUsers)
                         {
-                            <span>@user.User.FullName</span>
-                            <span>
-                                @foreach (var role in await _rolesService.ListUserRoles(user.User))
-                                {
-                                    <span>(</span><span>@role</span><span>)</span>
-                                }
-                            </span>
+                        <div class="row mb-1">
+                            @foreach (var role in await _rolesService.ListUserRoles(user.User))
+                            {
+                                <div class="col-md">
+                                    @if (role == "Admin")
+                                    {
+                                        <i class="fas fa-user-shield"></i>
+                                    }
+                                    @if (role == "ProjectManager")
+                                    {
+                                        <i class="fas fa-user-tie"></i>
+                                    }
+                                    @if (role == "Developer")
+                                    {
+                                        <i class="fas fa-user-ninja"></i>
+                                    }
+                                    @if (role == "Submitter")
+                                    {
+                                        <i class="fas fa-user-tag"></i>
+                                    }
+                                </div>
+                                <div class="col-md">
+                                    @if (role != "Demo")
+                                    {
+                                        <span>(</span>@role<span>)</span>
+                                    }
+                                </div>
+                            }
+                            <div class="col-md-8">
+                                <span>@user.User.FullName</span>
+                            </div>
                             <br />
+                        </div>
                         }
                     </div>
                 </div>
@@ -142,9 +167,9 @@
         </div>
         <div class="row mt-3">
             <div class="col-md">
-                <a asp-action="AssignUsers" asp-route-id="@Model.Id" class="btn btn-outline-dark text-white">Assign</a>
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark text-white">Edit</a>
-                <a asp-action="Index" class="btn btn-outline-dark text-white">Back to List</a>
+                <a asp-action="AssignUsers" asp-route-id="@Model.Id" class="btn btn-light btn-sm">Assign</a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-light btn-sm">Edit</a>
+                <a asp-action="Index" class="btn btn-light btn-sm">Back to List</a>
             </div>
         </div>
     </div>

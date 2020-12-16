@@ -6,9 +6,10 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 
 <head>
+    <meta property='og:image' content='//i.imgur.com/xWWbTll.jpg' />
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,6 +26,8 @@
     <!-- Custom styles for this template -->
     <link href="~/css/heroic-features.css" rel="stylesheet" />
     @*<link href="css/heroic-features.css" rel="stylesheet">*@
+
+    <script src="https://kit.fontawesome.com/8b5ae67e5c.js" crossorigin="anonymous"></script>
     <style>
         * {
             font-family: 'Nunito';
@@ -87,8 +90,7 @@
         <header id="hero" class="jumbotron my-4 text-white">
             <h1 class="display-3">Welcome to Komodo!</h1>
             <p class="lead">Komodo is an issue tracker application built with ASP.NET MVC and a SQL database. It incorporates different roles such as the Admin, Project Manager, Developer, and Submitter. See what this app can do by reading the cards below or login and see for yourself.</p>
-            <a asp-controller="Home" asp-action="Index" class="btn btn-light btn-lg">Login</a>
-            <a class="btn btn-light btn-lg" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-light btn-lg">Try it out <i class="fas fa-chevron-right"></i></a>
         </header>
 
         <!-- Page Features -->
