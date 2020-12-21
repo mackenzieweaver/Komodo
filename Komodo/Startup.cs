@@ -95,7 +95,7 @@ namespace Komodo
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=LandingPage}/{id?}");
+                    pattern: "{controller=Home}/{action=OnePage}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
