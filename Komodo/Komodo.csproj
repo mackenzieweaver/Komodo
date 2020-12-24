@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Home\FourOhFour.cshtml" />
+    <Content Remove="Views\Home\LandingPage.cshtml" />
     <Content Remove="Views\Shared\pages_error404.cshtml" />
     <Content Remove="Views\Shared\_Layout_old.cshtml" />
     <Content Remove="Views\Tickets\OldDetails.cshtml" />
