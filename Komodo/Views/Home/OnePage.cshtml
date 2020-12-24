@@ -114,13 +114,12 @@
 
             </div>
         </section><!-- End About Section -->
-
         <!-- ======= Features Section ======= -->
         <section id="features" class="services section-bg">
             <div class="container" data-aos="fade-up">
 
                 <div class="section-title">
-                    <h2>Features</h2>
+                    <h2 class="text-white">Features</h2>
                     <p>Some of the many features that will help to improve your team's workflow.</p>
                 </div>
 
@@ -207,8 +206,8 @@
 
             </div>
         </section><!-- End Sevices Section -->
-
         <!-- ======= About Video Section ======= -->
+        <!--
         <section id="about-video" class="about-video">
             <div class="container" data-aos="fade-up">
 
@@ -241,26 +240,26 @@
                 </div>
 
             </div>
-        </section><!-- End About Video Section -->
-
+        </section>
+        -->
+        <!-- End About Video Section -->
         <!-- ======= Cta Section ======= -->
         <section id="cta" class="cta">
             <div class="container" data-aos="zoom-in">
                 <div class="text-center">
-                    <h3>Call To Action</h3>
-                    <p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    <a class="cta-btn" href="#">Call To Action</a>
+                    <h3>See it in action</h3>
+                    <p>Skip the registration and demo the application as any role!</p>
+                    <a class="cta-btn" asp-controller="Home" asp-action="Index">Get Started</a>
                 </div>
             </div>
         </section><!-- End Cta Section -->
-
         <!-- ======= Roles Section ======= -->
         <section id="roles" class="team section-bg">
             <div class="container" data-aos="fade-up">
 
                 <div class="section-title">
-                    <h2>Team</h2>
-                    <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+                    <h2 class="text-white">Roles</h2>
+                    <p>Administrators have full control of the application and can step in when a project manager needs administrative action taken. A strong team has great management who work with talented developers.  Submitters can only view submit tickets.</p>
                 </div>
 
                 <div class="row">
@@ -269,16 +268,10 @@
                         <div class="member">
                             <div class="member-img">
                                 <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                <div class="social">
-                                    <a href=""><i class="icofont-twitter"></i></a>
-                                    <a href=""><i class="icofont-facebook"></i></a>
-                                    <a href=""><i class="icofont-instagram"></i></a>
-                                    <a href=""><i class="icofont-linkedin"></i></a>
-                                </div>
                             </div>
                             <div class="member-info">
                                 <h4>Walter White</h4>
-                                <span>Chief Executive Officer</span>
+                                <span>Administrator</span>
                             </div>
                         </div>
                     </div>
@@ -287,12 +280,6 @@
                         <div class="member">
                             <div class="member-img">
                                 <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                <div class="social">
-                                    <a href=""><i class="icofont-twitter"></i></a>
-                                    <a href=""><i class="icofont-facebook"></i></a>
-                                    <a href=""><i class="icofont-instagram"></i></a>
-                                    <a href=""><i class="icofont-linkedin"></i></a>
-                                </div>
                             </div>
                             <div class="member-info">
                                 <h4>Sarah Jhonson</h4>
@@ -305,16 +292,10 @@
                         <div class="member">
                             <div class="member-img">
                                 <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                                <div class="social">
-                                    <a href=""><i class="icofont-twitter"></i></a>
-                                    <a href=""><i class="icofont-facebook"></i></a>
-                                    <a href=""><i class="icofont-instagram"></i></a>
-                                    <a href=""><i class="icofont-linkedin"></i></a>
-                                </div>
                             </div>
                             <div class="member-info">
                                 <h4>William Anderson</h4>
-                                <span>CTO</span>
+                                <span>Developer</span>
                             </div>
                         </div>
                     </div>
@@ -323,16 +304,10 @@
                         <div class="member">
                             <div class="member-img">
                                 <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
-                                <div class="social">
-                                    <a href=""><i class="icofont-twitter"></i></a>
-                                    <a href=""><i class="icofont-facebook"></i></a>
-                                    <a href=""><i class="icofont-instagram"></i></a>
-                                    <a href=""><i class="icofont-linkedin"></i></a>
-                                </div>
                             </div>
                             <div class="member-info">
                                 <h4>Amanda Jepson</h4>
-                                <span>Accountant</span>
+                                <span>Submitter</span>
                             </div>
                         </div>
                     </div>
@@ -346,7 +321,7 @@
     <!-- ======= Footer ======= -->
     <footer id="footer">
 
-        <div class="footer-top">
+        @*<div class="footer-top">
             <div class="container">
                 <div class="row">
 
@@ -393,7 +368,7 @@
 
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <div class="container d-md-flex py-4">
 
@@ -406,15 +381,13 @@
                     <!-- You can delete the links only if you purchased the pro version. -->
                     <!-- Licensing information: https://bootstrapmade.com/license/ -->
                     <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/onepage-multipurpose-bootstrap-template/ -->
-                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> - Modified by <a href="https://www.mackenzie-weaver.com" target="_blank">Mackenzie Weaver</a>
                 </div>
             </div>
             <div class="social-links text-center text-md-right pt-3 pt-md-0">
-                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+                <a href="https://twitter.com/Mackenz60579223" target="_blank" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="https://www.linkedin.com/in/mackenzie-weaver/" target="_blank" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+                <a href="https://github.com/mackenzieweaver" target="_blank" class="social-github"><i class="bx bxl-github"></i></a>
             </div>
         </div>
     </footer><!-- End Footer -->
