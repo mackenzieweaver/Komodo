@@ -532,6 +532,10 @@ section {
   padding: 80px 0;
 }
 
+section#about, section#cta {
+    background-color:whitesmoke;
+}
+
 .section-bg {
     background-color: #191e3a;
 }
@@ -1039,13 +1043,13 @@ section {
 }
 
 .cta h3 {
-  color: #fff;
+  color: #124265;
   font-size: 28px;
   font-weight: 700;
 }
 
 .cta p {
-  color: #fff;
+    color: #919191;
 }
 
 .cta .cta-btn {
