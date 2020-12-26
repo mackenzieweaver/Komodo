@@ -1101,6 +1101,7 @@ namespace Komodo.Data
             string pmId = (await userManager.FindByEmailAsync("alexheim@mailinator.com")).Id;
             string devId = (await userManager.FindByEmailAsync("dennisenerson@mailinator.com")).Id;
             string subId = (await userManager.FindByEmailAsync("larryedwards@mailinator.com")).Id;
+
             int project1Id = context.Projects.FirstOrDefault(p => p.Name == "Blog").Id;
             int project2Id = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker").Id;
             int project3Id = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal").Id;

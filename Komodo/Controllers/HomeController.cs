@@ -175,7 +175,12 @@ namespace Komodo.Controllers
             return View();
         }
 
-        public IActionResult LandingPage()
+        //public IActionResult LandingPage()
+        //{
+        //    return View();
+        //}
+
+        public IActionResult OnePage()
         {
             return View();
         }
