@@ -1137,7 +1137,7 @@ namespace Komodo.Data
             }
         }
 
-        public static async Task SeedTicketsAsync(ApplicationDbContext context, UserManager<BTUser> userManager)
+        public static async Task SeedTicketsAsync(ApplicationDbContext context, UserManager<BTUser> userManager, int numTickets)
         {
             string devId = (await userManager.FindByEmailAsync("dennisenerson@mailinator.com")).Id;
             string subId = (await userManager.FindByEmailAsync("larryedwards@mailinator.com")).Id;
@@ -1145,7 +1145,7 @@ namespace Komodo.Data
             int project2Id = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker").Id;
             int project3Id = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal").Id;
             List<int> projects = new List<int> { project1Id, project2Id, project3Id };
-            int numTickets = 10;
+
             var statuses = context.TicketStatuses.ToList();
             var types = context.TicketTypes.ToList();
             var priorities = context.TicketPriorities.ToList();

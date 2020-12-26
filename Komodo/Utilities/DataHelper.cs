@@ -60,13 +60,35 @@ namespace Komodo.Utilities
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 var userManager = services.GetRequiredService<UserManager<BTUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                await ContextSeed.SeedRolesAsync(roleManager);
-                await ContextSeed.SeedDefaultUsersAsync(userManager);
+
+                if (!context.Roles.Any())
+                {
+                    await ContextSeed.SeedRolesAsync(roleManager);
+                }
+
+                if (context.Users.FirstOrDefault(u => u.Email == "m@w.com") == null)
+                {
+                    await ContextSeed.SeedDefaultUsersAsync(userManager);
+                }
+
                 await ContextSeed.SeedTicketListsAsync(context);
+
                 // projects, users, tickets
-                await ContextSeed.SeedProjectAsync(context);
-                await ContextSeed.SeedProjectUsersAsync(context, userManager);
-                await ContextSeed.SeedTicketsAsync(context, userManager);
+                if (!context.Projects.Any())
+                {
+                    await ContextSeed.SeedProjectAsync(context);
+                }
+
+                if (!context.ProjectUsers.Any())
+                {
+                    await ContextSeed.SeedProjectUsersAsync(context, userManager);
+                }
+
+                int numTickets = 10;
+                if (context.Tickets.ToList().Count < numTickets)
+                {
+                    await ContextSeed.SeedTicketsAsync(context, userManager, numTickets);
+                }
             }
             catch (Exception ex)
             {

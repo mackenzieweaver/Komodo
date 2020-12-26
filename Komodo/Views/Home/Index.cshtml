@@ -221,17 +221,20 @@
         {
             <div class="row mt-3">
                 @* Donut Chart *@
-                <div id="userbasedonut" class="col-md-4">
-                    <div class="widget widget-chart-two">
-                        <div class="widget-heading">
-                            <h3 class="pt-5 pl-5">Types of Users</h3>
-                        </div>
-                        <div class="widget-content pb-0">
-                            <div id="donut-chart" class=""></div>
+                <div class="col-md">
+                    <div id="userbasedonut">
+                        <div class="widget widget-chart-two">
+                            <div class="widget-heading">
+                                <h3 class="pt-5 pl-5">Types of Users</h3>
+                            </div>
+                            <div class="widget-content">
+                                <canvas id="myChart" height="200"></canvas>
+                                @*<div id="donut-chart" class=""></div>*@
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md">
+                <div class="col-md-8">
                     <div class="row mr-1">
                         <div class="col p-5 widget">
                             <div class="widget-heading">
@@ -383,9 +386,9 @@
                                     <td>
                                         <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Details</a>
                                         @if (User.IsInRole("Admin") ||
-                              User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                              User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                              User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
+                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
+                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
                                         {
                                             <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Edit</a>}
                                         @if (User.IsInRole("Admin"))
@@ -487,9 +490,9 @@
                                     <td>
                                         <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Details</a>
                                         @if (User.IsInRole("Admin") ||
-                              User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                              User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                              User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
+                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
+                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
                                         {
                                             <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Edit</a>}
                                         @if (User.IsInRole("Admin"))
@@ -591,9 +594,9 @@
                                     <td>
                                         <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Details</a>
                                         @if (User.IsInRole("Admin") ||
-                               User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                               User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                               User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                             User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
+                             User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
+                             User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
                                         {
                                             <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Edit</a>}
                                         @if (User.IsInRole("Admin"))
@@ -699,9 +702,9 @@
                                     <td>
                                         <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Details</a>
                                         @if (User.IsInRole("Admin") ||
-                              User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                              User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                              User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
+                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
+                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
                                         {
                                             <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Edit</a>}
                                         @if (User.IsInRole("Admin"))
@@ -803,9 +806,9 @@
                                     <td>
                                         <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Details</a>
                                         @if (User.IsInRole("Admin") ||
-                              User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                              User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                              User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
+                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
+                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
                                         {
                                             <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Edit</a>}
                                         @if (User.IsInRole("Admin"))
@@ -911,9 +914,9 @@
                                     <td>
                                         <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Details</a>
                                         @if (User.IsInRole("Admin") ||
-                              User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                              User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                              User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
+                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
+                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
                                         {
                                             <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-outline-dark text-white">Edit</a>}
                                         @if (User.IsInRole("Admin"))
@@ -933,7 +936,8 @@
 
 @section scripts {
     <script>
-        InitDonut('@Url.Action("PieData", "Charts")');
+        ChartJsDonut('@Url.Action("PieData", "Charts")');
+        @*ApexDonut('@Url.Action("PieData", "Charts")');*@
         InitBarChart('@Url.Action("BarData", "Charts")');
     </script>
 }

@@ -10,7 +10,7 @@ $(document).ready(function () {
     //InitBarChart();
 });
 
-function InitDonut(Url) {
+function ApexDonut(Url) {
     var pieData = [];
     $.post(Url).then(function (res) {
         for (let i = 0; i < res.length; i++) {
@@ -27,26 +27,48 @@ function InitDonut(Url) {
             },
             //series: [10, 20, 30, 40, 50],
             series: pieData,
-            colors: ['#e7515a', '#009688', '#e2a03f', '#5c1ac3', '#ccc'],
+            colors: ['#e7515a', '#009688', '#e2a03f', '#5c1ac3', 'rgb(74, 109, 167)'],
             labels: ["Admins", "Project Managers", "Developers", "Submitters", "New Users"],
 
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 250
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }]
+            //responsive: [{
+            //    breakpoint: 480,
+            //    options: {
+            //        chart: {
+            //            width: 250
+            //        },
+            //        legend: {
+            //            position: 'bottom'
+            //        }
+            //    }
+            //}]
         }
         var donut = new ApexCharts(
             document.querySelector("#donut-chart"),
             donutChart
         );
         donut.render();
+    });
+}
+
+function ChartJsDonut(Url) {
+    var pieData = [];
+    $.post(Url).then(function (res) {
+        for (let i = 0; i < res.length; i++) {
+            pieData.push(parseInt(res[i]));
+        }
+    }).then(() => {
+        // For a pie chart
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Admin', 'Project Manager', 'Developer', 'Submitter', 'New User'],
+                datasets: [{
+                    data: pieData,
+                    backgroundColor: ['#e7515a', '#009688', '#e2a03f', '#5c1ac3', 'rgb(74, 109, 167)']
+                }],
+            }
+        });
     });
 }
 

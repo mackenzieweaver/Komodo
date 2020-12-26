@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="google" content="notranslate" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
@@ -254,7 +255,6 @@
     <script src="~/plugins/apex/apexcharts.min.js"></script>
     <script src="~/assets/js/dashboard/dash_1.js"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @*<script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>*@
     <script src="~/js/datatables.js"></script>
     <script>
@@ -263,6 +263,9 @@
             height: 300
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
     @if (TempData["DemoLockout"] != null)
     {
         <script>alert("Demo users can't change data...");</script>
