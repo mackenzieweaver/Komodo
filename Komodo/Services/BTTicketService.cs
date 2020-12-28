@@ -30,10 +30,12 @@ namespace Komodo.Services
             {
                 return new SelectList("empty", "Id", "FullName");
             }
+
             if (await _rolesService.IsUserInRole(user, "Admin"))
             {
                 return new SelectList(_context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName");
             }
+
             var projects = await _projectService.ListUserProjects(user.Id);
             var users = new List<ICollection<BTUser>>();
             foreach (var project in projects)

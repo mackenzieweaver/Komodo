@@ -129,7 +129,7 @@
                                 @if (User.Identity.IsAuthenticated && !User.IsInRole("NewUser"))
                                 {
                                     <li>
-                                        <a class="nav-link" data-toggle="modal" data-target="#createModal">Create</a>
+                                        <a id="newticketmodal" class="nav-link" data-toggle="modal" data-target="#createModal">New</a>
                                     </li>
                                 }
                                 @if (User.IsInRole("ProjectManager"))

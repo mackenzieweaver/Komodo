@@ -89,6 +89,7 @@ namespace Komodo.Controllers
                     ticketAttachment.UserId = _userManager.GetUserId(User);
                     _context.Add(ticketAttachment);
                     await _context.SaveChangesAsync();
+
                     Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", ticketAttachment.FileData.ToString());
                     // send notification to pm
                     var ticket = await _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.Project).Include(t => t.TicketPriority).FirstOrDefaultAsync(t => t.Id == ticketAttachment.TicketId);

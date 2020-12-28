@@ -26,8 +26,15 @@ namespace Komodo.Controllers
         private readonly IBTRolesService _rolesService;
         private readonly IBTProjectService _projectService;
         private readonly IBTNotificationService _notificationService;
+        private readonly IBTFileService _fileService;
 
-        public TicketsController(ApplicationDbContext context, IBTHistoryService historyService, UserManager<BTUser> userManager, IBTRolesService rolesService, IBTProjectService projectService, IBTNotificationService notificationService)
+        public TicketsController(ApplicationDbContext context, 
+            IBTHistoryService historyService, 
+            UserManager<BTUser> userManager, 
+            IBTRolesService rolesService, 
+            IBTProjectService projectService, 
+            IBTNotificationService notificationService,
+            IBTFileService fileService)
         {
             _context = context;
             _userManager = userManager;
@@ -35,6 +42,7 @@ namespace Komodo.Controllers
             _rolesService = rolesService;
             _projectService = projectService;
             _notificationService = notificationService;
+            _fileService = fileService;
         }
 
         // GET: Tickets
@@ -285,7 +293,7 @@ namespace Komodo.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
         {
             if (User.IsInRole("Demo"))
             {
@@ -295,9 +303,28 @@ namespace Komodo.Controllers
 
             ticket.OwnerUserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
-            {
+            {                
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
+
+                if (attachment != null)
+                {
+                    var userId = _userManager.GetUserId(User);
+                    var data = await _fileService.ConvertFileToByteArrayAsync(attachment);
+                    var fileName = attachment.FileName;
+                    TicketAttachment ticketAttachment = new TicketAttachment
+                    {
+                        FileData = data,
+                        FileName = fileName,
+                        FilePath = _fileService.ConvertByteArrayToFile(data, Path.GetExtension(fileName)),
+                        Created = DateTime.Now,
+                        UserId = userId,
+                        TicketId = ticket.Id
+                    };
+                    _context.TicketAttachments.Add(ticketAttachment);
+                    await _context.SaveChangesAsync();
+                }
+
                 await _notificationService.NotifyPM(ticket, _userManager.GetUserId(User));
                 return RedirectToAction(nameof(Index));
             }

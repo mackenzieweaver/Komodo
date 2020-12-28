@@ -8,6 +8,11 @@
 			@Import	Mixins
 	===============================
 */
+
+#newticketmodal:hover {
+    cursor: pointer !important;
+}
+
 html {
   min-height: 100%; }
 
