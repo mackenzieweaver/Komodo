@@ -1,0 +1,81 @@
+﻿@inject Komodo.Services.IBTTicketService _ticketService
+@inject Microsoft.AspNetCore.Identity.UserManager<BTUser> _userManager
+
+@{
+    var projectids = _ticketService.GetProjects();
+    var types = _ticketService.GetTypes();
+    var priorities = _ticketService.GetPriorities();
+    var statuses = _ticketService.GetStatuses();
+
+    var user = await _userManager.GetUserAsync(User);
+    SelectList devs = await _ticketService.GetDevs(user);
+}
+
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form asp-controller="Tickets" asp-action="Create" enctype="multipart/form-data">
+                    <input type="hidden" name="Created" value="@DateTime.Now" />
+
+                    <div class="form-group">
+                        <label for="Title" class="control-label">Title</label>
+                        <input name="Title" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Description" class="control-label">Description</label>
+                        <input id="tinycontent" name="Description" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ProjectId" class="control-label">Project</label>
+                        <select name="ProjectId" class="form-control" asp-items="projectids"></select>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="TicketTypeId" class="control-label">Type</label>
+                                <select name="TicketTypeId" class="form-control" asp-items="types"></select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="TicketPriorityId" class="control-label">Priority</label>
+                                <select name="TicketPriorityId" class="form-control" asp-items="priorities"></select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="TicketStatusId" class="control-label">Status</label>
+                                <select name="TicketStatusId" class="form-control" asp-items="statuses"></select>
+                            </div>
+                        </div>
+                    </div>
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    {
+                        <div class="col-md-4 pl-0">
+                            <div class="form-group">
+                                <label for="DeveloperUserId" class="control-label">Developer</label>
+                                <select name="DeveloperUserId" class="form-control" asp-items="devs"></select>
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group">
+                        <label for="FileName" class=""></label><br />
+                        <input name="attachment" type="file" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-light btn-lg" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
