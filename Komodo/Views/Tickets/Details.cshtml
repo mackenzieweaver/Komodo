@@ -21,140 +21,220 @@
 
 <div class="row justify-content-around">
     <div class="col-md-10">
-        <div class="row">
-            <div class="col-md widget p-5">
+
+        @* Tabs *@
+        <ul class="nav nav-tabs mb-3" id="animateLine" role="tablist" style="margin-left:-15px; margin-right:-15px;">
+            <li class="nav-item">
+                <a class="nav-link active" id="animated-underline-home-tab" data-toggle="tab" href="#animated-underline-home" role="tab" aria-controls="animated-underline-home" aria-selected="true">Overview</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="animated-underline-profile-tab" data-toggle="tab" href="#animated-underline-profile" role="tab" aria-controls="animated-underline-profile" aria-selected="false">Attachments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="animated-underline-contact-tab" data-toggle="tab" href="#animated-underline-contact" role="tab" aria-controls="animated-underline-contact" aria-selected="false">History</a>
+            </li>
+        </ul>
+
+        @* Tab Content *@
+        <div class="tab-content" id="animateLineContent-4">
+            @* Tab 1 *@
+            <div class="tab-pane fade show active" id="animated-underline-home" role="tabpanel" aria-labelledby="animated-underline-home-tab">
+                @* Overview *@
                 <div class="row">
-                    <div class="col-md">
-                        <h1>Ticket Details</h1><hr />
-                        <h3>Title: "@Model.Title"</h3>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <h3 class="mt-3">Description</h3>
-                    </div>
-                    <div class="col align-self-end">
-                        @if (Model.Updated == null)
-                        {
-                            <h6 class="text-right mt-3">Created @Model.Created.ToString("g")</h6>
-                        }
-                        else
-                        {
-                            <h6 class="text-right mt-3">Last Updated @Model.Updated.ToString().Replace(" -08:00", "")</h6>
-                        }
-                    </div>
-                </div>
-
-                <div class="row mt-3">
-                    <div class="col-md">
-                        @Html.Raw(Model.Description)
-                    </div>
-                </div>
-
-                <div class="row mt-3 justify-content-between">
-                    <div class="col-md">
-                        <h6>
-                            By:
-                            @Model.OwnerUser.FullName
-                        </h6>
-                        @if (Model.DeveloperUserId != null)
-                        {
-                            <div>
-                                Developer:
-                                @Model.DeveloperUser.FullName
-                            </div>
-                        }
-                        else
-                        {
-                            <div>
-                                Developer: Unassigned
-                            </div>
-                        }
-                    </div>
-                    <div class="col-md">
-                        <div class="text-right">
-                            <div class="">
-                                Priority: @Model.TicketPriority.Name,
-                                Status: @Model.TicketStatus.Name,
-                                Type: @Model.TicketType.Name
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mt-5 mb-5">
-            <div class="col-md widget p-5">
-                <div class="row">
-                    <div class="col-md">
+                    <div class="col-md widget p-5">
                         <div class="row">
-                            <div class="col-md-4">
-                                <h3>Attachments:</h3>
-                            </div>
-                            @*@foreach (var attachment in Model.Attachments)
-                                {
-                                    <a href="@attachment.FilePath" download>@attachment.FileName</a><br />
-                                }*@
                             <div class="col-md">
-                                <div class="row" style="font-size: 12px;">
-                                    @foreach (TicketAttachment item in Model.Attachments)
-                                    {
-                                        <a asp-action="ShowFile" asp-controller="Tickets" asp-route-id="@item.Id" class="mr-3">
-                                            <img src="@_BTFileService.GetFileIcon(item.FileName)" style="height:50px;width:50px" />
-                                            <p class="m-b-5 text-muted mt-3">@_BTFileService.ShortenFileName(item.FileName, 15)</p>
-                                            <p class="mb-1 text-muted">Size: @_BTFileService.FormatFileSize(item.FileData.Length)</p>
-                                            <p class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</p>
-                                        </a>
-                                    }
+                                <h1>Ticket Details</h1><hr />
+                                <h3>Title: "@Model.Title"</h3>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <h3 class="mt-3">Description</h3>
+                            </div>
+                            <div class="col align-self-end">
+                                @if (Model.Updated == null)
+                                {
+                                    <h6 class="text-right mt-3">Created @Model.Created.ToString("g")</h6>
+                                }
+                                else
+                                {
+                                    <h6 class="text-right mt-3">Last Updated @Model.Updated.ToString().Replace(" -08:00", "")</h6>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md">
+                                @Html.Raw(Model.Description)
+                            </div>
+                        </div>
+
+                        <div class="row mt-3 justify-content-between">
+                            <div class="col-md">
+                                <h6>
+                                    By:
+                                    @Model.OwnerUser.FullName
+                                </h6>
+                                @if (Model.DeveloperUserId != null)
+                                {
+                                    <div>
+                                        Developer:
+                                        @Model.DeveloperUser.FullName
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div>
+                                        Developer: Unassigned
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md">
+                                <div class="text-right">
+                                    <div class="">
+                                        Priority: @Model.TicketPriority.Name,
+                                        Status: @Model.TicketStatus.Name,
+                                        Type: @Model.TicketType.Name
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
-              User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
-                {
-                    <div class="row mt-5">
-                        <div class="col-md">
-                            @*<h5 class="mt-3">Add an attachment</h5>*@
-                            @*<form asp-controller="TicketAttachments" asp-action="Create" class="ml-0 pl-0" enctype="multipart/form-data">
-                                    <input type="file" name="attachment" />
-                                    <input type="hidden" name="TicketId" value="@Model.Id" />
-                                    <input type="hidden" name="UserId" value="@userId" />
-                                    <div class="form-group mt-3">
-                                        <input type="submit" value="Upload" class="btn btn-light mt-4" />
-                                    </div>
-                                </form>*@
-                            <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <input type="hidden" asp-for="@Model.Id" name="TicketId">
+            </div>
 
-                                <div class="media-body row">
-                                    <div class="col-md-6">
-                                        <label class="h4 d-block mb-2 text-white">Add Attachment:</label>
+            @* Tab 2 *@
+            <div class="tab-pane fade" id="animated-underline-profile" role="tabpanel" aria-labelledby="animated-underline-profile-tab">
+                @* Attachments *@
+                <div class="row">
+                    <div class="col-md widget p-5">
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>Attachments:</h3>
                                     </div>
+                                    @*@foreach (var attachment in Model.Attachments)
+                                        {
+                                            <a href="@attachment.FilePath" download>@attachment.FileName</a><br />
+                                        }*@
                                     <div class="col-md">
-                                        <div class="row mb-3">
-                                            Description
-                                            <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
-                                        </div>
-                                        <div class="row justify-content-between">
-                                            <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" class="mb-3" />
-                                            <button type="submit" class="btn btn-light">Add attachment</button>
+                                        <div class="row" style="font-size: 12px;">
+                                            @foreach (TicketAttachment item in Model.Attachments)
+                                            {
+                                                <a asp-action="ShowFile" asp-controller="Tickets" asp-route-id="@item.Id" class="mr-3">
+                                                    <img src="@_BTFileService.GetFileIcon(item.FileName)" style="height:50px;width:50px" />
+                                                    <p class="m-b-5 text-muted mt-3">@_BTFileService.ShortenFileName(item.FileName, 15)</p>
+                                                    <p class="mb-1 text-muted">Size: @_BTFileService.FormatFileSize(item.FileData.Length)</p>
+                                                    <p class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</p>
+                                                </a>
+                                            }
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
+                        @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
+                   User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+                        {
+                            <div class="row mt-5">
+                                <div class="col-md">
+                                    @*<h5 class="mt-3">Add an attachment</h5>*@
+                                    @*<form asp-controller="TicketAttachments" asp-action="Create" class="ml-0 pl-0" enctype="multipart/form-data">
+                                            <input type="file" name="attachment" />
+                                            <input type="hidden" name="TicketId" value="@Model.Id" />
+                                            <input type="hidden" name="UserId" value="@userId" />
+                                            <div class="form-group mt-3">
+                                                <input type="submit" value="Upload" class="btn btn-light mt-4" />
+                                            </div>
+                                        </form>*@
+                                    <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input type="hidden" asp-for="@Model.Id" name="TicketId">
+
+                                        <div class="media-body row">
+                                            <div class="col-md-6">
+                                                <label class="h4 d-block mb-2 text-white">Add Attachment:</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="row mb-3">
+                                                    Description
+                                                    <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
+                                                </div>
+                                                <div class="row justify-content-between">
+                                                    <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" class="mb-3" />
+                                                    <button type="submit" class="btn btn-light">Add attachment</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        }
                     </div>
-                }
+                </div>
             </div>
+
+            @* Tab 3 *@
+            <div class="tab-pane fade" id="animated-underline-contact" role="tabpanel" aria-labelledby="animated-underline-contact-tab">
+
+                @* History *@
+                <div class="row mt-5">
+                    <div class="col-md-12 widget p-5">
+                        <h3 class="text-center">History</h3><hr />
+                        <table class="table table-striped ticketsIndex table-responsive-md">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Who
+                                    </th>
+                                    <th>
+                                        When
+                                    </th>
+                                    <th>
+                                        What
+                                    </th>
+                                    <th>
+                                        Old
+                                    </th>
+                                    <th>
+                                        New
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var history in Model.Histories.OrderByDescending(h => h.Created))
+                                {
+                                    <tr>
+                                        <td>
+                                            @history.User.FullName
+                                        <td>
+                                            @history.Created.ToString("g")
+                                        </td>
+                                        <td>
+                                            @history.Property
+                                        </td>
+                                        <td>
+                                            @Html.Raw(history.OldValue)
+                                        </td>
+                                        <td>
+                                            @Html.Raw(history.NewValue)
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-
-        <div class="row">
+        @* Comments *@
+        <div class="row mt-3">
             <div class="col-md widget p-5">
                 <div class="row justify-content-between">
                     <div class="col-md-3">
@@ -174,7 +254,7 @@
                     </div>
                 </div>
                 @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
-              User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
+            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
                 {
                     <div class="row">
                         <div class="col-md">
@@ -191,58 +271,9 @@
                 }
             </div>
         </div>
-
-        <div class="row mt-5">
-            <div class="col-md-12 widget p-5">
-                <h3 class="text-center">History</h3><hr />
-                <table class="table table-striped ticketsIndex table-responsive-md">
-                    <thead>
-                        <tr>
-                            <th>
-                                Who
-                            </th>
-                            <th>
-                                When
-                            </th>
-                            <th>
-                                What
-                            </th>
-                            <th>
-                                Old
-                            </th>
-                            <th>
-                                New
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var history in Model.Histories.OrderByDescending(h => h.Created))
-                        {
-                            <tr>
-                                <td>
-                                    @history.User.FullName
-                                <td>
-                                    @history.Created.ToString("g")
-                                </td>
-                                <td>
-                                    @history.Property
-                                </td>
-                                <td>
-                                    @Html.Raw(history.OldValue)
-                                </td>
-                                <td>
-                                    @Html.Raw(history.NewValue)
-                                </td>
-                            </tr>
-
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
 </div>
+
 <div class="row justify-content-center mt-3">
     <div class="col-md-10 ml-0 pl-0">
         @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
