@@ -277,11 +277,11 @@
 
 <div class="row justify-content-center mt-3">
     <div class="col-md-10 ml-0 pl-0">
-        @if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
+        @*@if (User.IsInRole("Admin") || Model.OwnerUserId == userId || Model.DeveloperUserId == userId ||
 User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, Model.ProjectId))
         {
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark text-white">Edit</a>
-        }
-        <a asp-action="Index" class="btn btn-outline-dark text-white">Back to List</a>
+        }*@
+        <a asp-action="Index" class="btn btn-light">Back to List</a>
     </div>
 </div>

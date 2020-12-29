@@ -1,0 +1,94 @@
+﻿@inject Komodo.Services.IBTTicketService _ticketService
+@inject Microsoft.AspNetCore.Identity.UserManager<BTUser> _userManager
+@model Komodo.Models.Ticket
+@{
+    var projectids = _ticketService.GetProjects();
+    var types = _ticketService.GetTypes();
+    var priorities = _ticketService.GetPriorities();
+    var statuses = _ticketService.GetStatuses();
+
+    var user = await _userManager.GetUserAsync(User);
+    SelectList devs = await _ticketService.GetDevs(user);
+}
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="exampleModalLabel">Edit ticket</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pl-5 pr-5 pb-5">
+
+                <form asp-controller="Tickets" asp-action="Edit" enctype="multipart/form-data">
+
+                    @* Hiddens *@
+                    <input type="hidden" name="Id" />
+                    <input type="hidden" name="@Model.Created" />
+                    <input type="hidden" name="Updated" value="@DateTime.Now" />
+                    <input type="hidden" name="@Model.ProjectId" />
+                    <input type="hidden" name="@Model.OwnerUserId" />
+
+                    <div class="form-group">
+                        <label for="Title" class="control-label">Title</label>
+                        <input name="Title" class="form-control" value="@Model.Title" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Description" class="control-label">Description</label>
+                        <input id="" name="Description" class="form-control tinycontent" />
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="TicketTypeId" class="control-label">Type</label>
+                                <select name="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="TicketPriorityId" class="control-label">Priority</label>
+                                <select name="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
+                            {
+                                <div class="form-group">
+                                    <label for="TicketStatusId" class="control-label">Status</label>
+                                    <select name="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="hidden" name="TicketStatusId" />
+                            }
+                        </div>
+                    </div>
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    {
+                        <div class="col-md-6 ml-0 pl-0">
+                            <div class="form-group">
+                                <label for="DeveloperUserId" class="control-label">Developer</label>
+                                <select name="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <input type="hidden" name="DeveloperUserId" />
+                    }
+                    <div class="form-group">
+                        <label for="FileName" class="control-label">Attachment</label><br />
+                        <input name="attachment" type="file" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-light btn-lg" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

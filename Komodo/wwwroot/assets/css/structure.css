@@ -9,7 +9,7 @@
 	===============================
 */
 
-#newticketmodal:hover {
+#newticketmodal:hover, .newprojectmodal:hover {
     cursor: pointer !important;
 }
 
