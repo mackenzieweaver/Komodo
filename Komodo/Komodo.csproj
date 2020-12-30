@@ -60,7 +60,6 @@
     <None Include="wwwroot\assets\js\apps\invoice.js" />
     <None Include="wwwroot\assets\js\apps\mailbox-chat.js" />
     <None Include="wwwroot\assets\js\apps\notes.js" />
-    <None Include="wwwroot\assets\js\apps\scrumboard.js" />
     <None Include="wwwroot\assets\js\apps\todoList.js" />
     <None Include="wwwroot\assets\js\authentication\form-1.js" />
     <None Include="wwwroot\assets\js\authentication\form-2.js" />
@@ -78,7 +77,6 @@
     <None Include="wwwroot\assets\js\elements\tooltip.js" />
     <None Include="wwwroot\assets\js\forms\bootstrap_validation\bs_validation_script.js" />
     <None Include="wwwroot\assets\js\forms\custom-clipboard.js" />
-    <None Include="wwwroot\assets\js\ie11fix\fn.fix-padStart.js" />
     <None Include="wwwroot\assets\js\libs\jquery-ui.js" />
     <None Include="wwwroot\assets\js\pages\coming-soon\coming-soon.js" />
     <None Include="wwwroot\assets\js\pages\faq\faq.js" />
@@ -421,7 +419,6 @@
     <None Include="wwwroot\plugins\input-mask\phone-codes\phone.min.js" />
     <None Include="wwwroot\plugins\jquery-step\custom-jquery.steps.js" />
     <None Include="wwwroot\plugins\jquery-step\jquery.steps.min.js" />
-    <None Include="wwwroot\plugins\jquery-ui\jquery-ui.min.js" />
     <None Include="wwwroot\plugins\jvector\africa\jquery-jvectormap-africa-en.js" />
     <None Include="wwwroot\plugins\jvector\asia\jquery-jvectormap-asia-en.js" />
     <None Include="wwwroot\plugins\jvector\continents\jquery-jvectormap-continents-en.js" />
@@ -485,6 +482,9 @@
     <Content Update="Views\Shared\_Layout.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\assets\css\apps\scrumboard.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\assets\css\dashboard\dash_1.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -515,10 +515,16 @@
     <Content Update="wwwroot\assets\js\app.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\assets\js\apps\scrumboard.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\assets\js\custom.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\assets\js\dashboard\dash_1.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\assets\js\ie11fix\fn.fix-padStart.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\assets\js\libs\jquery-3.1.1.min.js">
@@ -690,6 +696,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\plugins\highlight\styles\monokai-sublime.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\plugins\jquery-ui\jquery-ui.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\plugins\perfect-scrollbar\perfect-scrollbar.css">

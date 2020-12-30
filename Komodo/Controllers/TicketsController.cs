@@ -60,6 +60,11 @@ namespace Komodo.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public IActionResult Scrumboard()
+        {
+            return View();
+        }
+
         // GET: Tickets
         public async Task<IActionResult> Filter(string filter)
         {
