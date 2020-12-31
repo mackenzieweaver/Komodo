@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using MimeKit;
 using System.IO;
+using Komodo.Models.ViewModels;
 
 namespace Komodo.Controllers
 {
@@ -60,9 +61,48 @@ namespace Komodo.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public IActionResult Scrumboard()
+        public async Task<IActionResult> Scrumboard(int id, string status)
         {
-            return View();
+            var tickets = await _context.Tickets
+                .Include(t => t.Project).ThenInclude(p => p.ProjectUsers)
+                .Include(t => t.Project).ThenInclude(p => p.Tickets)
+
+                .Include(t => t.TicketType)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+
+                .Include(t => t.OwnerUser).ThenInclude(ou => ou.ProjectUsers)
+                .Include(t => t.DeveloperUser).ThenInclude(ou => ou.ProjectUsers)
+
+                .Include(t => t.Comments).ThenInclude(c => c.User)
+                .Include(t => t.Comments).ThenInclude(c => c.Ticket)
+
+                .Include(t => t.Attachments).ThenInclude(a => a.Ticket)
+                .Include(t => t.Attachments).ThenInclude(a => a.User)
+
+                .Include(t => t.Notifications).ThenInclude(n => n.Recipient)
+                .Include(t => t.Notifications).ThenInclude(n => n.Sender)
+                .Include(t => t.Notifications).ThenInclude(n => n.Ticket)
+
+                .Include(t => t.Histories).ThenInclude(h => h.Ticket)
+                .Include(t => t.Histories).ThenInclude(h => h.User)
+                .ToListAsync();
+
+            if(status != null)
+            {
+                var ticket = tickets.FirstOrDefault(t => t.Id == id);
+                ticket.TicketStatusId = _context.TicketStatuses.FirstOrDefault(ts => ts.Name == status).Id;
+                await _context.SaveChangesAsync();
+            }
+
+            var vm = new ScrumVM 
+            { 
+                Opened = tickets.Where(t => t.TicketStatus.Name == TicketStatuses.Opened.ToString()).ToList(),
+                Development = tickets.Where(t => t.TicketStatus.Name == TicketStatuses.Development.ToString()).ToList(),
+                QualityAssurance = tickets.Where(t => t.TicketStatus.Name == TicketStatuses.QA.ToString()).ToList(),
+                Closed = tickets.Where(t => t.TicketStatus.Name == TicketStatuses.Closed.ToString()).ToList()
+            };
+            return View(vm);
         }
 
         // GET: Tickets

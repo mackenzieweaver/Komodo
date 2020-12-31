@@ -29,11 +29,21 @@ $(function() {
             refreshPosition: true,
             stop: function( event, ui ) {
                 var parent_ui = ui.item.parent().attr('data-section');
-
             },
             update: function( event, ui ) {
-                console.log(ui);
-                console.log(ui.item);
+                let id = ui.item[0].id;
+                let status = ui.item.parent()[0].id;
+
+                $.ajax({
+                    type: "GET",
+                    url: `/Tickets/Scrumboard?id=${id}&status=${status}`,
+                    data: {},
+                    //contentType: "application/json; charset=utf-8",
+                    //dataType: "json",
+                    success: function (msg) {
+                        console.log(msg);
+                    }
+                })
             }
         });
     }

@@ -456,6 +456,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="IKVM" Version="8.1.5717" />
     <PackageReference Include="MailKit" Version="2.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
