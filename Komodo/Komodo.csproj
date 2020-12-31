@@ -489,6 +489,9 @@
     <Content Update="wwwroot\assets\css\dashboard\dash_1.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\assets\css\forms\theme-checkbox-radio.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\assets\css\loader.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -700,6 +703,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\plugins\jquery-ui\jquery-ui.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\plugins\jquery-ui\jquery-ui.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\plugins\perfect-scrollbar\perfect-scrollbar.css">
