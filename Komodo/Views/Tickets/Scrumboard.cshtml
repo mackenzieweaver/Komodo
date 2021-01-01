@@ -1,5 +1,5 @@
 ﻿@model Komodo.Models.ViewModels.ScrumVM
-@{ 
+@{
     ViewData["Title"] = "Scrumboard";
 }
 <div class="row scrumboard" id="cancel-row">
@@ -21,7 +21,8 @@
 
                                     <div class="task-header">
                                         <div class="">
-                                            <h4 class="" data-taskTitle="Launch New SEO Wordpress Theme ">@ticket.Title</h4>
+                                            <h4 class="" data-taskTitle="Launch New SEO Wordpress Theme ">Title: @ticket.Title</h4>
+                                            <h6 class="text-white-50" data-taskTitle="Launch New SEO Wordpress Theme ">Project: @ticket.Project.Name</h6>
                                         </div>
                                         <div class="tb-section-2">
                                             <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="text-white-50">
@@ -41,7 +42,7 @@
 
                                     <div class="task-body">
                                         <div class="task-content">
-                                            <p class="" data-taskText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">@Html.Raw(ticket.Description)</p>
+                                            <p data-taskText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">@Html.Raw(ticket.Description)</p>
                                         </div>
 
                                         <div class="task-bottom">
@@ -57,9 +58,13 @@
                                                 {
                                                     <span data-taskDate="08 Aug 2019">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                                        @ticket.Updated
+                                                        @ticket.Updated.ToString().Replace(" -08:00", "")
                                                     </span>
                                                 }
+                                            </div>
+                                            <div class="tb-section-2">
+                                                <span>Priority: @ticket.TicketPriority.Name</span><br />
+                                                <span>Type: @ticket.TicketType.Name</span>
                                             </div>
                                         </div>
                                     </div>
@@ -84,7 +89,8 @@
 
                                     <div class="task-header">
                                         <div class="">
-                                            <h4 class="" data-taskTitle="Launch New SEO Wordpress Theme ">@ticket.Title</h4>
+                                            <h4 class="" data-taskTitle="Launch New SEO Wordpress Theme ">Title: @ticket.Title</h4>
+                                            <h6 class="text-white-50" data-taskTitle="Launch New SEO Wordpress Theme ">Project: @ticket.Project.Name</h6>
                                         </div>
                                         <div class="tb-section-2">
                                             <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="text-white-50">
@@ -104,7 +110,7 @@
 
                                     <div class="task-body">
                                         <div class="task-content">
-                                            <p class="" data-taskText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">@Html.Raw(ticket.Description)</p>
+                                            <p data-taskText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">@Html.Raw(ticket.Description)</p>
                                         </div>
 
                                         <div class="task-bottom">
@@ -120,9 +126,13 @@
                                                 {
                                                     <span data-taskDate="08 Aug 2019">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                                        @ticket.Updated
+                                                        @ticket.Updated.ToString().Replace(" -08:00", "")
                                                     </span>
                                                 }
+                                            </div>
+                                            <div class="tb-section-2">
+                                                <span>Priority: @ticket.TicketPriority.Name</span><br />
+                                                <span>Type: @ticket.TicketType.Name</span>
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +158,8 @@
 
                                     <div class="task-header">
                                         <div class="">
-                                            <h4 class="" data-taskTitle="Launch New SEO Wordpress Theme ">@ticket.Title</h4>
+                                            <h4 class="" data-taskTitle="Launch New SEO Wordpress Theme ">Title: @ticket.Title</h4>
+                                            <h6 class="text-white-50" data-taskTitle="Launch New SEO Wordpress Theme ">Project: @ticket.Project.Name</h6>
                                         </div>
                                         <div class="tb-section-2">
                                             <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="text-white-50">
@@ -168,7 +179,7 @@
 
                                     <div class="task-body">
                                         <div class="task-content">
-                                            <p class="" data-taskText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">@Html.Raw(ticket.Description)</p>
+                                            <p data-taskText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">@Html.Raw(ticket.Description)</p>
                                         </div>
 
                                         <div class="task-bottom">
@@ -184,9 +195,13 @@
                                                 {
                                                     <span data-taskDate="08 Aug 2019">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                                        @ticket.Updated
+                                                        @ticket.Updated.ToString().Replace(" -08:00", "")
                                                     </span>
                                                 }
+                                            </div>
+                                            <div class="tb-section-2">
+                                                <span>Priority: @ticket.TicketPriority.Name</span><br />
+                                                <span>Type: @ticket.TicketType.Name</span>
                                             </div>
                                         </div>
                                     </div>
@@ -212,7 +227,8 @@
 
                                     <div class="task-header">
                                         <div class="">
-                                            <h4 class="" data-taskTitle="Launch New SEO Wordpress Theme ">@ticket.Title</h4>
+                                            <h4 class="" data-taskTitle="Launch New SEO Wordpress Theme ">Title: @ticket.Title</h4>
+                                            <h6 class="text-white-50" data-taskTitle="Launch New SEO Wordpress Theme ">Project: @ticket.Project.Name</h6>
                                         </div>
                                         <div class="tb-section-2">
                                             <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="text-white-50">
@@ -232,7 +248,7 @@
 
                                     <div class="task-body">
                                         <div class="task-content">
-                                            <p class="" data-taskText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">@Html.Raw(ticket.Description)</p>
+                                            <p data-taskText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">@Html.Raw(ticket.Description)</p>
                                         </div>
 
                                         <div class="task-bottom">
@@ -248,9 +264,13 @@
                                                 {
                                                     <span data-taskDate="08 Aug 2019">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                                        @ticket.Updated
+                                                        @ticket.Updated.ToString().Replace(" -08:00", "")
                                                     </span>
                                                 }
+                                            </div>
+                                            <div class="tb-section-2">
+                                                <span>Priority: @ticket.TicketPriority.Name</span><br />
+                                                <span>Type: @ticket.TicketType.Name</span>
                                             </div>
                                         </div>
                                     </div>

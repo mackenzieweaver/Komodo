@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Authorization;
 using MimeKit;
 using System.IO;
 using Komodo.Models.ViewModels;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Komodo.Controllers
 {
@@ -64,7 +63,12 @@ namespace Komodo.Controllers
 
         public async Task<IActionResult> Scrumboard(int id, string status)
         {
-            var tickets = await _context.Tickets.Include(t => t.TicketStatus).ToListAsync();
+            var tickets = await _context.Tickets
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketType)
+                .Include(t => t.TicketStatus)
+                .ToListAsync();
             var user = await _userManager.GetUserAsync(User);
 
             // pm - project's tickets
@@ -90,12 +94,20 @@ namespace Komodo.Controllers
                 var ticket = tickets.FirstOrDefault(t => t.Id == id);
                 ticket.TicketStatusId = _context.TicketStatuses.FirstOrDefault(ts => ts.Name == status).Id;
                 ticket.Updated = DateTime.Now;
+                _context.Update(ticket);
                 await _context.SaveChangesAsync();
-            }
-            if (status != null && User.IsInRole("Demo"))
-            {
-                TempData["DemoLockout"] = "demo user detected";
-                return RedirectToAction("Scrumboard", "Tickets");
+
+                // Add history
+                Ticket newTic = await _context.Tickets
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType)
+                    .Include(t => t.DeveloperUser)
+                    .Include(t => t.Project)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(t => t.Id == ticket.Id);
+                // Send notification
+                await _historyService.AddHistory(ticket, newTic, user.Id);
             }
             var vm = new ScrumVM 
             { 
