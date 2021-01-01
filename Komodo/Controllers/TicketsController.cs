@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using MimeKit;
 using System.IO;
 using Komodo.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Komodo.Controllers
 {
@@ -63,10 +64,7 @@ namespace Komodo.Controllers
 
         public async Task<IActionResult> Scrumboard(int id, string status)
         {
-            var tickets = await _context.Tickets
-                .Include(t => t.TicketStatus)
-                .ToListAsync();
-
+            var tickets = await _context.Tickets.Include(t => t.TicketStatus).ToListAsync();
             var user = await _userManager.GetUserAsync(User);
 
             // pm - project's tickets
@@ -87,13 +85,18 @@ namespace Komodo.Controllers
                 tickets = tickets.Where(t => t.DeveloperUserId == user.Id).ToList();
             }
 
-            if (status != null)
+            if (status != null && !User.IsInRole("Demo"))
             {
                 var ticket = tickets.FirstOrDefault(t => t.Id == id);
                 ticket.TicketStatusId = _context.TicketStatuses.FirstOrDefault(ts => ts.Name == status).Id;
+                ticket.Updated = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
-
+            if (status != null && User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "demo user detected";
+                return RedirectToAction("Scrumboard", "Tickets");
+            }
             var vm = new ScrumVM 
             { 
                 Opened = tickets.Where(t => t.TicketStatus.Name == TicketStatuses.Opened.ToString()).ToList(),
