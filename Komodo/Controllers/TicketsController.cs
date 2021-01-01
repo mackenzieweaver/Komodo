@@ -513,6 +513,7 @@ namespace Komodo.Controllers
             ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
             return View(ticket);
         }
+        
         [Authorize(Roles = "Admin")]
         // GET: Tickets/Delete/5
         public async Task<IActionResult> Delete(int? id)
