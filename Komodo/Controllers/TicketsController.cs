@@ -64,31 +64,30 @@ namespace Komodo.Controllers
         public async Task<IActionResult> Scrumboard(int id, string status)
         {
             var tickets = await _context.Tickets
-                //.Include(t => t.Project).ThenInclude(p => p.ProjectUsers)
-                //.Include(t => t.Project).ThenInclude(p => p.Tickets)
-
-                //.Include(t => t.TicketType)
-                //.Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
-
-                //.Include(t => t.OwnerUser).ThenInclude(ou => ou.ProjectUsers)
-                .Include(t => t.DeveloperUser).ThenInclude(ou => ou.ProjectUsers)
-
-                //.Include(t => t.Comments).ThenInclude(c => c.User)
-                //.Include(t => t.Comments).ThenInclude(c => c.Ticket)
-
-                //.Include(t => t.Attachments).ThenInclude(a => a.Ticket)
-                //.Include(t => t.Attachments).ThenInclude(a => a.User)
-
-                //.Include(t => t.Notifications).ThenInclude(n => n.Recipient)
-                //.Include(t => t.Notifications).ThenInclude(n => n.Sender)
-                //.Include(t => t.Notifications).ThenInclude(n => n.Ticket)
-
-                //.Include(t => t.Histories).ThenInclude(h => h.Ticket)
-                //.Include(t => t.Histories).ThenInclude(h => h.User)
                 .ToListAsync();
 
-            if(status != null)
+            var user = await _userManager.GetUserAsync(User);
+
+            // pm - project's tickets
+            if(await _rolesService.IsUserInRole(user, "ProjectManager"))
+            {
+                var projects = await _projectService.ListUserProjects(user.Id);
+                var ticketList = new List<ICollection<Ticket>>();
+                foreach(var project in projects)
+                {
+                    ticketList.Add(project.Tickets);
+                }
+                tickets = ticketList.SelectMany(t => t).ToList();
+            }
+
+            // dev - assigned tickets
+            if (await _rolesService.IsUserInRole(user, "Developer"))
+            {
+
+            }
+
+            if (status != null)
             {
                 var ticket = tickets.FirstOrDefault(t => t.Id == id);
                 ticket.TicketStatusId = _context.TicketStatuses.FirstOrDefault(ts => ts.Name == status).Id;
