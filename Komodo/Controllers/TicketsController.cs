@@ -84,7 +84,7 @@ namespace Komodo.Controllers
             // dev - assigned tickets
             if (await _rolesService.IsUserInRole(user, "Developer"))
             {
-
+                tickets = tickets.Where(t => t.DeveloperUserId == user.Id).ToList();
             }
 
             if (status != null)
