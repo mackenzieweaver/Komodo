@@ -486,6 +486,9 @@
     <Content Update="wwwroot\assets\css\apps\scrumboard.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\assets\css\components\cards\card.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\assets\css\dashboard\dash_1.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
