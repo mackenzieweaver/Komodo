@@ -26,7 +26,7 @@
 <div class="row justify-content-center">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-auto">
+            <div class="col-md-auto ml-1">
                 <h1>Welcome back, @user.FirstName</h1>
                 <h4>Role --> <u>@roleName</u></h4>
             </div>
@@ -74,7 +74,7 @@
         </div>
 
         <!-- New update -->
-        <div class="row mt-5 mb-5 ml-1 mr-1">
+        <div class="row mt-3 ml-1 mr-1">
             <div class="col-md-12 p-5 widget">
                 <div class="widget-heading">
                     <h3 class="mb-4">Ticket Overview</h3>
@@ -142,9 +142,9 @@
         @if (User.IsInRole("ProjectManager"))
         {
             @* Suggested Action *@
-            <div class="row mt-5 mb-5 mr-1 ml-1">
-                <div class="col-md p-5 widget">
-                    <h3 class="mb-4">Suggested Actions</h3>
+            <div class="row mt-3 mb-3 mr-1 ml-1">
+                <div class="col-md widget">
+                    <h3 class="pb-3">Suggested Actions</h3>
                     <table class="table table-striped table-responsive-md ticketsIndex">
                         <thead>
                             <tr>
@@ -166,7 +166,9 @@
                                 <th>
                                     Status
                                 </th>
-                                <th></th>
+                                <th>
+                                    Assign
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -204,7 +206,9 @@
                                             <input type="hidden" name="TicketStatusId" value="@Model.Tickets[i].TicketStatusId" />
                                             <input type="hidden" name="OwnerUserId" value="@Model.Tickets[i].OwnerUserId" />
                                             <input type="hidden" name="DeveloperUserId" value="@Model.Developers[i].Id" />
-                                            <input type="submit" value="Assign" class="btn btn-light" />
+                                            <button type="submit" value="Assign" class="btn btn-light" style="opacity:.9">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -218,10 +222,10 @@
                         <div class="col-md">
                             <div class="widget widget-chart-two">
                                 <div class="widget-heading">
-                                    <h3 class="pt-4 pl-4">Developers</h3>
+                                    <h3 class="pb-3">Developers</h3>
                                 </div>
                                 <div class="widget-content">
-                                    <div id="bar-chart" class="pb-5 pr-5"></div>
+                                    <div id="bar-chart"></div>
                                 </div>
                             </div>
                         </div>
@@ -234,11 +238,11 @@
         {
             <div class="row mt-3">
                 @* Donut Chart *@
-                <div class="col-md">
+                <div class="col-md ml-1">
                     <div id="userbasedonut">
                         <div class="widget widget-chart-two">
                             <div class="widget-heading">
-                                <h3 class="pt-5 pl-5">Types of Users</h3>
+                                <h3 class="pt-1 pl-1">Types of Users</h3>
                             </div>
                             <div class="widget-content">
                                 <canvas id="myChart" height="200"></canvas>
@@ -247,17 +251,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="row mr-1">
-                        <div class="col p-5 widget">
+                        <div class="col widget">
                             <div class="widget-heading">
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <h3 class="mb-4">All Users</h3>
+                                    <h3 class="p-1">All Users</h3>
                                 }
                                 else
                                 {
-                                    <h3 class="mb-4">Users on my projects</h3>
+                                    <h3 class="p-1">Users on my projects</h3>
                                 }
                             </div>
                             <div class="widget-content">
@@ -533,7 +537,7 @@
                     </table>
                 </div>
             </div>*@
-            <div class="row ml-1 mr-1">
+            <div class="row ml-1 mr-1 mt-3">
                 <div class="col-md widget p-5">
                     <div class="widget-heading">
                         <h3 class="mb-4">Assignments</h3>
@@ -759,7 +763,7 @@
                     </table>
                 </div>
             </div>*@
-            <div class="row ml-1 mr-1 mb-5">
+            <div class="row ml-1 mr-1 mb-5 mt-3">
                 <div class="col-md widget p-5">
                     <div class="widget-heading">
                         <h3 class="mb-4">Submitted</h3>
@@ -874,7 +878,7 @@
 
         @if (User.IsInRole("NewUser"))
         {
-            <div class="row ml-1 mr-1 mb-5">
+            <div class="row ml-1 mr-1 mb-5 mt-3">
                 <div class="col-md widget p-5">
                     <div class="widget-heading">
                         <h3 class="mb-4">All Tickets</h3>
