@@ -7,6 +7,7 @@
 @{
     ViewData["Title"] = "Dashboard";
     var user = await _userManager.GetUserAsync(User);
+    var userId = _userManager.GetUserId(User);
     var roles = await _rolesService.ListUserRoles(user);
     string roleName = "";
     foreach (var role in roles)
@@ -299,7 +300,7 @@
 
         @if (User.IsInRole("Developer"))
         {
-            <div class="row ml-1 mr-1 mb-5">
+            @*<div class="row ml-1 mr-1 mb-5">
                 <div class="col-md widget p-5">
                     <div class="widget-heading">
                         <h3 class="mb-4">All Tickets</h3>
@@ -385,16 +386,23 @@
                                         }
                                     </td>
                                     <td>
-                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-light">Details</a>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        </a>
                                         @if (User.IsInRole("Admin") ||
-                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                                  User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, ticket.ProjectId) ||
+                                  User.IsInRole("Developer") && ticket.DeveloperUserId == userId ||
+                                  User.IsInRole("Submitter") && ticket.OwnerUserId == userId)
                                         {
-                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-light">Edit</a>}
+                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                            </a>
+                                        }
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="btn btn-light">Delete</a>
+                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </a>
                                         }
                                     </td>
                                 </tr>
@@ -402,8 +410,8 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="row ml-1 mr-1 mb-5">
+            </div>*@
+            @*<div class="row ml-1 mr-1 mb-5">
                 <div class="col-md widget p-5">
                     <div class="widget-heading">
                         <h3 class="mb-4">Tickets on your projects</h3>
@@ -489,16 +497,23 @@
                                         }
                                     </td>
                                     <td>
-                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-light">Details</a>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        </a>
                                         @if (User.IsInRole("Admin") ||
-                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                                 User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, ticket.ProjectId) ||
+                                 User.IsInRole("Developer") && ticket.DeveloperUserId == userId ||
+                                 User.IsInRole("Submitter") && ticket.OwnerUserId == userId)
                                         {
-                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-light">Edit</a>}
+                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                            </a>
+                                        }
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="btn btn-light">Delete</a>
+                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </a>
                                         }
                                     </td>
                                 </tr>
@@ -506,11 +521,11 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div>*@
             <div class="row ml-1 mr-1">
                 <div class="col-md widget p-5">
                     <div class="widget-heading">
-                        <h3 class="mb-4">Assigned to you</h3>
+                        <h3 class="mb-4">Assignments</h3>
                     </div>
                     <table class="table table-striped ticketsIndex table-responsive-md">
                         <thead>
@@ -593,16 +608,23 @@
                                         }
                                     </td>
                                     <td>
-                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-light mb-md-3">Details</a>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        </a>
                                         @if (User.IsInRole("Admin") ||
-                             User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                             User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                             User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                                 User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, ticket.ProjectId) ||
+                                 User.IsInRole("Developer") && ticket.DeveloperUserId == userId ||
+                                 User.IsInRole("Submitter") && ticket.OwnerUserId == userId)
                                         {
-                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-light">Edit</a>}
+                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                            </a>
+                                        }
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="btn btn-light">Delete</a>
+                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </a>
                                         }
                                     </td>
                                 </tr>
@@ -615,7 +637,7 @@
 
         @if (User.IsInRole("Submitter"))
         {
-            <div class="row ml-1 mr-1 mb-5">
+            @*<div class="row ml-1 mr-1 mb-5">
                 <div class="col-md widget p-5">
                     <div class="widget-heading">
                         <h3 class="mb-4">All Tickets</h3>
@@ -701,16 +723,23 @@
                                         }
                                     </td>
                                     <td>
-                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-light mb-md-3">Details</a>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        </a>
                                         @if (User.IsInRole("Admin") ||
-                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                                User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, ticket.ProjectId) ||
+                                User.IsInRole("Developer") && ticket.DeveloperUserId == userId ||
+                                User.IsInRole("Submitter") && ticket.OwnerUserId == userId)
                                         {
-                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-light">Edit</a>}
+                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                            </a>
+                                        }
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="btn btn-light">Delete</a>
+                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </a>
                                         }
                                     </td>
                                 </tr>
@@ -718,11 +747,11 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div>*@
             <div class="row ml-1 mr-1 mb-5">
                 <div class="col-md widget p-5">
                     <div class="widget-heading">
-                        <h3 class="mb-4">Tickets I've submitted</h3>
+                        <h3 class="mb-4">Submitted</h3>
                     </div>
                     <table class="table table-striped ticketsIndex table-responsive-md">
                         <thead>
@@ -805,16 +834,23 @@
                                         }
                                     </td>
                                     <td>
-                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-light mb-md-3">Details</a>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        </a>
                                         @if (User.IsInRole("Admin") ||
-                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                                User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, ticket.ProjectId) ||
+                                User.IsInRole("Developer") && ticket.DeveloperUserId == userId ||
+                                User.IsInRole("Submitter") && ticket.OwnerUserId == userId)
                                         {
-                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-light">Edit</a>}
+                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                            </a>
+                                        }
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="btn btn-light">Delete</a>
+                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </a>
                                         }
                                     </td>
                                 </tr>
@@ -913,16 +949,23 @@
                                         }
                                     </td>
                                     <td>
-                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-light mb-md-3">Details</a>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        </a>
                                         @if (User.IsInRole("Admin") ||
-                            User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(user.Id, ticket.ProjectId) ||
-                            User.IsInRole("Developer") && ticket.DeveloperUserId == user.Id ||
-                            User.IsInRole("Submitter") && ticket.OwnerUserId == user.Id)
+                               User.IsInRole("ProjectManager") && await _projectService.IsUserOnProject(userId, ticket.ProjectId) ||
+                               User.IsInRole("Developer") && ticket.DeveloperUserId == userId ||
+                               User.IsInRole("Submitter") && ticket.OwnerUserId == userId)
                                         {
-                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-light">Edit</a>}
+                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                            </a>
+                                        }
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="btn btn-light">Delete</a>
+                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </a>
                                         }
                                     </td>
                                 </tr>
