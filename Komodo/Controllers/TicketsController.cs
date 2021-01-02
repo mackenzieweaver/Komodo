@@ -92,6 +92,15 @@ namespace Komodo.Controllers
             if (status != null && !User.IsInRole("Demo"))
             {
                 var ticket = tickets.FirstOrDefault(t => t.Id == id);
+                Ticket oldTic = await _context.Tickets
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType)
+                    .Include(t => t.DeveloperUser)
+                    .Include(t => t.Project)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(t => t.Id == ticket.Id);
+
                 ticket.TicketStatusId = _context.TicketStatuses.FirstOrDefault(ts => ts.Name == status).Id;
                 ticket.Updated = DateTime.Now;
                 _context.Update(ticket);
@@ -106,8 +115,7 @@ namespace Komodo.Controllers
                     .Include(t => t.Project)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(t => t.Id == ticket.Id);
-                // Send notification
-                await _historyService.AddHistory(ticket, newTic, user.Id);
+                await _historyService.AddHistory(oldTic, newTic, user.Id);
             }
             var vm = new ScrumVM 
             { 
