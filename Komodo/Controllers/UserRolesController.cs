@@ -38,10 +38,15 @@ namespace Komodo.Controllers
             {
                 ManageUserRolesViewModel vm = new ManageUserRolesViewModel();
                 vm.User = user;
-                //vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);
-                var myRole = (await _rolesService.ListUserRoles(user)).FirstOrDefault(role => role != "Demo");
-                ViewData["Roles"] = new SelectList(_context.Roles.Where(r => r.Name != "Demo" && r.Name != "NewUser" && r.Name != myRole), "Name", "Name");
+
+
+                var myRoles = await _rolesService.ListUserRoles(user);
+                var myRole = myRoles.FirstOrDefault(role => role != "Demo");
                 vm.SelectedRole = myRole;
+                //var roleList = _context.Roles.ToList();
+                var roleList = _context.Roles.Where(r => r.Name != "Demo" && r.Name != "NewUser").ToList();
+                ViewData["Roles"] = new SelectList(roleList, "Name", "Name");
+
                 model.Add(vm);
             }
             return View(model);
@@ -68,13 +73,5 @@ namespace Komodo.Controllers
             }
             return RedirectToAction("ManageUserRoles");
         }
-        //[Authorize(Roles = "")]
-        //public async Task<IActionResult> MyRole()
-        //{
-        //    var userId = _userManager.GetUserId(User);
-        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-        //    var roles = await _rolesService.ListUserRoles(user);
-        //    return View(roles);
-        //}
     }
 }
